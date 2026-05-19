@@ -63,7 +63,7 @@ const Menu = () => {
 
         <motion.div
           layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
         >
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => (
@@ -74,11 +74,11 @@ const Menu = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
-                className="bg-[#f8f9fa] rounded-3xl overflow-hidden group hover:shadow-xl transition-all duration-500"
+                className="bg-[#f8f9fa] rounded-2xl overflow-hidden group hover:shadow-xl transition-all duration-500"
               >
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className="relative h-80 overflow-hidden"
+                  className="relative h-44 overflow-hidden"
                 >
                   <img
                     src={item.image}
@@ -91,25 +91,25 @@ const Menu = () => {
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="p-8"
+                  className="p-5"
                 >
                   <motion.div
                     whileHover={{ x: 5 }}
-                    className="flex justify-between items-start mb-4"
+                    className="flex justify-between items-start mb-2 gap-2"
                   >
-                    <span className="text-[#f35e16] text-2xl font-serif font-semibold">
+                    <span className="text-[#f35e16] text-lg font-serif font-semibold">
                       From ${item.price}
                     </span>
-                    <span className="px-4 py-1.5 rounded-full border border-gray-200 text-gray-600 text-xs font-medium uppercase tracking-wider">
+                    <span className="px-2.5 py-1 rounded-full border border-gray-200 text-gray-600 text-[10px] font-medium uppercase tracking-wider shrink-0">
                       {item.category}
                     </span>
                   </motion.div>
 
-                  <h3 className="text-3xl font-serif text-[#101810] mb-4 group-hover:text-[#f35e16] transition-colors">
+                  <h3 className="text-lg font-serif text-[#101810] mb-2 group-hover:text-[#f35e16] transition-colors leading-snug">
                     {item.name}
                   </h3>
 
-                  <p className="text-gray-500 leading-relaxed mb-6">
+                  <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">
                     {item.description}
                   </p>
                 </motion.div>

@@ -308,10 +308,10 @@ const MenuCard = ({ item, index }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.92 }}
       transition={{ duration: 0.5, delay: index * 0.07 }}
-      className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100"
+      className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100"
     >
       {/* Image */}
-      <div className="relative h-72 overflow-hidden bg-gray-100">
+      <motion.div className="relative h-44 overflow-hidden bg-gray-100">
         <motion.img
           src={item.image}
           alt={item.name}
@@ -325,24 +325,24 @@ const MenuCard = ({ item, index }) => {
           initial={{ opacity: 0, y: 20 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-[#f35e16] text-white text-sm font-medium px-5 py-2.5 rounded-full shadow-lg translate-y-2 group-hover:translate-y-0"
+          className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-[#f35e16] text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-lg translate-y-2 group-hover:translate-y-0"
         >
           Get Quote
         </motion.button>
-      </div>
+      </motion.div>
 
       {/* Content */}
-      <div className="p-7">
+      <div className="p-5">
         {/* Top row: price + category */}
-        <div className="flex items-center justify-between mb-4">
+        <motion.div className="flex items-center justify-between mb-2 gap-2">
           <motion.span
-            className="text-[#f35e16] text-2xl font-serif font-bold"
+            className="text-[#f35e16] text-lg font-serif font-bold"
             whileHover={{ scale: 1.05 }}
           >
             From ${item.price.toFixed(2)}
           </motion.span>
           <span
-            className="text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wider"
+            className="text-[10px] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider shrink-0"
             style={{
               backgroundColor: colors.bg,
               color: colors.text,
@@ -351,32 +351,32 @@ const MenuCard = ({ item, index }) => {
           >
             {item.category}
           </span>
-        </div>
+        </motion.div>
 
         {/* Name */}
-        <h3 className="text-2xl font-serif text-[#101810] mb-3 group-hover:text-[#f35e16] transition-colors duration-300 leading-tight">
+        <h3 className="text-lg font-serif text-[#101810] mb-2 group-hover:text-[#f35e16] transition-colors duration-300 leading-snug">
           {item.name}
         </h3>
 
         {/* Description */}
-        <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">
+        <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
           {item.description}
         </p>
 
         {/* Bottom row */}
-        <div className="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between">
-          <div className="flex items-center gap-1">
+        <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+          <div className="flex items-center gap-0.5">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                size={12}
+                size={10}
                 className="text-[#f35e16] fill-[#f35e16]"
               />
             ))}
-            <span className="text-gray-400 text-xs ml-1 font-sans">(4.8)</span>
+            <span className="text-gray-400 text-[10px] ml-0.5 font-sans">(4.8)</span>
           </div>
-          <div className="flex items-center gap-1.5 text-gray-400 text-xs font-sans">
-            <Package size={12} />
+          <div className="flex items-center gap-1 text-gray-400 text-[10px] font-sans">
+            <Package size={10} />
             <span>Bulk supply</span>
           </div>
         </div>
@@ -487,7 +487,7 @@ const MenuGrid = () => {
         </motion.div>
 
         {/* Grid */}
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <AnimatePresence mode="popLayout">
             {mounted &&
               filtered.map((item, index) => (
