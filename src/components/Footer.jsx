@@ -1,32 +1,44 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  UtensilsCrossed,
-} from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import BrandLogo from "./Logo";
 
 const Footer = () => {
   return (
     <footer className="bg-[#101810] text-white pt-24 pb-12 border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
-          {/* Logo Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="max-w-7xl mx-auto px-6"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20"
+        >
           <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <UtensilsCrossed size={32} className="text-[#f35e16] rotate-45" />
-              <span className="text-3xl font-serif font-medium tracking-tight">
-                Craving
+            <motion.div className="flex items-center gap-3">
+              <BrandLogo size="lg" />
+              <span className="text-2xl font-serif font-medium tracking-tight">
+                Abhyati Food Pak
               </span>
-            </div>
+            </motion.div>
             <p className="text-white/50 leading-relaxed max-w-xs">
-              Exceptional culinary experiences delivered to your doorstep.
-              Crafted with passion, served with love.
+              Abhyati Food Pak Solutions Pvt Ltd — your trusted partner for
+              high-quality, eco-friendly food service packaging across
+              restaurants, cafés, catering, and institutional food service.
             </p>
-            <div className="flex gap-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="flex gap-4"
+            >
               {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
                 <motion.a
                   key={i}
@@ -37,10 +49,9 @@ const Footer = () => {
                   <Icon size={18} />
                 </motion.a>
               ))}
-            </div>
+            </motion.div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h4 className="text-xl font-serif mb-8 text-[#f35e16]">
               Quick Links
@@ -48,9 +59,10 @@ const Footer = () => {
             <ul className="space-y-4">
               {[
                 { label: "Home", href: "/" },
-                { label: "About Our Story", href: "#" },
-                { label: "Menu", href: "/menu" },
-                { label: "Blog", href: "#" },
+                { label: "About Us", href: "#" },
+                { label: "Products", href: "/menu" },
+                { label: "Testimonials", href: "/testimonials" },
+                { label: "Sustainability", href: "#" },
                 { label: "Contact", href: "#" },
               ].map((link) => (
                 <li key={link.label}>
@@ -74,16 +86,15 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Services */}
           <div>
             <h4 className="text-xl font-serif mb-8 text-[#f35e16]">Services</h4>
             <ul className="space-y-4">
               {[
-                "Dining Experience",
-                "Catering",
-                "Private Events",
-                "Delivery",
-                "Reservations",
+                "Bulk Distribution",
+                "Custom Branding",
+                "Eco-Friendly Solutions",
+                "Nationwide Delivery",
+                "B2B Account Support",
               ].map((link) => (
                 <li key={link}>
                   <a
@@ -97,22 +108,26 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div>
             <h4 className="text-xl font-serif mb-8 text-[#f35e16]">
               Contact Us
             </h4>
             <ul className="space-y-4 text-white/50">
-              <li>123 Gourmet Street,</li>
-              <li>Foodie District, NY 10001</li>
-              <li className="pt-2">hello@craving.com</li>
-              <li>+1 (555) 123-4567</li>
+              <li>Abhyati Food Pak Solutions Pvt Ltd</li>
+              <li>India</li>
+              <li className="pt-2">info@abhyatifoodpak.com</li>
+              <li>+91 (000) 000-0000</li>
             </ul>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-white/30 text-sm">
-          <p>© 2026 Craving. All Rights Reserved.</p>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-white/30 text-sm"
+        >
+          <p>© 2026 Abhyati Food Pak Solutions Pvt Ltd. All Rights Reserved.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white transition-colors">
               Privacy Policy
@@ -121,8 +136,8 @@ const Footer = () => {
               Terms of Service
             </a>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </footer>
   );
 };

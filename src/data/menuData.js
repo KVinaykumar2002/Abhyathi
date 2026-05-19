@@ -1,129 +1,129 @@
 export const menuItems = [
   {
     id: 1,
-    name: "BBQ Grilled Ribs",
-    price: 18.99,
-    category: "Non-veg",
+    name: "Biodegradable Meal Containers",
+    price: 42.99,
+    category: "Containers",
     description:
-      "Tender and slow-cooked to perfection, our BBQ Grilled Ribs are glazed with a smoky sweet barbecue sauce.",
+      "Sturdy, leak-resistant clamshell containers made from plant-based materials. Ideal for takeout, catering, and meal prep.",
     image:
-      "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2069&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop",
   },
   {
     id: 2,
-    name: "Classic Mojito",
-    price: 4.75,
-    category: "Drinks",
+    name: "Kraft Paper Food Bags",
+    price: 28.5,
+    category: "Bags & Wraps",
     description:
-      "This classic mocktail blends fresh mint, lime, and soda for a cool, bubbly, and refreshing drink.",
+      "Grease-resistant kraft bags with reinforced handles. Perfect for bakeries, quick-service restaurants, and retail food outlets.",
+    image:
+      "https://images.unsplash.com/photo-1582735689369-4fe3724936a7?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    id: 3,
+    name: "Compostable Coffee Cups",
+    price: 36.75,
+    category: "Cups & Lids",
+    description:
+      "Double-wall compostable cups with matching lids. Heat-insulated and suitable for hot beverages on the go.",
+    image:
+      "https://images.unsplash.com/photo-1598300042247-d088f8b8a631?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    id: 4,
+    name: "Sugarcane Clamshell Boxes",
+    price: 48.25,
+    category: "Eco-Friendly",
+    description:
+      "100% compostable clamshells molded from sugarcane bagasse. Microwave-safe and commercially compostable.",
+    image:
+      "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    id: 5,
+    name: "Aluminum Foil Containers",
+    price: 34.99,
+    category: "Containers",
+    description:
+      "Heavy-duty foil trays with secure lids for hot meals, catering, and food delivery. Recyclable and oven-safe.",
+    image:
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    id: 6,
+    name: "PLA Cold Drink Cups",
+    price: 31.5,
+    category: "Cups & Lids",
+    description:
+      "Clear plant-based cups for smoothies, iced coffee, and cold beverages. Paired with compostable flat and dome lids.",
     image:
       "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=1974&auto=format&fit=crop",
   },
   {
-    id: 3,
-    name: "Garden Fresh Salad",
-    price: 12.5,
-    category: "Veg",
-    description:
-      "A vibrant mix of seasonal greens, cherry tomatoes, cucumbers, and our signature balsamic vinaigrette.",
-    image:
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2070&auto=format&fit=crop",
-  },
-  {
-    id: 4,
-    name: "Spicy Paneer Tikka",
-    price: 14.25,
-    category: "Veg",
-    description:
-      "Marinated cottage cheese cubes grilled to perfection with bell peppers and aromatic spices.",
-    image:
-      "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?q=80&w=2017&auto=format&fit=crop",
-  },
-  {
-    id: 5,
-    name: "Seafood Platter",
-    price: 24.99,
-    category: "Non-veg",
-    description:
-      "An assortment of grilled shrimp, calamari, and salmon served with garlic butter sauce.",
-    image:
-      "https://images.unsplash.com/photo-1551248429-40975aa4de74?q=80&w=2080&auto=format&fit=crop",
-  },
-  {
-    id: 6,
-    name: "Tropical Sunrise",
-    price: 5.5,
-    category: "Drinks",
-    description:
-      "A delightful blend of orange juice, pineapple, and grenadine for a sweet start to your meal.",
-    image:
-      "https://images.unsplash.com/photo-1536935338788-846bb9981813?q=80&w=1972&auto=format&fit=crop",
-  },
-  {
     id: 7,
-    name: "Grilled Chicken Breast",
-    price: 16.5,
-    category: "Non-veg",
+    name: "Recycled Paper Wraps",
+    price: 22.0,
+    category: "Bags & Wraps",
     description:
-      "Juicy herb-marinated chicken breast served with roasted vegetables and a lemon-herb drizzle.",
-    image:
-      "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=2013&auto=format&fit=crop",
-  },
-  {
-    id: 8,
-    name: "Wild Berry Smoothie",
-    price: 6.25,
-    category: "Drinks",
-    description:
-      "A vibrant blend of mixed wild berries, yogurt, and honey for a refreshing and nutritious sip.",
-    image:
-      "https://images.unsplash.com/photo-1553530666-ba11a7da3888?q=80&w=2036&auto=format&fit=crop",
-  },
-  {
-    id: 9,
-    name: "Mushroom Risotto",
-    price: 15.75,
-    category: "Veg",
-    description:
-      "Creamy Arborio rice slow-cooked with wild mushrooms, parmesan, and a touch of truffle oil.",
-    image:
-      "https://images.unsplash.com/photo-1476124369491-e7addf5db371?q=80&w=2070&auto=format&fit=crop",
-  },
-  {
-    id: 10,
-    name: "Butter Chicken",
-    price: 19.99,
-    category: "Non-veg",
-    description:
-      "Succulent chicken pieces in a velvety tomato-butter gravy with aromatic spices, served with naan.",
-    image:
-      "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=2070&auto=format&fit=crop",
-  },
-  {
-    id: 11,
-    name: "Avocado Toast",
-    price: 11.0,
-    category: "Veg",
-    description:
-      "Smashed creamy avocado on artisan sourdough, topped with cherry tomatoes, micro herbs, and chilli flakes.",
+      "Food-grade wax and parchment wraps made from recycled paper. Ideal for sandwiches, wraps, and deli items.",
     image:
       "https://images.unsplash.com/photo-1603046891744-1f15eb4d4b4d?q=80&w=1974&auto=format&fit=crop",
   },
   {
-    id: 12,
-    name: "Iced Matcha Latte",
-    price: 5.0,
-    category: "Drinks",
+    id: 8,
+    name: "Bamboo Cutlery Sets",
+    price: 18.75,
+    category: "Eco-Friendly",
     description:
-      "Premium Japanese matcha whisked with oat milk and poured over ice for a smooth, earthy refreshment.",
+      "Disposable knife, fork, and spoon sets crafted from sustainable bamboo. A plastic-free alternative for dine-in and delivery.",
     image:
-      "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?q=80&w=2071&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=2013&auto=format&fit=crop",
+  },
+  {
+    id: 9,
+    name: "PET Salad Bowls with Lids",
+    price: 39.99,
+    category: "Containers",
+    description:
+      "Crystal-clear bowls with snap-fit lids for salads, grain bowls, and fresh prep. Stackable for efficient storage.",
+    image:
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    id: 10,
+    name: "Cornstarch Straws",
+    price: 14.5,
+    category: "Eco-Friendly",
+    description:
+      "Compostable drinking straws derived from cornstarch. Sturdy in cold drinks and fully biodegradable.",
+    image:
+      "https://images.unsplash.com/photo-1536935338788-846bb9981813?q=80&w=1972&auto=format&fit=crop",
+  },
+  {
+    id: 11,
+    name: "Grease-Resistant Burger Boxes",
+    price: 37.0,
+    category: "Containers",
+    description:
+      "Folded paperboard boxes with vented lids for burgers and hot sandwiches. Keeps food crisp and presentation-ready.",
+    image:
+      "https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=2070&auto=format&fit=crop",
+  },
+  {
+    id: 12,
+    name: "Bioplastic Takeaway Trays",
+    price: 44.25,
+    category: "Eco-Friendly",
+    description:
+      "Multi-compartment trays made from renewable bioplastics. Designed for combo meals, catering, and institutional food service.",
+    image:
+      "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2069&auto=format&fit=crop",
   },
 ];
 
 export const stats = [
-  { label: "Restaurants", value: "450+" },
-  { label: "Fresh Ingredients", value: "90+" },
-  { label: "Star Rating", value: "4" },
-  { label: "Customer Reviews", value: "180+" },
+  { label: "Businesses Served", value: "500+" },
+  { label: "Product SKUs", value: "120+" },
+  { label: "Eco-Friendly Range", value: "85%" },
+  { label: "Years of Trust", value: "15+" },
 ];

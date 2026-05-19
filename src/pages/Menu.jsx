@@ -9,9 +9,11 @@ import {
   Star,
   ChevronDown,
   Clock,
-  Flame,
+  Package,
   Leaf,
   GlassWater,
+  ShoppingBag,
+  Recycle,
 } from "lucide-react";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -19,10 +21,11 @@ import { menuItems } from '../data/menuData';
 
 /* ─── Category Config ─── */
 const categories = [
-  { label: "All Menu", icon: null, color: "#f35e16" },
-  { label: "Veg", icon: Leaf, color: "#22c55e" },
-  { label: "Non-veg", icon: Flame, color: "#ef4444" },
-  { label: "Drinks", icon: GlassWater, color: "#3b82f6" },
+  { label: "All Products", icon: null, color: "#f35e16" },
+  { label: "Containers", icon: Package, color: "#22c55e" },
+  { label: "Bags & Wraps", icon: ShoppingBag, color: "#ef4444" },
+  { label: "Cups & Lids", icon: GlassWater, color: "#3b82f6" },
+  { label: "Eco-Friendly", icon: Leaf, color: "#16a34a" },
 ];
 
 /* ─── Hero Section ─── */
@@ -71,14 +74,14 @@ const MenuHero = () => {
               <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#f35e16]/30 bg-[#f35e16]/10">
                 <Star size={14} className="text-[#f35e16] fill-[#f35e16]" />
                 <span className="text-[#f35e16] text-sm font-medium tracking-wider uppercase">
-                  Favourite World Cuisine
+                  Food Service Packaging
                 </span>
               </div>
             </motion.div>
 
             {/* Heading */}
             <div className="space-y-2 overflow-hidden">
-              {["Taste", "the World"].map((word, i) => (
+              {["Quality", "Packaging"].map((word, i) => (
                 <div key={i} className="overflow-hidden">
                   <motion.h1
                     initial={{ y: "100%" }}
@@ -106,9 +109,9 @@ const MenuHero = () => {
               transition={{ duration: 0.7, delay: 0.55 }}
               className="text-white/60 text-lg leading-relaxed max-w-md font-sans"
             >
-              Embark on a culinary journey through our handcrafted menu — where
-              every dish tells a story of tradition, passion, and exceptional
-              flavour.
+              Browse Abhyati Food Pak’s full catalog of containers, cups, bags,
+              and compostable disposables — distributed in bulk for restaurants,
+              cafés, catering, and food service operators.
             </motion.p>
 
             {/* Stats pills */}
@@ -119,9 +122,9 @@ const MenuHero = () => {
               className="flex flex-wrap gap-4"
             >
               {[
-                { icon: Clock, text: "30 min avg delivery" },
-                { icon: Star, text: "4.9 Rating" },
-                { icon: Leaf, text: "Fresh Ingredients" },
+                { icon: Clock, text: "Fast bulk dispatch" },
+                { icon: Star, text: "500+ clients" },
+                { icon: Leaf, text: "85% eco range" },
               ].map(({ icon: Icon, text }) => (
                 <div
                   key={text}
@@ -148,7 +151,7 @@ const MenuHero = () => {
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f35e16] text-white font-medium transition-colors duration-300"
               >
-                Explore Menu
+                Browse Catalog
                 <ChevronDown size={18} />
               </motion.a>
               <motion.a
@@ -157,7 +160,7 @@ const MenuHero = () => {
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white font-medium hover:bg-white/5 transition-all duration-300"
               >
-                Reserve Table
+                Request Quote
               </motion.a>
             </motion.div>
           </motion.div>
@@ -185,8 +188,8 @@ const MenuHero = () => {
                 transition={{ duration: 0.5 }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1780&auto=format&fit=crop"
-                  alt="Gourmet dish"
+                  src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=2070&auto=format&fit=crop"
+                  alt="Eco-friendly food packaging"
                   className="w-full h-full object-cover"
                 />
                 {/* Overlay gradient */}
@@ -198,7 +201,7 @@ const MenuHero = () => {
               <div className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full bg-[#1a4a1a]/40 blur-2xl" />
             </motion.div>
 
-            {/* Floating card: Chef */}
+            {/* Floating card: Eco certified */}
             <motion.div
               initial={{ opacity: 0, x: 40, y: -20 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
@@ -206,16 +209,12 @@ const MenuHero = () => {
               className="absolute -top-6 -right-4 md:right-0 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-3 shadow-xl"
               style={{ animation: "float 4s ease-in-out infinite" }}
             >
-              <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-[#f35e16]/40">
-                <img
-                  src="https://images.unsplash.com/photo-1607631568010-a87245c0daf8?q=80&w=200&auto=format&fit=crop"
-                  alt="Chef"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <motion.div className="w-12 h-12 rounded-full ring-2 ring-[#f35e16]/40 bg-[#f35e16]/20 flex items-center justify-center">
+                <Recycle size={22} className="text-[#f35e16]" />
+              </motion.div>
               <div>
                 <p className="text-white text-sm font-medium font-sans">
-                  Expert Chef
+                  Eco Certified
                 </p>
                 <div className="flex items-center gap-1 mt-0.5">
                   {[...Array(5)].map((_, i) => (
@@ -229,7 +228,7 @@ const MenuHero = () => {
               </div>
             </motion.div>
 
-            {/* Floating card: Dishes count */}
+            {/* Floating card: SKU count */}
             <motion.div
               initial={{ opacity: 0, x: -40, y: 20 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
@@ -238,13 +237,13 @@ const MenuHero = () => {
               style={{ animation: "floatReverse 5s ease-in-out infinite" }}
             >
               <p className="text-white/70 text-xs font-sans uppercase tracking-widest">
-                Dishes
+                Catalog
               </p>
               <p className="text-white text-3xl font-serif font-bold leading-none mt-1">
-                80+
+                120+
               </p>
               <p className="text-white/70 text-xs font-sans mt-1">
-                Curated items
+                Product SKUs
               </p>
             </motion.div>
 
@@ -257,8 +256,8 @@ const MenuHero = () => {
               style={{ animation: "floatSlow 6s ease-in-out infinite" }}
             >
               <img
-                src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=200&auto=format&fit=crop"
-                alt="Food"
+                src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=200&auto=format&fit=crop"
+                alt="Packaging"
                 className="w-full h-full object-cover"
               />
             </motion.div>
@@ -291,9 +290,10 @@ const MenuHero = () => {
 /* ─── Single Menu Card ─── */
 const MenuCard = ({ item, index }) => {
   const categoryColors = {
-    Veg: { bg: "#dcfce7", text: "#16a34a", border: "#bbf7d0" },
-    "Non-veg": { bg: "#fee2e2", text: "#dc2626", border: "#fecaca" },
-    Drinks: { bg: "#dbeafe", text: "#2563eb", border: "#bfdbfe" },
+    Containers: { bg: "#dcfce7", text: "#16a34a", border: "#bbf7d0" },
+    "Bags & Wraps": { bg: "#fee2e2", text: "#dc2626", border: "#fecaca" },
+    "Cups & Lids": { bg: "#dbeafe", text: "#2563eb", border: "#bfdbfe" },
+    "Eco-Friendly": { bg: "#ecfdf5", text: "#059669", border: "#a7f3d0" },
   };
   const colors = categoryColors[item.category] || {
     bg: "#f3f4f6",
@@ -327,7 +327,7 @@ const MenuCard = ({ item, index }) => {
           whileTap={{ scale: 0.95 }}
           className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-[#f35e16] text-white text-sm font-medium px-5 py-2.5 rounded-full shadow-lg translate-y-2 group-hover:translate-y-0"
         >
-          Order Now
+          Get Quote
         </motion.button>
       </div>
 
@@ -339,7 +339,7 @@ const MenuCard = ({ item, index }) => {
             className="text-[#f35e16] text-2xl font-serif font-bold"
             whileHover={{ scale: 1.05 }}
           >
-            ${item.price.toFixed(2)}
+            From ${item.price.toFixed(2)}
           </motion.span>
           <span
             className="text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wider"
@@ -376,8 +376,8 @@ const MenuCard = ({ item, index }) => {
             <span className="text-gray-400 text-xs ml-1 font-sans">(4.8)</span>
           </div>
           <div className="flex items-center gap-1.5 text-gray-400 text-xs font-sans">
-            <Clock size={12} />
-            <span>25-30 min</span>
+            <Package size={12} />
+            <span>Bulk supply</span>
           </div>
         </div>
       </div>
@@ -387,7 +387,7 @@ const MenuCard = ({ item, index }) => {
 
 /* ─── Main Menu Grid Section ─── */
 const MenuGrid = () => {
-  const [activeCategory, setActiveCategory] = useState("All Menu");
+  const [activeCategory, setActiveCategory] = useState("All Products");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -395,15 +395,18 @@ const MenuGrid = () => {
   }, []);
 
   const filtered =
-    activeCategory === "All Menu"
+    activeCategory === "All Products"
       ? menuItems
       : menuItems.filter((item) => item.category === activeCategory);
 
   const counts = {
-    "All Menu": menuItems.length,
-    Veg: menuItems.filter((i) => i.category === "Veg").length,
-    "Non-veg": menuItems.filter((i) => i.category === "Non-veg").length,
-    Drinks: menuItems.filter((i) => i.category === "Drinks").length,
+    "All Products": menuItems.length,
+    Containers: menuItems.filter((i) => i.category === "Containers").length,
+    "Bags & Wraps": menuItems.filter((i) => i.category === "Bags & Wraps")
+      .length,
+    "Cups & Lids": menuItems.filter((i) => i.category === "Cups & Lids").length,
+    "Eco-Friendly": menuItems.filter((i) => i.category === "Eco-Friendly")
+      .length,
   };
 
   return (
@@ -429,7 +432,7 @@ const MenuGrid = () => {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-6xl font-serif text-[#101810] mb-5 leading-tight"
           >
-            Explore Our <span className="text-[#f35e16]">Menu</span>
+            Explore Our <span className="text-[#f35e16]">Catalog</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -438,9 +441,9 @@ const MenuGrid = () => {
             transition={{ delay: 0.2 }}
             className="text-gray-500 text-lg leading-relaxed font-sans"
           >
-            A symphony of flavours crafted by our world-class chefs. Each dish
-            is prepared fresh daily using the finest local and imported
-            ingredients.
+            High-quality food service packaging for takeout, delivery, catering,
+            and dine-in — including compostable and recyclable options from
+            Abhyati Food Pak Solutions.
           </motion.p>
         </div>
 
@@ -500,8 +503,8 @@ const MenuGrid = () => {
             animate={{ opacity: 1 }}
             className="text-center py-24 text-gray-400"
           >
-            <p className="text-6xl mb-4">🍽️</p>
-            <p className="text-xl font-serif">No items in this category yet.</p>
+            <p className="text-6xl mb-4">📦</p>
+            <p className="text-xl font-serif">No products in this category yet.</p>
           </motion.div>
         )}
 
@@ -517,10 +520,10 @@ const MenuGrid = () => {
             whileTap={{ scale: 0.95 }}
             className="px-10 py-4 rounded-full bg-[#f35e16] text-white font-semibold text-base transition-colors duration-300 shadow-xl shadow-[#f35e16]/30"
           >
-            Book a Table & Reserve Your Spot
+            Request Bulk Pricing
           </motion.button>
           <p className="text-gray-400 text-sm mt-4 font-sans">
-            New dishes added every week · Chef's specials available daily
+            New SKUs added regularly · Custom branding available on select lines
           </p>
         </motion.div>
       </div>
@@ -528,7 +531,7 @@ const MenuGrid = () => {
   );
 };
 
-/* ─── Chef's Special Banner ─── */
+/* ─── Sustainable Solutions Banner ─── */
 const ChefSpecial = () => (
   <section className="bg-[#101810] py-20 overflow-hidden relative">
     <div className="absolute inset-0 pointer-events-none">
@@ -548,27 +551,27 @@ const ChefSpecial = () => (
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#f35e16]/15 border border-[#f35e16]/25">
                 <Star size={12} className="text-[#f35e16] fill-[#f35e16]" />
                 <span className="text-[#f35e16] text-xs font-semibold uppercase tracking-widest">
-                  Chef's Special
+                  Sustainability
                 </span>
               </div>
 
               <h2 className="text-4xl md:text-5xl font-serif text-white leading-tight">
-                Exclusive Seasonal{" "}
-                <span className="text-[#f35e16] italic">Specials</span>
+                Eco-Friendly{" "}
+                <span className="text-[#f35e16] italic">Packaging Line</span>
               </h2>
 
               <p className="text-white/50 leading-relaxed font-sans">
-                Every month, our head chef curates a unique tasting menu using
-                the finest seasonal produce. Limited availability — book early
-                to avoid disappointment.
+                Help your business reduce plastic waste with our compostable
+                containers, plant-based cups, bamboo cutlery, and recyclable
+                paper solutions — without compromising on durability or presentation.
               </p>
 
               <div className="grid grid-cols-2 gap-6 pt-4">
                 {[
-                  { label: "Tasting Courses", value: "7" },
-                  { label: "Wine Pairings", value: "5" },
-                  { label: "Vegetarian Options", value: "4+" },
-                  { label: "Years of Excellence", value: "12" },
+                  { label: "Compostable SKUs", value: "45+" },
+                  { label: "Recyclable Options", value: "60+" },
+                  { label: "Certified Materials", value: "100%" },
+                  { label: "Years in Business", value: "15+" },
                 ].map(({ label, value }) => (
                   <div key={label} className="space-y-1">
                     <p className="text-[#f35e16] text-3xl font-serif font-bold">
@@ -584,7 +587,7 @@ const ChefSpecial = () => (
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f35e16] text-white font-semibold transition-colors duration-300 mt-2"
               >
-                Reserve Chef's Table
+                Explore Eco Range
               </motion.button>
             </motion.div>
           </div>
@@ -600,8 +603,8 @@ const ChefSpecial = () => (
             {/* Main large image */}
             <div className="absolute inset-4 lg:inset-8 rounded-3xl overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop"
-                alt="Chef's special"
+                src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop"
+                alt="Eco-friendly packaging"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#1a2e1a]/30" />
@@ -610,12 +613,12 @@ const ChefSpecial = () => (
             {/* Small overlay badge */}
             <div className="absolute bottom-12 left-12 lg:left-4 bg-[#f35e16] rounded-2xl px-6 py-4 shadow-2xl">
               <p className="text-white/80 text-xs font-sans uppercase tracking-wider">
-                Tonight's Special
+                Featured Product
               </p>
               <p className="text-white font-serif text-lg font-semibold mt-1">
-                Wagyu Beef Fillet
+                Sugarcane Clamshell Box
               </p>
-              <p className="text-white/70 text-sm font-sans">From $89</p>
+              <p className="text-white/70 text-sm font-sans">From $48.25/case</p>
             </div>
           </motion.div>
         </div>

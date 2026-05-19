@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { UtensilsCrossed, X, Menu as MenuIcon } from "lucide-react";
+import { X, Menu as MenuIcon } from "lucide-react";
+import BrandLogo from "./Logo";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -17,11 +18,21 @@ const Navbar = () => {
 
   const navLinks = [
     { label: "Home", href: "/" },
-    { label: "Menu", href: "/menu" },
-    { label: "Blog", href: "#" },
+    { label: "Products", href: "/menu" },
+    { label: "Testimonials", href: "/testimonials" },
+    { label: "About", href: "#" },
   ];
 
   const isActive = (href) => currentPath === href;
+
+  const Brand = () => (
+    <>
+      <BrandLogo size="md" className="group-hover:opacity-90 transition-opacity" />
+      <span className="text-2xl font-serif text-white font-medium tracking-tight group-hover:text-[#f35e16] transition-colors duration-300">
+        Abhyati Food Pak
+      </span>
+    </>
+  );
 
   return (
     <>
@@ -32,16 +43,16 @@ const Navbar = () => {
             : "bg-[#101810]/80 backdrop-blur-md"
         }`}
       >
-        <Link to="/" className="flex items-center gap-2 group">
-          <motion.div className="text-white group-hover:text-[#f35e16] transition-colors duration-300">
-            <UtensilsCrossed size={28} className="rotate-45" />
-          </motion.div>
-          <span className="text-2xl font-serif text-white font-medium tracking-tight group-hover:text-[#f35e16] transition-colors duration-300">
-            Craving
-          </span>
+        <Link to="/" className="flex items-center gap-3 group">
+          <Brand />
         </Link>
 
-        <div className="hidden md:flex items-center gap-8 text-white/90 font-sans text-sm font-medium">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="hidden md:flex items-center gap-8 text-white/90 font-sans text-sm font-medium"
+        >
           {navLinks.map((link) =>
             link.href.startsWith("#") ? (
               <a
@@ -83,7 +94,7 @@ const Navbar = () => {
               </Link>
             )
           )}
-        </div>
+        </motion.div>
 
         <div className="flex items-center gap-4">
           <motion.a
@@ -92,7 +103,7 @@ const Navbar = () => {
             whileTap={{ scale: 0.95 }}
             className="hidden md:block px-6 py-2.5 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white hover:text-[#101810] transition-all duration-300"
           >
-            About Our Story
+            Contact Us
           </motion.a>
 
           <button
@@ -114,18 +125,19 @@ const Navbar = () => {
             transition={{ type: "tween", duration: 0.3 }}
             className="fixed inset-0 z-[100] bg-[#101810] flex flex-col px-8 py-8"
           >
-            <div className="flex justify-between items-center mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex justify-between items-center mb-16"
+            >
               <Link
                 to="/"
-                className="flex items-center gap-2"
+                className="flex items-center gap-3"
                 onClick={() => setMobileOpen(false)}
               >
-                <UtensilsCrossed
-                  size={28}
-                  className="text-[#f35e16] rotate-45"
-                />
+                <BrandLogo size="md" />
                 <span className="text-2xl font-serif text-white font-medium">
-                  Craving
+                  Abhyati Food Pak
                 </span>
               </Link>
               <button
@@ -135,7 +147,7 @@ const Navbar = () => {
               >
                 <X size={28} />
               </button>
-            </div>
+            </motion.div>
 
             <nav className="flex flex-col gap-8">
               {navLinks.map((link, i) => (
@@ -181,7 +193,7 @@ const Navbar = () => {
                 whileTap={{ scale: 0.98 }}
                 className="block w-full px-8 py-4 rounded-full bg-[#f35e16] text-white text-lg font-medium text-center"
               >
-                About Our Story
+                Contact Us
               </motion.a>
             </div>
           </motion.div>
