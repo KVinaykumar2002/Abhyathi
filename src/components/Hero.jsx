@@ -1,151 +1,120 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  PlayCircle,
+  Leaf,
+  Recycle,
+  Droplets,
+} from "lucide-react";
+
+const HERO_VIDEO = encodeURI("/mp_ (online-video-cutter.com).mp4");
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const features = [
+  { icon: Leaf, label: "Eco-Friendly Materials" },
+  { icon: Recycle, label: "Compostable & Biodegradable" },
+  { icon: Droplets, label: "Durable & Leak-Proof" },
+];
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen bg-[#101810] pt-32 pb-20 px-6 md:px-12 overflow-hidden">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-[#f35e16]/5 rounded-full blur-[120px] pointer-events-none"
-      />
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
-        className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#1a3d1a]/40 rounded-full blur-[100px] pointer-events-none"
-      />
-
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-        className="absolute top-32 left-12 hidden lg:block"
-      >
-        <div className="w-16 h-16 rounded-full border border-[#f35e16]/20 flex items-center justify-center">
-          <motion.div className="w-2 h-2 rounded-full bg-[#f35e16]" />
-        </div>
-      </motion.div>
-
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="z-10"
+    <section className="relative h-[100svh] min-h-[720px] w-full overflow-hidden bg-[#101810]">
+      {/* Video layer — block flow inside section, cannot extend above section top */}
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="block h-full w-full object-cover"
+          aria-hidden
         >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#f35e16]/30 bg-[#f35e16]/10 mb-8"
-          >
-            <span className="text-[#f35e16] text-sm font-medium tracking-wider uppercase">
-              Eco-Friendly Food Service Packaging
-            </span>
-          </motion.div>
+          <source src={HERO_VIDEO} type="video/mp4" />
+        </video>
+      </div>
 
+      {/* Text overlay */}
+      <div className="relative z-[1] flex h-full items-center px-6 pb-8 pt-24 md:px-12 md:pt-28 lg:px-16">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-2xl lg:max-w-3xl drop-shadow-sm"
+        >
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="text-5xl md:text-7xl font-serif text-white leading-tight mb-8"
+            variants={itemVariants}
+            className="text-3xl font-bold leading-[1.1] tracking-tight text-white drop-shadow-md sm:text-4xl md:text-5xl"
           >
-            Packaging That{" "}
-            <span className="italic text-[#f35e16]">Protects</span> Your Brand
+            Smart Packaging for a Greener Future
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            className="text-white/70 text-lg md:text-xl max-w-lg mb-10 leading-relaxed"
+            variants={itemVariants}
+            className="mt-4 max-w-xl text-sm leading-relaxed text-white/90 drop-shadow-md md:text-base"
           >
             Abhyati Food Pak Solutions Pvt Ltd is a leading distributor of
             high-quality, eco-friendly food service packaging — from containers
-            and cups to bags and compostable disposables for restaurants,
-            cafés, and catering businesses.
+            and cups to bags and compostable disposables for restaurants, cafés,
+            and catering businesses.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
-            className="flex flex-wrap gap-4"
+            variants={itemVariants}
+            className="mt-6 flex flex-wrap items-center gap-4"
           >
-            <motion.a
-              href="/menu"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-10 py-4 bg-[#f35e16] text-white rounded-full text-lg font-medium shadow-lg shadow-[#f35e16]/20 hover:bg-[#d85212] transition-colors"
-            >
-              Browse Products
-            </motion.a>
-            <motion.a
-              href="#"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-10 py-4 border border-white/20 text-white rounded-full text-lg font-medium hover:bg-white/5 transition-colors"
-            >
-              Request a Quote
-            </motion.a>
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                to="/menu"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#1a4d3e] px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-[#1a4d3e]/25 transition-colors hover:bg-[#153d32] md:text-base"
+              >
+                Shop Now
+                <ArrowRight size={18} strokeWidth={2.5} />
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                to="/menu"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/40 px-4 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white/10 md:text-base"
+              >
+                <PlayCircle size={22} strokeWidth={1.75} />
+                Explore Our Products
+              </Link>
+            </motion.div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="mt-20 max-w-md"
+          <motion.ul
+            variants={itemVariants}
+            className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-6 md:mt-10"
           >
-            <span className="text-[#f35e16] text-6xl font-serif leading-none block mb-4">
-              “
-            </span>
-            <p className="text-white/80 text-lg italic leading-relaxed">
-              "Abhyati Food Pak has been our go-to supplier for compostable
-              containers and cups. Reliable bulk delivery, consistent quality,
-              and packaging our customers actually feel good about using."
-            </p>
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="relative flex flex-col items-center"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="relative w-[300px] h-[450px] md:w-[450px] md:h-[650px] rounded-full overflow-hidden border-8 border-[#1a2e1a] shadow-2xl shadow-[#f35e16]/10"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=2070&auto=format&fit=crop"
-              alt="Eco-friendly food service packaging"
-              className="w-full h-full object-cover"
-            />
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.2 }}
-              className="absolute inset-0 bg-gradient-to-t from-[#101810]/40 via-transparent to-transparent"
-            />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="absolute -bottom-4 -left-4 md:left-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 shadow-xl"
-          >
-            <p className="text-white/60 text-xs uppercase tracking-wider">
-              Product range
-            </p>
-            <p className="text-white text-2xl font-serif font-bold">120+ SKUs</p>
-          </motion.div>
+            {features.map(({ icon: Icon, label }) => (
+              <li key={label} className="flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-white/60 text-white">
+                  <Icon size={16} strokeWidth={2} />
+                </span>
+                <span className="text-sm font-bold text-white drop-shadow-md md:text-base">
+                  {label}
+                </span>
+              </li>
+            ))}
+          </motion.ul>
         </motion.div>
       </div>
     </section>

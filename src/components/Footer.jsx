@@ -63,7 +63,7 @@ const Footer = () => {
                 { label: "Products", href: "/menu" },
                 { label: "Testimonials", href: "/testimonials" },
                 { label: "Sustainability", href: "#" },
-                { label: "Contact", href: "#" },
+                { label: "Contact", href: "/contact" },
               ].map((link) => (
                 <li key={link.label}>
                   {link.href.startsWith("/") ? (

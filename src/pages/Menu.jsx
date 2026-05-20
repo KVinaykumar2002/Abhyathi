@@ -41,7 +41,7 @@ const MenuHero = () => {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[90vh] bg-[#101810] flex items-center overflow-hidden pt-20"
+      className="relative min-h-[90vh] bg-[#101810] flex items-center overflow-hidden"
     >
       {/* Background ambient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

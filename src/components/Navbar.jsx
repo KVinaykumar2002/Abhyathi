@@ -1,18 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Menu as MenuIcon } from "lucide-react";
 import BrandLogo from "./Logo";
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
+  const [elevated, setElevated] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const lastScrollY = useRef(0);
   const location = useLocation();
   const currentPath = location.pathname;
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      const y = window.scrollY;
+      if (y <= 20) {
+        setElevated(false);
+      } else if (y < lastScrollY.current) {
+        setElevated(true);
+      } else if (y > lastScrollY.current) {
+        setElevated(false);
+      }
+      lastScrollY.current = y;
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -21,6 +34,7 @@ const Navbar = () => {
     { label: "Products", href: "/menu" },
     { label: "Testimonials", href: "/testimonials" },
     { label: "About", href: "#" },
+    { label: "Contact", href: "/contact" },
   ];
 
   const isActive = (href) => currentPath === href;
@@ -38,9 +52,9 @@ const Navbar = () => {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between transition-all duration-500 ${
-          scrolled
-            ? "bg-[#101810]/95 backdrop-blur-md shadow-lg shadow-black/20"
-            : "bg-[#101810]/80 backdrop-blur-md"
+          elevated
+            ? "border-b border-white/10 bg-[#101810]/95 shadow-lg shadow-black/20 backdrop-blur-md"
+            : "border-b border-transparent bg-transparent"
         }`}
       >
         <Link to="/" className="flex items-center gap-3 group">
@@ -97,14 +111,14 @@ const Navbar = () => {
         </motion.div>
 
         <div className="flex items-center gap-4">
-          <motion.a
-            href="#"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="hidden md:block px-6 py-2.5 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white hover:text-[#101810] transition-all duration-300"
-          >
-            Contact Us
-          </motion.a>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              to="/contact"
+              className="hidden md:block px-6 py-2.5 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white hover:text-[#101810] transition-all duration-300"
+            >
+              Contact Us
+            </Link>
+          </motion.div>
 
           <button
             onClick={() => setMobileOpen(true)}
@@ -187,14 +201,15 @@ const Navbar = () => {
             </nav>
 
             <div className="mt-auto">
-              <motion.a
-                href="#"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="block w-full px-8 py-4 rounded-full bg-[#f35e16] text-white text-lg font-medium text-center"
-              >
-                Contact Us
-              </motion.a>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  to="/contact"
+                  onClick={() => setMobileOpen(false)}
+                  className="block w-full px-8 py-4 rounded-full bg-[#f35e16] text-white text-lg font-medium text-center"
+                >
+                  Contact Us
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
         )}

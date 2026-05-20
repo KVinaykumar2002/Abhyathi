@@ -9,9 +9,11 @@ import Footer from "../components/Footer";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen font-sans selection:bg-[#f35e16]/30 selection:text-[#f35e16]">
-      <Navbar />
-      <main>
+    <div className="flex min-h-screen flex-col font-sans selection:bg-[#f35e16]/30 selection:text-[#f35e16]">
+      <header className="relative z-[100] shrink-0 isolate overflow-hidden bg-[#101810]">
+        <Navbar />
+      </header>
+      <main className="relative flex-1">
         <Hero />
         <Stats />
         <Menu />

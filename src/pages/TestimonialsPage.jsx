@@ -6,7 +6,7 @@ export default function TestimonialsPage() {
   return (
     <div className="min-h-screen bg-[#f8f6f3] font-sans selection:bg-[#f35e16]/30 selection:text-[#f35e16]">
       <Navbar />
-      <main className="pt-24">
+      <main>
         <TestimonialV2 />
       </main>
       <Footer />
