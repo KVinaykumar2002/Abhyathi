@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import ScrollToTop from '@/components/ScrollToTop';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AdminAuthProvider } from '@/context/AdminAuthContext';
 import ProtectedAdminRoute from '@/components/admin/ProtectedAdminRoute';
@@ -32,6 +33,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AdminAuthProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <div className="min-h-screen min-w-0 overflow-x-hidden bg-surface-base font-primary text-text-primary">
             <Routes>
               <Route path="/" element={<Home />} />

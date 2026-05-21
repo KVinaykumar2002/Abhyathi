@@ -9,7 +9,10 @@ export default function AboutScrollSequence() {
   const { canvasRef, scrollYProgress, reducedMotion } = useScrollFrameScrub(
     trackRef,
     frameUrls,
-    { fit: "cover" }
+    {
+      fit: "cover",
+      offset: ["start start", "end start"],
+    }
   );
 
   const hintOpacity = useTransform(scrollYProgress, [0, 0.08, 0.92, 1], [1, 0, 0, 1]);
@@ -35,7 +38,7 @@ export default function AboutScrollSequence() {
 
   return (
     <section
-      className="relative bg-surface-base [--about-scroll-h:125vh] md:[--about-scroll-h:155vh]"
+      className="relative bg-surface-base [--about-scroll-h:calc(100svh_+_72vh)] md:[--about-scroll-h:calc(100svh_+_88vh)]"
       aria-label="Packaging showcase animation"
     >
       <div

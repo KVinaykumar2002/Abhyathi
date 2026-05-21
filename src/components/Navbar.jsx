@@ -18,6 +18,10 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    setElevated(window.scrollY > 24);
+  }, [currentPath]);
+
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Products", href: "/menu" },
@@ -27,6 +31,11 @@ const Navbar = () => {
   ];
 
   const isActive = (href) => currentPath === href;
+
+  const handleNavClick = () => {
+    setMobileOpen(false);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  };
   /** Light page hero (e.g. menu) — dark nav text until user scrolls */
   const lightHero = !elevated && currentPath === "/menu";
   /** Home/video hero — white nav text until user scrolls */
@@ -71,6 +80,7 @@ const Navbar = () => {
       >
         <Link
           to="/"
+          onClick={handleNavClick}
           className="flex min-w-0 max-w-[55%] items-center gap-2 group focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2 sm:max-w-none sm:gap-ds-2"
         >
           <Brand />
@@ -83,7 +93,7 @@ const Navbar = () => {
           className="hidden items-center gap-ds-4 md:flex"
         >
           {navLinks.map((link) => (
-            <Link key={link.label} to={link.href} className={linkClass(link.href)}>
+            <Link key={link.label} to={link.href} onClick={handleNavClick} className={linkClass(link.href)}>
               {link.label}
             </Link>
           ))}
@@ -93,6 +103,7 @@ const Navbar = () => {
           <motion.div whileTap={{ scale: 0.98 }}>
             <Link
               to="/contact"
+              onClick={handleNavClick}
               className="group/contact hidden min-h-[44px] items-center gap-ds-2 rounded-ds-xl bg-surface-raised py-ds-1 pl-ds-1 pr-ds-3 text-ds-sm font-semibold text-text-secondary ring-1 ring-border-muted transition-[background-color,transform] duration-fast hover:bg-surface-base hover:translate-x-1 motion-reduce:hover:translate-x-0 md:inline-flex focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2"
             >
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-text-secondary text-surface-base">
@@ -130,7 +141,7 @@ const Navbar = () => {
               <Link
                 to="/"
                 className="flex items-center gap-ds-2"
-                onClick={() => setMobileOpen(false)}
+                onClick={handleNavClick}
               >
                 <BrandLogo size="md" />
                 <span className="font-primary text-ds-2xl font-medium text-text-primary">
@@ -157,7 +168,7 @@ const Navbar = () => {
                 >
                   <Link
                     to={link.href}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={handleNavClick}
                     className={cn(
                       "inline-flex items-center gap-3 font-primary text-ds-3xl transition-colors duration-fast",
                       "before:h-2 before:w-2 before:shrink-0 before:rounded-full before:bg-current before:content-['']",
@@ -175,7 +186,7 @@ const Navbar = () => {
             <div className="mt-auto">
               <Link
                 to="/contact"
-                onClick={() => setMobileOpen(false)}
+                onClick={handleNavClick}
                 className="flex min-h-[44px] w-full items-center justify-center gap-ds-2 rounded-ds-xl bg-surface-raised px-ds-3 py-ds-2 text-ds-lg font-semibold text-text-secondary ring-1 ring-border-muted transition-transform duration-fast hover:translate-x-1 motion-reduce:hover:translate-x-0 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-text-secondary text-surface-base">

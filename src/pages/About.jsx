@@ -238,7 +238,7 @@ export default function About() {
         <AboutScrollSequence />
 
         {/* Stats strip — three metrics, dotted rule below */}
-        <section className="border-b border-dashed border-border-muted/80">
+        <section className="-mt-px border-b border-dashed border-border-muted/80">
           <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-14 sm:grid-cols-3 sm:gap-8 md:px-10 lg:px-12 lg:py-16">
             <StatItem
               icon={Package}

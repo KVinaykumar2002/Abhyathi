@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 
 const SACRAMENTO = "'Sacramento', cursive";
 
-function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
-  const isDark = theme === "dark";
+function ShowcaseServiceCard({ title, bgText, imageSrc, accent = "default", className }) {
+  const isOrange = accent === "orange";
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -13,7 +13,7 @@ function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={cn(
         "relative w-full aspect-square md:aspect-auto md:h-[736px] rounded-[48px] overflow-hidden flex flex-col items-center pt-20 px-6 md:px-10 pb-10 group",
-        "bg-surface-raised",
+        isOrange ? "bg-text-secondary" : "bg-surface-raised",
         className
       )}
     >
@@ -21,7 +21,7 @@ function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
         className={cn(
           "absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[20%] pointer-events-none select-none -rotate-[25deg]",
           "text-[320px] md:text-[720px] leading-none whitespace-nowrap transition-transform duration-1000 group-hover:scale-105",
-          "text-text-primary/[0.04]"
+          isOrange ? "text-black/[0.12]" : "text-text-primary/[0.04]"
         )}
         style={{ fontFamily: SACRAMENTO }}
       >
@@ -32,7 +32,7 @@ function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
         <h3
           className={cn(
             "text-4xl md:text-[56px] leading-[1.1] font-semibold tracking-tight",
-            "text-text-primary"
+            isOrange ? "text-white" : "text-text-primary"
           )}
         >
           {title}
@@ -45,7 +45,9 @@ function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
           transition={{ duration: 0.5 }}
           className={cn(
             "relative w-[280px] md:w-[420px] aspect-[1.64] overflow-hidden rounded-2xl flex items-center justify-center p-1",
-            "border border-border-muted bg-surface-base/50"
+            isOrange
+              ? "border border-black/20 bg-black/15"
+              : "border border-border-muted bg-surface-base/50"
           )}
         >
           <img
@@ -64,19 +66,18 @@ export default function ServiceShowcase() {
     <section className="w-full bg-surface-base py-ds-5 px-ds-3 md:px-ds-4">
       <div className="max-w-[1520px] mx-auto grid grid-cols-1 xl:grid-cols-2 gap-8">
         <ShowcaseServiceCard
-          theme="dark"
+          accent="orange"
           bgText="growth"
           imageSrc="https://framerusercontent.com/images/rHfULRO1K2vbjZM8nXSkffVmX8.webp?width=2400&height=1600"
           title={
             <>
-              Growth, <span className="text-text-secondary">Performance</span>
+              Growth, <span className="text-black font-semibold">Performance</span>
               <br className="hidden md:block" /> & Scale
             </>
           }
         />
 
         <ShowcaseServiceCard
-          theme="dark"
           bgText="digital"
           imageSrc="https://framerusercontent.com/images/PgbdTcC7ZaDTdbWag0CMigzQM.webp?width=2400&height=1600"
           title={

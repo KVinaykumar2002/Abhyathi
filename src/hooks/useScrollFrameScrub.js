@@ -11,7 +11,11 @@ function prefersReducedMotion() {
 /**
  * Scroll-linked image sequence on a canvas (scrubs forward/back with scroll).
  */
-export function useScrollFrameScrub(trackRef, frameUrls, { fit = "contain" } = {}) {
+export function useScrollFrameScrub(
+  trackRef,
+  frameUrls,
+  { fit = "contain", offset = ["start start", "end end"] } = {}
+) {
   const canvasRef = useRef(null);
   const imagesRef = useRef([]);
   const readyRef = useRef(false);
@@ -20,7 +24,7 @@ export function useScrollFrameScrub(trackRef, frameUrls, { fit = "contain" } = {
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
-    offset: ["start start", "end end"],
+    offset,
   });
 
   const drawFrame = useCallback(
