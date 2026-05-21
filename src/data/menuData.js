@@ -18,7 +18,7 @@ export const menuItems = [
     description:
       "Grease-resistant kraft bags with reinforced handles. Perfect for bakeries, quick-service restaurants, and retail food outlets.",
     image:
-      "https://images.unsplash.com/photo-1582735689369-4fe3724936a7?q=80&w=2070&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1607083206968-13611e41cbd2?q=80&w=1200&auto=format&fit=crop",
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ export const menuItems = [
     description:
       "Double-wall compostable cups with matching lids. Heat-insulated and suitable for hot beverages on the go.",
     image:
-      "https://images.unsplash.com/photo-1598300042247-d088f8b8a631?q=80&w=2070&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop",
   },
   {
     id: 4,

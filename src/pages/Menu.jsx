@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Package, Leaf, GlassWater, ShoppingBag } from "lucide-react";
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import { menuItems } from '../data/menuData';
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { menuItems } from "../data/menuData";
+
+const CATEGORIES = [
+  "All Products",
+  "Containers",
+  "Bags & Wraps",
+  "Cups & Lids",
+  "Eco-Friendly",
+];
 
 /** Catalog hero — kraft / eco packaging lineup (public/image.png) */
 const PRODUCTS_HERO_BG = "/image.png";
@@ -55,171 +62,136 @@ const ProductsHero = () => (
   </section>
 );
 
-/* ─── Category Config ─── */
-const categories = [
-  { label: "All Products", icon: null, color: "#f35e16" },
-  { label: "Containers", icon: Package, color: "#22c55e" },
-  { label: "Bags & Wraps", icon: ShoppingBag, color: "#ef4444" },
-  { label: "Cups & Lids", icon: GlassWater, color: "#3b82f6" },
-  { label: "Eco-Friendly", icon: Leaf, color: "#16a34a" },
-];
-
-/** INR-style list price for catalog (placeholder scale from `price`). */
-function formatCatalogRs(item) {
-  const n = item.priceRs ?? Math.round(item.price * 10);
-  return n.toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
-
-/* ─── Catalog product cell — minimal grid like storefront ─── */
-const MenuCard = ({ item, index }) => {
+/* ─── Product range grid (matches home catalog layout) ─── */
+const ProductCard = ({ item }) => {
   const soldOut = Boolean(item.soldOut);
 
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.35, delay: index * 0.04 }}
-      className="flex flex-col items-center text-center"
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.35 }}
+      className="group overflow-hidden rounded-2xl bg-[#f8f9fa] shadow-sm transition-shadow duration-500 hover:shadow-xl"
     >
-      <div className="relative mx-auto aspect-[4/5] w-full max-w-[260px] rounded-xl bg-white">
+      <div className="relative h-44 overflow-hidden bg-neutral-100">
         {soldOut && (
-          <span className="absolute right-2 top-2 z-10 rounded-md border border-neutral-200 bg-neutral-100 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-red-600">
+          <span className="absolute right-3 top-3 z-10 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-red-600">
             Sold out
           </span>
         )}
         <img
           src={item.image}
-          alt=""
-          className={`h-full w-full object-contain p-4 ${soldOut ? "opacity-[0.55] grayscale" : ""}`}
+          alt={item.name}
+          className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 ${
+            soldOut ? "opacity-55 grayscale" : ""
+          }`}
           loading="lazy"
         />
       </div>
-      <h3 className="mt-5 max-w-[260px] px-1 text-[12px] font-semibold uppercase leading-snug tracking-wide text-neutral-950 sm:text-[13px]">
-        {item.name}
-      </h3>
-      <p className="mt-2 text-sm text-neutral-600">
-        From RS. {formatCatalogRs(item)}
-      </p>
+
+      <div className="p-5">
+        <div className="mb-2 flex items-start justify-between gap-2">
+          <span className="font-serif text-lg font-semibold text-[#f35e16]">
+            From ${item.price}
+          </span>
+          <span className="shrink-0 rounded-full border border-gray-200 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-gray-600">
+            {item.category}
+          </span>
+        </div>
+
+        <h3 className="mb-2 font-serif text-lg leading-snug text-[#101810] transition-colors group-hover:text-[#f35e16]">
+          {item.name}
+        </h3>
+
+        <p className="line-clamp-2 text-sm leading-relaxed text-gray-500">
+          {item.description}
+        </p>
+      </div>
     </motion.article>
   );
 };
 
-/* ─── Main Menu Grid Section ─── */
 const MenuGrid = () => {
   const [activeCategory, setActiveCategory] = useState("All Products");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const filtered =
     activeCategory === "All Products"
       ? menuItems
       : menuItems.filter((item) => item.category === activeCategory);
 
-  const counts = {
-    "All Products": menuItems.length,
-    Containers: menuItems.filter((i) => i.category === "Containers").length,
-    "Bags & Wraps": menuItems.filter((i) => i.category === "Bags & Wraps")
-      .length,
-    "Cups & Lids": menuItems.filter((i) => i.category === "Cups & Lids").length,
-    "Eco-Friendly": menuItems.filter((i) => i.category === "Eco-Friendly")
-      .length,
-  };
-
   return (
     <section
       id="menu-grid"
-      className="border-t border-neutral-100 bg-white pt-8 pb-14 md:pt-10 md:pb-16"
+      className="border-t border-neutral-100 bg-white py-16 md:py-24"
     >
-      <div className="mx-auto max-w-[1400px] px-5 md:px-8 lg:px-10">
-        <div className="mb-8 flex flex-col items-center gap-2 text-center md:mb-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#f35e16]">
-            Products
-          </p>
-          <h2 className="text-2xl font-semibold tracking-tight text-neutral-950 md:text-3xl">
-            Catalog
-          </h2>
-          <p className="max-w-lg text-sm text-neutral-500">
-            Filter by category — pricing shown as indicative list rates.
-          </p>
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-16 text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-6 font-serif text-4xl text-[#101810] md:text-5xl"
+          >
+            Our Product Range
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="mx-auto max-w-2xl text-lg text-gray-500"
+          >
+            Explore our catalog of containers, cups, bags, and compostable
+            disposables — sourced for quality, sustainability, and reliable bulk
+            supply.
+          </motion.p>
+        </div>
+
+        <div className="mb-16 flex flex-wrap justify-center gap-3 md:gap-4">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setActiveCategory(cat)}
+              className={`rounded-full border px-6 py-3 text-sm font-medium transition-all duration-300 md:px-8 ${
+                activeCategory === cat
+                  ? "border-[#f35e16] bg-[#f35e16] text-white"
+                  : "border-gray-200 bg-white text-gray-600 hover:border-[#f35e16] hover:text-[#f35e16]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-8 flex flex-wrap justify-center gap-2 md:mb-10 md:gap-2.5"
-        >
-          {categories.map((cat) => {
-            const Icon = cat.icon;
-            const active = activeCategory === cat.label;
-            return (
-              <motion.button
-                key={cat.label}
-                type="button"
-                onClick={() => setActiveCategory(cat.label)}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition-colors md:px-5 md:text-sm ${
-                  active
-                    ? "border-neutral-950 bg-neutral-950 text-white"
-                    : "border-neutral-200 bg-white text-neutral-700 hover:border-[#f35e16]/50 hover:text-[#f35e16]"
-                }`}
-              >
-                {Icon && <Icon size={14} className="shrink-0 opacity-80" />}
-                {cat.label}
-                <span
-                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums ${
-                    active ? "bg-white/15 text-white" : "bg-neutral-100 text-neutral-500"
-                  }`}
-                >
-                  {counts[cat.label]}
-                </span>
-              </motion.button>
-            );
-          })}
-        </motion.div>
-
-        <motion.div
           layout
-          className="grid grid-cols-1 gap-y-14 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-16"
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           <AnimatePresence mode="popLayout">
-            {mounted &&
-              filtered.map((item, index) => (
-                <MenuCard key={item.id} item={item} index={index} />
-              ))}
+            {filtered.map((item) => (
+              <ProductCard key={item.id} item={item} />
+            ))}
           </AnimatePresence>
         </motion.div>
 
-        {mounted && filtered.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="py-20 text-center text-neutral-500"
-          >
-            <p className="text-lg font-medium text-neutral-800">
-              No products in this category yet.
-            </p>
-          </motion.div>
+        {filtered.length === 0 && (
+          <p className="py-20 text-center text-lg font-medium text-gray-600">
+            No products in this category yet.
+          </p>
         )}
 
-        <div className="mt-14 flex flex-col items-center gap-3 text-center md:mt-16">
+        <div className="mt-16 text-center">
           <Link
             to="/contact"
-            className="rounded-full border-2 border-neutral-950 bg-neutral-950 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#f35e16] hover:border-[#f35e16]"
+            className="inline-flex items-center justify-center rounded-full bg-[#f35e16] px-10 py-4 text-base font-semibold text-white shadow-xl shadow-[#f35e16]/30 transition-colors hover:bg-[#e04e08]"
           >
             Request bulk pricing
           </Link>
-          <p className="max-w-md text-xs text-neutral-500">
-            New SKUs added regularly · Custom branding on select lines
+          <p className="mt-4 text-sm text-gray-400">
+            120+ SKUs across containers, cups, bags, and eco-friendly lines
           </p>
         </div>
       </div>

@@ -50,7 +50,7 @@ export default function WorksHero({ pinScrollTargetRef } = {}) {
             scale: scaleWorks,
             fontFamily: '"Inter Tight", sans-serif',
           }}
-          className="text-white font-semibold text-[25vw] md:text-[28vw] lg:text-[410px] leading-[0.9] tracking-[-0.03em] md:tracking-[-0.05em] text-center will-change-transform"
+          className="text-white font-semibold text-[13vw] md:text-[15vw] lg:text-[220px] leading-[0.9] tracking-[-0.03em] md:tracking-[-0.05em] text-center will-change-transform"
         >
           WORKS
         </motion.h1>
@@ -63,7 +63,7 @@ export default function WorksHero({ pinScrollTargetRef } = {}) {
           className="absolute inset-0 flex items-center justify-center pointer-events-none will-change-transform"
         >
           <span
-            className="text-[#f35e16] font-normal text-[15vw] md:text-[18vw] lg:text-[280px] leading-none text-center whitespace-nowrap mt-[5%] md:mt-[2%]"
+            className="text-[#f35e16] font-normal text-[8vw] md:text-[9.5vw] lg:text-[145px] leading-none text-center whitespace-nowrap mt-[5%] md:mt-[2%]"
             style={{
               fontFamily: '"Sacramento", cursive',
               textShadow: "0 10px 40px rgba(0,0,0,0.5)",
