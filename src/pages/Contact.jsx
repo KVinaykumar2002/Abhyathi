@@ -44,20 +44,6 @@ const ContactHero = () => (
       transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
     />
 
-    {/* Decorative fruit imagery */}
-    <img
-      src="https://images.unsplash.com/photo-1464454709131-ffd692591ee5?w=400&q=80&auto=format&fit=crop"
-      alt=""
-      aria-hidden
-      className="pointer-events-none absolute bottom-8 left-0 hidden h-36 w-36 -translate-x-1/4 object-contain drop-shadow-lg md:block lg:h-44 lg:w-44"
-    />
-    <img
-      src="https://images.unsplash.com/photo-1518492104733-9d9d4d0d6f6e?w=400&q=80&auto=format&fit=crop"
-      alt=""
-      aria-hidden
-      className="pointer-events-none absolute bottom-6 right-4 hidden h-32 w-32 object-contain drop-shadow-lg md:block lg:right-12 lg:h-40 lg:w-40"
-    />
-
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}

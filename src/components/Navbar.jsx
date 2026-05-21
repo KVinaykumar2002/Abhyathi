@@ -29,9 +29,6 @@ const Navbar = () => {
 
   const isActive = (href) => currentPath === href;
 
-  /** Products hero: frosted bar only on the nav row (not a full-page mask). */
-  const menuNavGlass = currentPath === "/menu" && !elevated;
-
   const Brand = () => (
     <>
       <BrandLogo size="md" className="group-hover:opacity-90 transition-opacity" />
@@ -47,9 +44,7 @@ const Navbar = () => {
         className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between transition-all duration-500 ${
           elevated
             ? "border-b border-black/10 bg-white/95 shadow-md shadow-black/10 backdrop-blur-md"
-            : menuNavGlass
-              ? "border-b border-black/[0.07] bg-white/65 shadow-sm shadow-black/5 backdrop-blur-md"
-              : "border-b border-transparent bg-transparent"
+            : "border-b border-transparent bg-transparent"
         }`}
       >
         <Link to="/" className="flex items-center gap-3 group">
