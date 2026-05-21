@@ -87,12 +87,12 @@ const cardData = [
     title: (
       <span className="text-white">
         Brand Identity <br className="hidden md:block" /> &{" "}
-        <span className="text-[#f35e16]">Visual</span> Design
+        <span className="text-text-secondary">Visual</span> Design
       </span>
     ),
   },
   {
-    backgroundColor: "#f35e16",
+    backgroundColor: "var(--color-text-secondary)",
     watermarkClassName: "text-black/[0.12]",
     imageFrameClassName: "bg-black/15 border border-black/20",
     watermarkText: "creative",
@@ -109,7 +109,7 @@ const cardData = [
 
 export default function ServiceCardsSection() {
   return (
-    <section className="w-full py-20 px-4 md:px-8 bg-[#0a0a0a]">
+    <section className="w-full bg-surface-base py-ds-5 px-ds-3 md:px-ds-4">
       <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
         {cardData.map((card, index) => (
           <CardsServiceCard key={index} {...card} />

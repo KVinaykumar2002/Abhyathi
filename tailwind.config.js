@@ -1,13 +1,17 @@
+const designTheme = require('./tailwind.design.cjs');
+
 module.exports = {
 	darkMode: 'class',
 	content: ['./src/**/*.{js,ts,jsx,tsx}'],
 	theme: {
 		fontFamily: {
-			sans: ['Inter', 'sans-serif'],
+			...designTheme.fontFamily,
 		},
 		extend: {
+			...designTheme.extend,
 			colors: {
-				primary: '#f35e16',
+				...designTheme.extend.colors,
+				primary: 'var(--color-text-secondary)',
 			},
 			fontFamily: {
 				'a-bee-zee': 'A Bee Zee',

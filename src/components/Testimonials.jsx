@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const Testimonials = () => {
   return (
-    <section className="py-24 bg-[#101810] overflow-hidden">
+    <section className="py-24 bg-surface-base overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row gap-12 items-center">
           <div className="w-full md:w-1/2">
@@ -19,7 +19,7 @@ const Testimonials = () => {
                 alt="Food service packaging warehouse"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-[#101810]/20" />
+              <div className="absolute inset-0 bg-surface-base/20" />
             </motion.div>
           </div>
 
@@ -30,7 +30,7 @@ const Testimonials = () => {
             transition={{ duration: 0.8 }}
             className="w-full md:w-1/2"
           >
-            <span className="text-[#f35e16] font-serif italic text-2xl mb-6 block">
+            <span className="text-text-secondary font-serif italic text-2xl mb-6 block">
               What our partners say
             </span>
             <h2 className="text-4xl md:text-5xl font-serif text-white mb-8 leading-tight">

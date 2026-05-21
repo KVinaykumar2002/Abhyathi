@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
 export default function RootLayout({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="bg-[#101810]">{children}</div>
+      <div className="bg-surface-base">{children}</div>
     </QueryClientProvider>
   );
 }

@@ -55,14 +55,14 @@ function StatItem({ icon: Icon, valueType, target, suffix, label, index }) {
       transition={{ duration: 0.55, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       className="flex flex-col items-center text-center sm:flex-row sm:items-center sm:gap-5 sm:text-left"
     >
-      <span className="mb-4 flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-black/10 bg-[#f35e16]/10 text-[#f35e16] sm:mb-0">
+      <span className="mb-4 flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-border-muted bg-text-secondary/10 text-text-secondary sm:mb-0">
         <Icon className="h-7 w-7" strokeWidth={1.75} />
       </span>
       <div>
-        <p className="text-4xl font-bold tracking-tight text-neutral-900 md:text-5xl">
+        <p className="text-4xl font-bold tracking-tight text-text-primary md:text-5xl">
           {text}
         </p>
-        <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-neutral-500">
+        <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-text-disabled">
           {label}
         </p>
       </div>
@@ -79,22 +79,22 @@ function FeaturePill({
 }) {
   const shell =
     variant === "dark"
-      ? "border-transparent bg-neutral-950 text-white shadow-[0_16px_40px_rgba(0,0,0,0.2)]"
+      ? "border-transparent bg-surface-raised text-white shadow-[0_16px_40px_rgba(0,0,0,0.2)]"
       : variant === "mid"
-        ? "border border-[#f35e16]/35 bg-neutral-900 text-white shadow-[0_12px_32px_rgba(243,94,22,0.12)]"
-        : "border border-black/[0.06] bg-[#f4efe6] text-neutral-900 shadow-[0_8px_28px_rgba(0,0,0,0.06)]";
+        ? "border border-text-secondary/35 bg-surface-base text-white shadow-[0_12px_32px_rgba(243,94,22,0.12)]"
+        : "border border-border-muted bg-surface-raised text-text-primary shadow-[0_8px_28px_rgba(0,0,0,0.06)]";
 
   const iconWrap =
     variant === "dark"
-      ? "bg-white text-neutral-950"
+      ? "bg-surface-base text-text-primary"
       : variant === "mid"
-        ? "bg-white/20 text-white"
-        : "bg-[#f35e16] text-white";
+        ? "bg-surface-base/20 text-white"
+        : "bg-text-secondary text-white";
 
   const titleClass =
-    variant === "light" ? "font-bold text-neutral-900" : "font-bold text-white";
+    variant === "light" ? "font-bold text-text-primary" : "font-bold text-white";
   const descClass =
-    variant === "light" ? "text-sm text-neutral-600" : "text-sm text-white/75";
+    variant === "light" ? "text-sm text-text-disabled" : "text-sm text-white/75";
 
   return (
     <motion.div
@@ -119,18 +119,18 @@ function FeaturePill({
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-[#f35e16]/30 selection:text-[#f35e16]">
+    <div className="min-h-screen bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
       <Navbar />
 
       <main className="pt-24 md:pt-28">
         {/* Hero — white band, black + orange accents */}
-        <section className="bg-white pb-10 pt-6 md:pb-12 md:pt-8">
+        <section className="bg-surface-base pb-10 pt-6 md:pb-12 md:pt-8">
           <div className="mx-auto max-w-7xl px-6 text-center md:px-10 lg:px-12">
             <motion.h1
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl font-bold tracking-tight text-neutral-950 md:text-5xl lg:text-[3.25rem]"
+              className="text-4xl font-bold tracking-tight text-text-primary md:text-5xl lg:text-[3.25rem]"
             >
               About Us
             </motion.h1>
@@ -138,29 +138,29 @@ export default function About() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-4 flex flex-wrap items-center justify-center gap-1 text-sm font-medium text-neutral-700 md:text-base"
+              className="mt-4 flex flex-wrap items-center justify-center gap-1 text-sm font-medium text-text-disabled md:text-base"
               aria-label="Breadcrumb"
             >
-              <Link to="/" className="transition-colors hover:text-[#f35e16]">
+              <Link to="/" className="transition-colors hover:text-text-secondary">
                 Home
               </Link>
-              <span className="flex items-center px-0.5 text-neutral-400" aria-hidden>
+              <span className="flex items-center px-0.5 text-text-disabled" aria-hidden>
                 <ChevronRight className="h-4 w-4" strokeWidth={2} />
                 <ChevronRight className="-ml-2.5 h-4 w-4" strokeWidth={2} />
               </span>
-              <span className="font-semibold text-[#f35e16]">About Us</span>
+              <span className="font-semibold text-text-secondary">About Us</span>
             </motion.nav>
           </div>
         </section>
 
         {/* Vision / Mission + excellence — black shell, orange accents, rounded throughout */}
-        <section className="bg-white px-6 pb-12 md:px-10 md:pb-14 lg:px-12">
+        <section className="bg-surface-base px-6 pb-12 md:px-10 md:pb-14 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ ...viewportScrollReplay, amount: 0.12 }}
             transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="mx-auto max-w-7xl overflow-hidden rounded-t-[1.75rem] bg-neutral-950 shadow-[0_24px_60px_rgba(243,94,22,0.15)] ring-1 ring-[#f35e16]/20 md:rounded-t-[2.25rem]"
+            className="mx-auto max-w-7xl overflow-hidden rounded-t-[1.75rem] bg-surface-raised shadow-[0_24px_60px_rgba(243,94,22,0.15)] ring-1 ring-text-secondary/20 md:rounded-t-[2.25rem]"
           >
             <div className="grid gap-12 px-5 py-12 md:gap-14 md:px-10 md:py-16 lg:grid-cols-2 lg:gap-16 lg:px-14 lg:py-20 xl:gap-20">
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-5 lg:gap-6">
@@ -169,9 +169,9 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ ...viewportScrollReplay, amount: 0.2 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative mx-auto mt-9 w-full max-w-sm rounded-2xl border border-white/10 bg-neutral-900 px-5 pb-8 pt-11 text-center text-white shadow-lg shadow-black/40 sm:mx-0 sm:max-w-none"
+                  className="relative mx-auto mt-9 w-full max-w-sm rounded-2xl border border-white/10 bg-surface-base px-5 pb-8 pt-11 text-center text-white shadow-lg shadow-black/40 sm:mx-0 sm:max-w-none"
                 >
-                  <div className="absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-[#f35e16] text-white shadow-lg shadow-[#f35e16]/35 ring-4 ring-neutral-950">
+                  <div className="absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-text-secondary text-white shadow-lg shadow-text-secondary/35 ring-4 ring-surface-base">
                     <Eye className="h-6 w-6" strokeWidth={2} aria-hidden />
                   </div>
                   <h2 className="text-lg font-bold md:text-xl">Our Vision</h2>
@@ -185,9 +185,9 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ ...viewportScrollReplay, amount: 0.2 }}
                   transition={{ duration: 0.5, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative mx-auto mt-9 w-full max-w-sm rounded-2xl border border-white/15 bg-[#f35e16] px-5 pb-8 pt-11 text-center text-white shadow-lg shadow-[#f35e16]/30 sm:mx-0 sm:max-w-none"
+                  className="relative mx-auto mt-9 w-full max-w-sm rounded-2xl border border-white/15 bg-text-secondary px-5 pb-8 pt-11 text-center text-white shadow-lg shadow-text-secondary/30 sm:mx-0 sm:max-w-none"
                 >
-                  <div className="absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-white text-neutral-950 shadow-md ring-4 ring-[#f35e16]">
+                  <div className="absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-surface-base text-text-primary shadow-md ring-4 ring-text-secondary">
                     <Target className="h-6 w-6" strokeWidth={2} aria-hidden />
                   </div>
                   <h2 className="text-lg font-bold md:text-xl">Our Mission</h2>
@@ -207,14 +207,14 @@ export default function About() {
               >
                 <h2 className="text-2xl font-bold leading-tight tracking-tight md:text-3xl lg:text-[2rem] xl:text-[2.15rem]">
                   Excellence In{" "}
-                  <span className="text-[#f35e16]">Food Service</span> Packaging
+                  <span className="text-text-secondary">Food Service</span> Packaging
                 </h2>
                 <p className="mt-5 text-sm leading-relaxed text-white/85 md:text-base">
                   From bulk containers and cups to bags and compostable lines—we
                   help restaurants, cloud kitchens, and caterers ship consistent
                   quality with packaging that performs on the shelf and on the road.
                 </p>
-                <div className="my-8 border-t border-dashed border-[#f35e16]/45" />
+                <div className="my-8 border-t border-dashed border-text-secondary/45" />
                 <p className="text-sm font-semibold tracking-wide text-white">
                   Our Partners:
                 </p>
@@ -222,7 +222,7 @@ export default function About() {
                   {["Partner One", "Partner Two", "Partner Three"].map((label) => (
                     <div
                       key={label}
-                      className="flex h-11 min-w-[6.5rem] items-center justify-center rounded-xl border-2 border-white/35 bg-black/40 px-4 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-colors hover:border-[#f35e16] hover:bg-[#f35e16]"
+                      className="flex h-11 min-w-[6.5rem] items-center justify-center rounded-xl border-2 border-white/35 bg-black/40 px-4 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-colors hover:border-text-secondary hover:bg-text-secondary"
                     >
                       {label}
                     </div>
@@ -234,7 +234,7 @@ export default function About() {
         </section>
 
         {/* Stats strip — three metrics, dotted rule below */}
-        <section className="border-b border-dashed border-neutral-300/80">
+        <section className="border-b border-dashed border-border-muted/80">
           <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-14 sm:grid-cols-3 sm:gap-8 md:px-10 lg:px-12 lg:py-16">
             <StatItem
               icon={Package}
@@ -273,10 +273,10 @@ export default function About() {
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="flex max-w-lg flex-col justify-center lg:max-w-none lg:pr-2"
             >
-              <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-bold leading-[1.15] tracking-tight text-neutral-900">
+              <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-bold leading-[1.15] tracking-tight text-text-primary">
                 Why Choose Us
               </h2>
-              <p className="mt-5 text-[15px] leading-relaxed text-neutral-500 md:text-base">
+              <p className="mt-5 text-[15px] leading-relaxed text-text-disabled md:text-base">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit
                 tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -288,9 +288,9 @@ export default function About() {
               >
                 <Link
                   to="/menu"
-                  className="inline-flex w-full items-center gap-3 rounded-full bg-neutral-950 py-2 pl-2 pr-8 text-sm font-semibold text-white shadow-md transition-colors hover:bg-black sm:w-auto sm:pr-10"
+                  className="inline-flex w-full items-center gap-3 rounded-full bg-surface-raised py-2 pl-2 pr-8 text-sm font-semibold text-white shadow-md transition-colors hover:bg-black sm:w-auto sm:pr-10"
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-neutral-950">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-base text-text-primary">
                     <ArrowRight className="h-4 w-4" aria-hidden strokeWidth={2.25} />
                   </span>
                   Learn More
@@ -351,13 +351,13 @@ export default function About() {
         </section>
 
         {/* CTA banner — texture bg (10002.jpg), 10001.png left, copy + pills right */}
-        <section className="bg-white px-6 pb-20 pt-10 md:px-10 lg:px-12 lg:pb-24 lg:pt-14">
+        <section className="bg-surface-base px-6 pb-20 pt-10 md:px-10 lg:px-12 lg:pb-24 lg:pt-14">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ ...viewportScrollReplay, amount: 0.12 }}
             transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="relative mx-auto max-w-7xl overflow-hidden rounded-t-[2.5rem] shadow-xl shadow-black/10 ring-1 ring-neutral-200/90 md:rounded-t-[3rem]"
+            className="relative mx-auto max-w-7xl overflow-hidden rounded-t-[2.5rem] shadow-xl shadow-black/10 ring-1 ring-border-muted md:rounded-t-[3rem]"
           >
             <div
               aria-hidden
@@ -383,7 +383,7 @@ export default function About() {
                 />
               </motion.div>
 
-              <div className="relative flex flex-col justify-center bg-white/85 px-6 py-12 backdrop-blur-md md:px-10 md:py-14 lg:px-12 lg:py-16">
+              <div className="relative flex flex-col justify-center bg-surface-base/85 px-6 py-12 backdrop-blur-md md:px-10 md:py-14 lg:px-12 lg:py-16">
                 <div
                   aria-hidden
                   className="pointer-events-none absolute right-[-10%] top-1/2 h-[min(90%,420px)] w-[min(90%,420px)] -translate-y-1/2 opacity-[0.12]"
@@ -401,22 +401,22 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewportScrollReplay}
                   transition={{ delay: 0.05 }}
-                  className="relative z-[1] max-w-lg text-2xl font-bold leading-snug tracking-tight text-neutral-900 md:text-3xl lg:text-[1.85rem] xl:text-4xl"
+                  className="relative z-[1] max-w-lg text-2xl font-bold leading-snug tracking-tight text-text-primary md:text-3xl lg:text-[1.85rem] xl:text-4xl"
                 >
                   Didn&apos;t find your answer?{" "}
-                  <span className="text-[#f35e16]">Contact us!</span>
+                  <span className="text-text-secondary">Contact us!</span>
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewportScrollReplay}
                   transition={{ delay: 0.1 }}
-                  className="relative z-[1] mt-4 max-w-lg text-sm leading-relaxed text-neutral-600 md:text-base"
+                  className="relative z-[1] mt-4 max-w-lg text-sm leading-relaxed text-text-disabled md:text-base"
                 >
                   Tell us about bulk orders, custom branding, or eco ranges—we
                   reply with clear next steps and timelines.
                 </motion.p>
-                <div className="relative z-[1] my-8 h-px w-full max-w-lg border-t border-dashed border-neutral-300" />
+                <div className="relative z-[1] my-8 h-px w-full max-w-lg border-t border-dashed border-border-muted" />
                 <div className="relative z-[1] flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                   <motion.a
                     href="tel:+910000000000"
@@ -426,16 +426,16 @@ export default function About() {
                     transition={{ delay: 0.15 }}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex min-w-0 flex-1 items-center gap-3 rounded-full border border-black/10 bg-white px-4 py-3 pr-6 shadow-lg sm:min-w-[240px] sm:flex-initial"
+                    className="flex min-w-0 flex-1 items-center gap-3 rounded-full border border-border-muted bg-surface-base px-4 py-3 pr-6 shadow-lg sm:min-w-[240px] sm:flex-initial"
                   >
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-neutral-950 text-white">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-surface-raised text-white">
                       <Phone className="h-5 w-5" strokeWidth={2} />
                     </span>
                     <div className="min-w-0 text-left">
-                      <p className="truncate text-sm font-bold text-neutral-900">
+                      <p className="truncate text-sm font-bold text-text-primary">
                         +91 (000) 000-0000
                       </p>
-                      <p className="text-xs text-neutral-500">Call sales & support</p>
+                      <p className="text-xs text-text-disabled">Call sales & support</p>
                     </div>
                   </motion.a>
                   <motion.a
@@ -446,9 +446,9 @@ export default function About() {
                     transition={{ delay: 0.22 }}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex min-w-0 flex-1 items-center gap-3 rounded-full bg-[#f35e16] px-4 py-3 pr-6 text-white shadow-[0_12px_40px_rgba(243,94,22,0.35)] sm:min-w-[240px] sm:flex-initial"
+                    className="flex min-w-0 flex-1 items-center gap-3 rounded-full bg-text-secondary px-4 py-3 pr-6 text-white shadow-[0_12px_40px_rgba(243,94,22,0.35)] sm:min-w-[240px] sm:flex-initial"
                   >
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-[#f35e16]">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-surface-base text-text-secondary">
                       <Mail className="h-5 w-5" strokeWidth={2} />
                     </span>
                     <div className="min-w-0 text-left">

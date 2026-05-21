@@ -14,7 +14,7 @@ export default function Home() {
   const worksTrackRef = useRef(null);
 
   return (
-    <div className="min-h-screen font-sans selection:bg-[#f35e16]/30 selection:text-[#f35e16]">
+    <div className="min-h-screen bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
       <Navbar />
       <main>
         <Hero />

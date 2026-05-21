@@ -25,7 +25,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="bg-[#101810] min-h-screen">
+        <div className="min-h-screen bg-surface-base font-primary text-text-primary">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />

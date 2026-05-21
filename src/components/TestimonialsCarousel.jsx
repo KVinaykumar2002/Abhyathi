@@ -258,7 +258,7 @@ function CustomCursor({ containerRef }) {
 
   return (
     <motion.div
-      className="absolute z-50 pointer-events-none hidden md:flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full"
+      className="absolute z-50 pointer-events-none hidden md:flex items-center gap-2 px-4 py-2 bg-surface-base/10 backdrop-blur-md border border-white/20 rounded-full"
       style={{
         left: smoothX,
         top: smoothY,
@@ -290,17 +290,17 @@ function TestimonialCard({ testimonial, index }) {
     <div className="relative group shrink-0 w-[300px] md:w-[490px] h-[280px] md:h-[240px]">
       <div
         className={cn(
-          "absolute w-20 h-20 bg-[#f35e16] blur-[40px] opacity-40 group-hover:opacity-60 transition-opacity",
+          "absolute w-20 h-20 bg-text-secondary blur-[40px] opacity-40 group-hover:opacity-60 transition-opacity",
           blurPos
         )}
       />
-      <div className="relative h-full w-full p-2 bg-white/10 backdrop-blur-3xl border border-white/10 rounded-2xl overflow-hidden">
+      <div className="relative h-full w-full p-2 bg-surface-base/10 backdrop-blur-3xl border border-white/10 rounded-2xl overflow-hidden">
         <div className="h-full w-full bg-[#0b0b0b] rounded-xl p-4 md:p-6 flex flex-col gap-2 md:gap-4">
           <div className="flex flex-col">
             <h4 className="text-white font-medium text-base md:text-lg">
               {testimonial.name}
             </h4>
-            <span className="text-[#f35e16] text-[10px] md:text-xs font-medium uppercase tracking-wider">
+            <span className="text-text-secondary text-[10px] md:text-xs font-medium uppercase tracking-wider">
               {testimonial.role}
             </span>
           </div>
@@ -359,7 +359,7 @@ export default function TestimonialsCarousel() {
   }, [isDragging, x]);
 
   return (
-    <section className="relative w-full min-h-[70vh] md:min-h-screen bg-[#0b0b0b] overflow-hidden flex flex-col items-center justify-center py-20 px-4 md:px-0 font-sans text-white">
+    <section className="relative flex min-h-[70vh] w-full flex-col items-center justify-center overflow-hidden bg-surface-raised py-ds-5 px-ds-3 font-primary text-text-primary md:min-h-screen md:px-0">
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {FLOATING_ASSETS.map((asset) => (
           <FloatingImage key={asset.id} asset={asset} />
@@ -379,7 +379,7 @@ export default function TestimonialsCarousel() {
           </h3>
           <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tight leading-tight">
             Packaging built for{" "}
-            <span className="text-[#f35e16]">real kitchens.</span>
+            <span className="text-text-secondary">real kitchens.</span>
           </h2>
           <p className="text-white/50 text-base md:text-lg max-w-lg">
             Clamshells, cups, bags, and bulk disposables—spec-driven supply for
@@ -392,7 +392,7 @@ export default function TestimonialsCarousel() {
             onMouseLeave={() => setIsHovered(false)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="relative mt-8 px-8 py-3 rounded-full flex items-center gap-3 bg-[#f35e16]/20 backdrop-blur-lg border border-white/10 group overflow-hidden"
+            className="relative mt-8 px-8 py-3 rounded-full flex items-center gap-3 bg-text-secondary/20 backdrop-blur-lg border border-white/10 group overflow-hidden"
           >
             <motion.div
               animate={{
@@ -400,9 +400,9 @@ export default function TestimonialsCarousel() {
                 y: isHovered ? -5 : 0,
                 scale: isHovered ? 1.5 : 1,
               }}
-              className="absolute -right-4 -bottom-4 w-12 h-12 bg-[#f35e16] rounded-full blur-xl opacity-60 pointer-events-none"
+              className="absolute -right-4 -bottom-4 w-12 h-12 bg-text-secondary rounded-full blur-xl opacity-60 pointer-events-none"
             />
-            <div className="relative z-10 w-8 h-8 rounded-full bg-[#f35e16] flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
+            <div className="relative z-10 w-8 h-8 rounded-full bg-text-secondary flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
               <ArrowRight size={18} className="text-white" />
             </div>
             <span className="relative z-10 font-medium text-lg text-white">

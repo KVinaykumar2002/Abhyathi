@@ -30,7 +30,7 @@ const features = [
 
 const Hero = () => {
   return (
-    <section className="relative h-[100svh] min-h-[720px] w-full overflow-hidden bg-[#101810]">
+    <section className="relative h-[100svh] min-h-[720px] w-full overflow-hidden bg-surface-base">
       {/* Video layer — block flow inside section, cannot extend above section top */}
       <div className="absolute inset-0 overflow-hidden">
         <video
@@ -78,7 +78,7 @@ const Hero = () => {
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
               <Link
                 to="/menu"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/40 px-4 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white/10 md:text-base"
+                className="inline-flex min-h-[44px] items-center gap-ds-2 rounded-ds-sm border border-border-muted px-ds-3 py-ds-2 text-ds-md font-semibold text-text-primary transition-colors duration-fast hover:border-text-secondary hover:bg-surface-raised md:text-ds-lg"
               >
                 <PlayCircle size={22} strokeWidth={1.75} />
                 Explore Our Products

@@ -36,7 +36,7 @@ export default function WorksHero({ pinScrollTargetRef } = {}) {
   return (
     <section
       ref={pinned ? undefined : localRef}
-      className={`relative w-full bg-[#0a0a0a] flex items-center justify-center overflow-hidden font-sans ${
+      className={`relative w-full bg-surface-base flex items-center justify-center overflow-hidden font-primary ${
         pinned ? "h-full min-h-0" : "min-h-[520px] h-[72vh] max-h-[825px]"
       }`}
     >
@@ -63,7 +63,7 @@ export default function WorksHero({ pinScrollTargetRef } = {}) {
           className="absolute inset-0 flex items-center justify-center pointer-events-none will-change-transform"
         >
           <span
-            className="text-[#f35e16] font-normal text-[8vw] md:text-[9.5vw] lg:text-[145px] leading-none text-center whitespace-nowrap mt-[5%] md:mt-[2%]"
+            className="text-text-secondary font-normal text-[8vw] md:text-[9.5vw] lg:text-[145px] leading-none text-center whitespace-nowrap mt-[5%] md:mt-[2%]"
             style={{
               fontFamily: '"Sacramento", cursive',
               textShadow: "0 10px 40px rgba(0,0,0,0.5)",
@@ -78,7 +78,7 @@ export default function WorksHero({ pinScrollTargetRef } = {}) {
         style={{ y: yGlow }}
         className="absolute inset-0 pointer-events-none opacity-20 will-change-transform"
       >
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[30%] bg-gradient-to-t from-[#f35e16]/25 to-transparent blur-3xl rounded-full" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[30%] bg-gradient-to-t from-text-secondary/25 to-transparent blur-3xl rounded-full" />
       </motion.div>
     </section>
   );

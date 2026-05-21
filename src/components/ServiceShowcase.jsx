@@ -13,7 +13,7 @@ function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={cn(
         "relative w-full aspect-square md:aspect-auto md:h-[736px] rounded-[48px] overflow-hidden flex flex-col items-center pt-20 px-6 md:px-10 pb-10 group",
-        isDark ? "bg-[#111111]" : "bg-[#fafafa]",
+        "bg-surface-raised",
         className
       )}
     >
@@ -21,7 +21,7 @@ function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
         className={cn(
           "absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[20%] pointer-events-none select-none -rotate-[25deg]",
           "text-[320px] md:text-[720px] leading-none whitespace-nowrap transition-transform duration-1000 group-hover:scale-105",
-          isDark ? "text-white/[0.04]" : "text-black/[0.04]"
+          "text-text-primary/[0.04]"
         )}
         style={{ fontFamily: SACRAMENTO }}
       >
@@ -32,7 +32,7 @@ function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
         <h3
           className={cn(
             "text-4xl md:text-[56px] leading-[1.1] font-semibold tracking-tight",
-            isDark ? "text-white" : "text-neutral-900"
+            "text-text-primary"
           )}
         >
           {title}
@@ -45,7 +45,7 @@ function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
           transition={{ duration: 0.5 }}
           className={cn(
             "relative w-[280px] md:w-[420px] aspect-[1.64] overflow-hidden rounded-2xl flex items-center justify-center p-1",
-            isDark ? "bg-white/5" : "bg-black/5"
+            "border border-border-muted bg-surface-base/50"
           )}
         >
           <img
@@ -61,15 +61,15 @@ function ShowcaseServiceCard({ title, bgText, imageSrc, theme, className }) {
 
 export default function ServiceShowcase() {
   return (
-    <section className="w-full py-20 px-6 md:px-12 bg-[#0a0a0a]">
+    <section className="w-full bg-surface-base py-ds-5 px-ds-3 md:px-ds-4">
       <div className="max-w-[1520px] mx-auto grid grid-cols-1 xl:grid-cols-2 gap-8">
         <ShowcaseServiceCard
-          theme="light"
+          theme="dark"
           bgText="growth"
           imageSrc="https://framerusercontent.com/images/rHfULRO1K2vbjZM8nXSkffVmX8.webp?width=2400&height=1600"
           title={
             <>
-              Growth, <span className="text-[#f35e16]">Performance</span>
+              Growth, <span className="text-text-secondary">Performance</span>
               <br className="hidden md:block" /> & Scale
             </>
           }
@@ -81,7 +81,7 @@ export default function ServiceShowcase() {
           imageSrc="https://framerusercontent.com/images/PgbdTcC7ZaDTdbWag0CMigzQM.webp?width=2400&height=1600"
           title={
             <>
-              Digital <span className="text-[#f35e16]">Experience</span>
+              Digital <span className="text-text-secondary">Experience</span>
               <br className="hidden md:block" /> & Development
             </>
           }

@@ -1,38 +1,26 @@
-import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import PageShell from "../components/PageShell";
+import { Button } from "@/components/ui";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#101810] font-sans selection:bg-[#f35e16]/30 selection:text-[#f35e16]">
-      <Navbar />
-      <main className="flex min-h-[70vh] flex-col items-center justify-center px-6 pt-28 pb-16 text-center">
-        <p className="text-sm font-semibold uppercase tracking-widest text-[#f35e16]">
-          404
-        </p>
-        <h1 className="mt-3 max-w-lg font-serif text-4xl font-medium text-white md:text-5xl">
-          This page isn&apos;t on the menu
-        </h1>
-        <p className="mt-4 max-w-md text-white/60">
-          The link may be outdated or the address was mistyped. Head back home or
-          open our product catalog.
-        </p>
-        <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <Link
-            to="/"
-            className="inline-flex rounded-full bg-[#f35e16] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#d85212]"
-          >
-            Back to home
-          </Link>
-          <Link
-            to="/menu"
-            className="inline-flex rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-          >
-            Browse products
-          </Link>
-        </div>
-      </main>
-      <Footer />
-    </div>
+    <PageShell mainClassName="flex min-h-[70vh] flex-col items-center justify-center px-ds-3 text-center">
+      <p className="text-ds-sm font-semibold uppercase tracking-widest text-text-secondary">
+        404
+      </p>
+      <h1 className="mt-ds-2 max-w-lg font-primary text-ds-3xl font-medium text-text-primary md:text-ds-4xl">
+        This page isn&apos;t on the menu
+      </h1>
+      <p className="mt-ds-3 max-w-md text-ds-md text-text-disabled">
+        The link may be outdated. Head home or browse our product catalog.
+      </p>
+      <div className="mt-ds-4 flex flex-wrap justify-center gap-ds-2">
+        <Button to="/" variant="primary">
+          Back to home
+        </Button>
+        <Button to="/menu" variant="secondary">
+          View products
+        </Button>
+      </div>
+    </PageShell>
   );
 }
