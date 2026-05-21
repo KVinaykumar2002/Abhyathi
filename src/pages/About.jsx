@@ -119,7 +119,6 @@ function FeaturePill({
 }
 
 export default function About() {
-  /** Tall runway for frame scrub; stats scroll over after animation completes (same pattern as Home WORKS). */
   const aboutScrollRunwayRef = useRef(null);
 
   return (
@@ -237,62 +236,61 @@ export default function About() {
           </motion.div>
         </section>
 
-        {/* Scroll-scrub runway, then stats scroll in after frames finish (Home WORKS pattern) */}
+        {/* Pin canvas for full scrub, then stats — scrub spacer in overlay (no black tail below stats) */}
         <div
-          className="relative isolate bg-surface-base"
-          style={{
-            "--about-pin-h": "100svh",
-            "--about-scroll-h": "calc(100svh + 55vh)",
-          }}
+          ref={aboutScrollRunwayRef}
+          className="relative isolate bg-surface-base [--about-pin-h:100svh] [--about-scrub-h:55vh] md:[--about-scrub-h:65vh]"
+          aria-label="Packaging showcase animation"
         >
           <div
-            ref={aboutScrollRunwayRef}
-            className="relative w-full"
-            style={{ height: "var(--about-scroll-h)" }}
-            aria-label="Packaging showcase animation"
+            className="sticky top-0 z-0 w-full overflow-hidden bg-surface-base"
+            style={{ height: "var(--about-pin-h)" }}
           >
-            <div
-              className="sticky top-0 z-0 w-full overflow-hidden bg-surface-base"
-              style={{ height: "var(--about-pin-h)" }}
-            >
-              <AboutScrollSequence pinScrollTargetRef={aboutScrollRunwayRef} />
-            </div>
+            <AboutScrollSequence pinScrollTargetRef={aboutScrollRunwayRef} />
           </div>
 
-          <section
-            className="relative z-[1] border-b border-dashed border-border-muted/80 bg-surface-base shadow-[0_-24px_48px_rgba(0,0,0,0.2)]"
+          <div
+            className="relative z-[1] bg-surface-base"
             style={{
-              marginTop: "calc(0px - var(--about-scroll-h))",
-              paddingTop: "var(--about-scroll-h)",
+              marginTop: "calc(0px - var(--about-pin-h))",
+              paddingTop: "var(--about-pin-h)",
             }}
           >
-            <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-14 sm:grid-cols-3 sm:gap-8 md:px-10 lg:px-12 lg:py-16">
-              <StatItem
-                icon={Package}
-                valueType="int"
-                target={23}
-                suffix=""
-                label="Experience"
-                index={0}
-              />
-              <StatItem
-                icon={Users}
-                valueType="float"
-                target={5.8}
-                suffix="+"
-                label="Customer Rate"
-                index={1}
-              />
-              <StatItem
-                icon={BadgeCheck}
-                valueType="float"
-                target={6.1}
-                suffix="+"
-                label="Project Done"
-                index={2}
-              />
-            </div>
-          </section>
+            <div
+              aria-hidden
+              className="pointer-events-none w-full shrink-0"
+              style={{ height: "var(--about-scrub-h)" }}
+            />
+
+            <section className="border-b border-dashed border-border-muted/80 shadow-[0_-20px_40px_rgba(0,0,0,0.18)]">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-14 sm:grid-cols-3 sm:gap-8 md:px-10 lg:px-12 lg:py-16">
+            <StatItem
+              icon={Package}
+              valueType="int"
+              target={23}
+              suffix=""
+              label="Experience"
+              index={0}
+            />
+            <StatItem
+              icon={Users}
+              valueType="float"
+              target={5.8}
+              suffix="+"
+              label="Customer Rate"
+              index={1}
+            />
+            <StatItem
+              icon={BadgeCheck}
+              valueType="float"
+              target={6.1}
+              suffix="+"
+              label="Project Done"
+              index={2}
+            />
+          </div>
+            </section>
+          </div>
         </div>
 
         {/* Why Choose Us — 3 equal columns: copy | mockup | cards (matches reference layout) */}

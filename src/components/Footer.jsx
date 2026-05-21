@@ -116,7 +116,7 @@ const FooterBrandColumn = ({ className }) => (
         to="/"
         className="group inline-flex flex-col gap-4 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F4783E] focus-visible:outline-offset-4"
       >
-        <BrandLogo size="lg" className="h-14 w-auto transition-opacity duration-300 group-hover:opacity-90 sm:h-16" />
+        <BrandLogo size="lg" className="h-20 w-auto transition-opacity duration-300 group-hover:opacity-90 sm:h-24 md:h-28" />
         <span className="text-[18px] font-medium text-white/50 transition-colors duration-300 group-hover:text-white/80">
           Abhyati Food Pak
         </span>

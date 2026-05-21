@@ -19,7 +19,7 @@ export default function AboutScrollSequence({ pinScrollTargetRef } = {}) {
     frameUrls,
     {
       fit: "cover",
-      offset: pinned ? ["start start", "end end"] : ["start start", "end start"],
+      offset: ["start start", "end end"],
     }
   );
 
@@ -46,7 +46,13 @@ export default function AboutScrollSequence({ pinScrollTargetRef } = {}) {
 
   const canvasBlock = (
     <>
-      <canvas ref={canvasRef} className="h-full w-full" aria-hidden />
+      <img
+        src={frameUrls[0]}
+        alt=""
+        aria-hidden
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+      <canvas ref={canvasRef} className="relative z-[1] h-full w-full" aria-hidden />
       <motion.p
         style={{ opacity: hintOpacity }}
         className="pointer-events-none absolute bottom-8 left-1/2 z-10 -translate-x-1/2 rounded-full border border-border-muted bg-surface-raised/90 px-4 py-2 text-ds-xs font-medium uppercase tracking-widest text-text-disabled backdrop-blur-sm"
@@ -63,7 +69,7 @@ export default function AboutScrollSequence({ pinScrollTargetRef } = {}) {
 
   return (
     <section
-      className="relative bg-surface-base [--about-scroll-h:calc(100svh_+_55vh)]"
+      className="relative bg-surface-base [--about-scroll-h:calc(100svh_+_28vh)] md:[--about-scroll-h:calc(100svh_+_36vh)]"
       aria-label="Packaging showcase animation"
     >
       <div
