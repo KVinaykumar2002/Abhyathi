@@ -119,8 +119,6 @@ function FeaturePill({
 }
 
 export default function About() {
-  const aboutScrollRunwayRef = useRef(null);
-
   return (
     <div className="min-h-screen min-w-0 overflow-x-hidden bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
       <Navbar />
@@ -236,33 +234,9 @@ export default function About() {
           </motion.div>
         </section>
 
-        {/* Pin canvas for full scrub, then stats — scrub spacer in overlay (no black tail below stats) */}
-        <div
-          ref={aboutScrollRunwayRef}
-          className="relative isolate bg-surface-base [--about-pin-h:100svh] [--about-scrub-h:55vh] md:[--about-scrub-h:65vh]"
-          aria-label="Packaging showcase animation"
-        >
-          <div
-            className="sticky top-0 z-0 w-full overflow-hidden bg-surface-base"
-            style={{ height: "var(--about-pin-h)" }}
-          >
-            <AboutScrollSequence pinScrollTargetRef={aboutScrollRunwayRef} />
-          </div>
+        <AboutScrollSequence />
 
-          <div
-            className="relative z-[1] bg-surface-base"
-            style={{
-              marginTop: "calc(0px - var(--about-pin-h))",
-              paddingTop: "var(--about-pin-h)",
-            }}
-          >
-            <div
-              aria-hidden
-              className="pointer-events-none w-full shrink-0"
-              style={{ height: "var(--about-scrub-h)" }}
-            />
-
-            <section className="border-b border-dashed border-border-muted/80 shadow-[0_-20px_40px_rgba(0,0,0,0.18)]">
+        <section className="relative z-[1] -mt-[45vh] border-b border-dashed border-border-muted/80 bg-surface-base md:-mt-[55vh]">
           <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-14 sm:grid-cols-3 sm:gap-8 md:px-10 lg:px-12 lg:py-16">
             <StatItem
               icon={Package}
@@ -289,9 +263,7 @@ export default function About() {
               index={2}
             />
           </div>
-            </section>
-          </div>
-        </div>
+        </section>
 
         {/* Why Choose Us — 3 equal columns: copy | mockup | cards (matches reference layout) */}
         <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-20 lg:px-12 lg:py-24">
