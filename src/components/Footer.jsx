@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { EASE_OUT_SOFT, viewportScrollReplay } from "@/lib/motionPresets";
 import FooterDownloadBanner from "./FooterDownloadBanner";
+import BrandLogo from "./Logo";
 
 const gridContainer = {
   hidden: {},
@@ -62,11 +63,6 @@ const NAV_LINKS = [
   { label: "Contact Us", href: "/contact" },
 ];
 
-const ACCOUNT_LINKS = [
-  { label: "Login", href: "/account" },
-  { label: "Register", href: "/account" },
-];
-
 const CONTACT_INFO = [
   {
     label: "info@abhyatifoodpak.com",
@@ -112,6 +108,22 @@ function FooterLinkAnchor({ link, pathname }) {
     </a>
   );
 }
+
+const FooterBrandColumn = ({ className }) => (
+  <motion.div variants={columnReveal} className={cn("flex flex-col gap-4", className)}>
+    <motion.div variants={linkReveal}>
+      <Link
+        to="/"
+        className="group inline-flex flex-col gap-4 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F4783E] focus-visible:outline-offset-4"
+      >
+        <BrandLogo size="lg" className="h-14 w-auto transition-opacity duration-300 group-hover:opacity-90 sm:h-16" />
+        <span className="text-[18px] font-medium text-white/50 transition-colors duration-300 group-hover:text-white/80">
+          Abhyati Food Pak
+        </span>
+      </Link>
+    </motion.div>
+  </motion.div>
+);
 
 const FooterColumn = ({ title, links, className, pathname }) => {
   return (
@@ -185,7 +197,7 @@ const Footer = () => {
           viewport={viewportScrollReplay}
         >
           <FooterColumn links={NAV_LINKS} pathname={pathname} />
-          <FooterColumn links={ACCOUNT_LINKS} pathname={pathname} />
+          <FooterBrandColumn />
           <FooterColumn
             links={CONTACT_INFO}
             pathname={pathname}

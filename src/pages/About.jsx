@@ -119,6 +119,9 @@ function FeaturePill({
 }
 
 export default function About() {
+  /** Tall runway for frame scrub; stats scroll over after animation completes (same pattern as Home WORKS). */
+  const aboutScrollRunwayRef = useRef(null);
+
   return (
     <div className="min-h-screen min-w-0 overflow-x-hidden bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
       <Navbar />
@@ -234,38 +237,63 @@ export default function About() {
           </motion.div>
         </section>
 
-        {/* Scroll-scrub packaging sequence (middle of page — not in header) */}
-        <AboutScrollSequence />
-
-        {/* Stats strip — three metrics, dotted rule below */}
-        <section className="-mt-px border-b border-dashed border-border-muted/80">
-          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-14 sm:grid-cols-3 sm:gap-8 md:px-10 lg:px-12 lg:py-16">
-            <StatItem
-              icon={Package}
-              valueType="int"
-              target={23}
-              suffix=""
-              label="Experience"
-              index={0}
-            />
-            <StatItem
-              icon={Users}
-              valueType="float"
-              target={5.8}
-              suffix="+"
-              label="Customer Rate"
-              index={1}
-            />
-            <StatItem
-              icon={BadgeCheck}
-              valueType="float"
-              target={6.1}
-              suffix="+"
-              label="Project Done"
-              index={2}
-            />
+        {/* Scroll-scrub runway, then stats scroll in after frames finish (Home WORKS pattern) */}
+        <div
+          className="relative isolate bg-surface-base"
+          style={{
+            "--about-pin-h": "100svh",
+            "--about-scroll-h": "calc(100svh + 55vh)",
+          }}
+        >
+          <div
+            ref={aboutScrollRunwayRef}
+            className="relative w-full"
+            style={{ height: "var(--about-scroll-h)" }}
+            aria-label="Packaging showcase animation"
+          >
+            <div
+              className="sticky top-0 z-0 w-full overflow-hidden bg-surface-base"
+              style={{ height: "var(--about-pin-h)" }}
+            >
+              <AboutScrollSequence pinScrollTargetRef={aboutScrollRunwayRef} />
+            </div>
           </div>
-        </section>
+
+          <section
+            className="relative z-[1] border-b border-dashed border-border-muted/80 bg-surface-base shadow-[0_-24px_48px_rgba(0,0,0,0.2)]"
+            style={{
+              marginTop: "calc(0px - var(--about-scroll-h))",
+              paddingTop: "var(--about-scroll-h)",
+            }}
+          >
+            <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-14 sm:grid-cols-3 sm:gap-8 md:px-10 lg:px-12 lg:py-16">
+              <StatItem
+                icon={Package}
+                valueType="int"
+                target={23}
+                suffix=""
+                label="Experience"
+                index={0}
+              />
+              <StatItem
+                icon={Users}
+                valueType="float"
+                target={5.8}
+                suffix="+"
+                label="Customer Rate"
+                index={1}
+              />
+              <StatItem
+                icon={BadgeCheck}
+                valueType="float"
+                target={6.1}
+                suffix="+"
+                label="Project Done"
+                index={2}
+              />
+            </div>
+          </section>
+        </div>
 
         {/* Why Choose Us — 3 equal columns: copy | mockup | cards (matches reference layout) */}
         <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-20 lg:px-12 lg:py-24">

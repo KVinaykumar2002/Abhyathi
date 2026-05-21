@@ -3,15 +3,23 @@ import { motion, useTransform } from "framer-motion";
 import { getAboutFrameUrls, ABOUT_SCROLL_FRAMES } from "@/data/aboutScrollFrames";
 import { useScrollFrameScrub } from "@/hooks/useScrollFrameScrub";
 
-export default function AboutScrollSequence() {
-  const trackRef = useRef(null);
+/**
+ * Scroll-scrub frame canvas. With `pinScrollTargetRef`, the parent supplies the
+ * tall runway + sticky shell (see About page); frames scrub until scroll completes,
+ * then the next section scrolls in on top.
+ */
+export default function AboutScrollSequence({ pinScrollTargetRef } = {}) {
+  const localTrackRef = useRef(null);
+  const scrollTarget = pinScrollTargetRef ?? localTrackRef;
+  const pinned = Boolean(pinScrollTargetRef);
+
   const frameUrls = useMemo(() => getAboutFrameUrls(), []);
   const { canvasRef, scrollYProgress, reducedMotion } = useScrollFrameScrub(
-    trackRef,
+    scrollTarget,
     frameUrls,
     {
       fit: "cover",
-      offset: ["start start", "end start"],
+      offset: pinned ? ["start start", "end end"] : ["start start", "end start"],
     }
   );
 
@@ -36,32 +44,35 @@ export default function AboutScrollSequence() {
     );
   }
 
+  const canvasBlock = (
+    <>
+      <canvas ref={canvasRef} className="h-full w-full" aria-hidden />
+      <motion.p
+        style={{ opacity: hintOpacity }}
+        className="pointer-events-none absolute bottom-8 left-1/2 z-10 -translate-x-1/2 rounded-full border border-border-muted bg-surface-raised/90 px-4 py-2 text-ds-xs font-medium uppercase tracking-widest text-text-disabled backdrop-blur-sm"
+      >
+        Scroll to explore · {ABOUT_SCROLL_FRAMES.count} frames @ {ABOUT_SCROLL_FRAMES.fps}
+        fps
+      </motion.p>
+    </>
+  );
+
+  if (pinned) {
+    return <div className="relative h-full w-full">{canvasBlock}</div>;
+  }
+
   return (
     <section
-      className="relative bg-surface-base [--about-scroll-h:calc(100svh_+_72vh)] md:[--about-scroll-h:calc(100svh_+_88vh)]"
+      className="relative bg-surface-base [--about-scroll-h:calc(100svh_+_55vh)]"
       aria-label="Packaging showcase animation"
     >
       <div
-        ref={trackRef}
+        ref={localTrackRef}
         className="relative w-full"
         style={{ height: "var(--about-scroll-h)" }}
       >
-        <div className="sticky top-0 z-0 flex h-[100svh] min-h-[480px] w-full items-center justify-center overflow-hidden bg-surface-base">
-          <canvas
-            ref={canvasRef}
-            className="h-full w-full"
-            aria-hidden
-          />
-
-          {!reducedMotion && (
-            <motion.p
-              style={{ opacity: hintOpacity }}
-              className="pointer-events-none absolute bottom-8 left-1/2 z-10 -translate-x-1/2 rounded-full border border-border-muted bg-surface-raised/90 px-4 py-2 text-ds-xs font-medium uppercase tracking-widest text-text-disabled backdrop-blur-sm"
-            >
-              Scroll to explore · {ABOUT_SCROLL_FRAMES.count} frames @{" "}
-              {ABOUT_SCROLL_FRAMES.fps}fps
-            </motion.p>
-          )}
+        <div className="sticky top-0 z-0 flex h-svh w-full items-center justify-center overflow-hidden bg-surface-base">
+          {canvasBlock}
         </div>
       </div>
     </section>
