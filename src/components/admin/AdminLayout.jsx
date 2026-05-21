@@ -27,8 +27,8 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="admin-ui flex min-h-screen bg-surface-base font-primary text-lg text-text-primary">
-      <aside className="flex w-full shrink-0 flex-col border-r border-border-muted bg-surface-raised md:w-64 lg:w-72">
+    <div className="admin-ui flex min-h-screen min-w-0 flex-col bg-surface-base font-primary text-lg text-text-primary md:flex-row">
+      <aside className="flex w-full shrink-0 flex-col border-b border-border-muted bg-surface-raised md:w-64 md:border-b-0 md:border-r lg:w-72">
         <div className="border-b border-border-muted px-ds-3 py-ds-4">
           <Link to="/admin" className="flex items-center gap-ds-2">
             <span className="flex h-11 w-11 items-center justify-center rounded-ds-sm bg-text-secondary text-surface-base">

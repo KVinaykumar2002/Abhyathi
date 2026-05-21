@@ -9,7 +9,7 @@ export default function PageShell({ children, className, mainClassName }) {
   return (
     <div
       className={cn(
-        "min-h-screen bg-surface-base font-primary text-text-primary selection:bg-text-secondary/30 selection:text-text-secondary",
+        "min-h-screen min-w-0 overflow-x-hidden bg-surface-base font-primary text-text-primary selection:bg-text-secondary/30 selection:text-text-secondary",
         className
       )}
     >

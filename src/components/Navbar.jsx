@@ -27,7 +27,10 @@ const Navbar = () => {
   ];
 
   const isActive = (href) => currentPath === href;
+  /** Light page hero (e.g. menu) — dark nav text until user scrolls */
   const lightHero = !elevated && currentPath === "/menu";
+  /** Home/video hero — white nav text until user scrolls */
+  const overMediaHero = !elevated && (currentPath === "/" || currentPath === "/about");
 
   const linkClass = (href) =>
     cn(
@@ -35,9 +38,11 @@ const Navbar = () => {
       "before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-current before:content-['']",
       isActive(href)
         ? "text-text-secondary"
-        : lightHero && !elevated
+        : lightHero
           ? "text-surface-base hover:text-text-secondary"
-          : "text-text-primary hover:text-text-secondary"
+          : overMediaHero
+            ? "text-white hover:text-text-secondary"
+            : "text-text-primary hover:text-text-secondary"
     );
 
   const Brand = () => (
@@ -45,8 +50,8 @@ const Navbar = () => {
       <BrandLogo size="md" className="transition-opacity duration-fast group-hover:opacity-90" />
       <span
         className={cn(
-          "font-primary text-ds-2xl font-medium tracking-tight transition-colors duration-fast group-hover:text-text-secondary",
-          lightHero && !elevated ? "text-surface-base" : "text-text-primary"
+          "truncate font-primary text-base font-medium tracking-tight transition-colors duration-fast group-hover:text-text-secondary sm:text-ds-xl md:text-ds-2xl",
+          lightHero ? "text-surface-base" : overMediaHero ? "text-white" : "text-text-primary"
         )}
       >
         Abhyati Food Pak
@@ -58,15 +63,15 @@ const Navbar = () => {
     <>
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-ds-3 py-ds-2 transition-all duration-slow",
+          "fixed top-0 left-0 right-0 z-50 flex min-w-0 items-center justify-between gap-2 px-4 py-2 transition-all duration-slow sm:px-ds-3 sm:py-ds-2",
           elevated
-            ? "border-b border-border-muted bg-surface-raised/95 shadow-md backdrop-blur-md"
+            ? "border-b border-white/10 bg-[#000000] shadow-lg"
             : "border-b border-transparent bg-transparent"
         )}
       >
         <Link
           to="/"
-          className="flex items-center gap-ds-2 group focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2"
+          className="flex min-w-0 max-w-[55%] items-center gap-2 group focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2 sm:max-w-none sm:gap-ds-2"
         >
           <Brand />
         </Link>
@@ -103,7 +108,7 @@ const Navbar = () => {
             className={cn(
               "min-h-[44px] min-w-[44px] rounded-ds-xs p-ds-2 transition-colors duration-fast md:hidden",
               "hover:bg-surface-raised focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2",
-              lightHero && !elevated ? "text-surface-base" : "text-text-primary"
+              lightHero ? "text-surface-base" : overMediaHero ? "text-white" : "text-text-primary"
             )}
             aria-label="Open menu"
           >

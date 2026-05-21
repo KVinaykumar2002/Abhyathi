@@ -1,4 +1,4 @@
-import { mediaPath } from "./gridfs.js";
+import { productImageForApi } from "./productImage.js";
 
 /** Normalize product document for API responses. */
 export function formatProduct(doc) {
@@ -8,9 +8,8 @@ export function formatProduct(doc) {
   delete ret._id;
   delete ret.__v;
 
-  if (ret.imageFileId) {
-    ret.image = mediaPath(ret.imageFileId.toString());
-  }
+  ret.image = productImageForApi(ret);
+  delete ret.imageFileId;
 
   return ret;
 }

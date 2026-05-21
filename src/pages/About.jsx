@@ -120,13 +120,13 @@ function FeaturePill({
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
+    <div className="min-h-screen min-w-0 overflow-x-hidden bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
       <Navbar />
 
       <main className="pt-24 md:pt-28">
         {/* Hero — white band, black + orange accents */}
         <section className="bg-surface-base pb-10 pt-6 md:pb-12 md:pt-8">
-          <div className="mx-auto max-w-7xl px-6 text-center md:px-10 lg:px-12">
+          <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 md:px-10 lg:px-12">
             <motion.h1
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -355,7 +355,7 @@ export default function About() {
         </section>
 
         {/* CTA banner — texture bg (10002.jpg), 10001.png left, copy + pills right */}
-        <section className="bg-surface-base px-6 pb-20 pt-10 md:px-10 lg:px-12 lg:pb-24 lg:pt-14">
+        <section className="bg-surface-base px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-10 md:px-10 lg:px-12 lg:pb-24 lg:pt-14">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}

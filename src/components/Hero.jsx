@@ -39,7 +39,7 @@ const Hero = () => {
 
       <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
 
-      <div className="relative z-[2] flex h-full items-center px-6 pb-8 pt-24 md:px-12 md:pt-28 lg:px-16 pointer-events-auto">
+      <div className="relative z-[2] flex h-full items-center px-4 pb-8 pt-20 pointer-events-auto sm:px-6 sm:pt-24 md:px-12 md:pt-28 lg:px-16">
         <motion.div
           variants={containerVariants}
           initial="hidden"

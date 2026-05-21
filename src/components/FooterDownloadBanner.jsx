@@ -34,7 +34,7 @@ function GooglePlayIcon({ className }) {
   );
 }
 
-function PlayStoreButton({ variants }) {
+function PlayStoreButton({ variants, className }) {
   return (
     <motion.a
       variants={variants}
@@ -43,19 +43,53 @@ function PlayStoreButton({ variants }) {
       rel="noopener noreferrer"
       whileHover={{ scale: 1.03, x: 4 }}
       whileTap={{ scale: 0.98 }}
-      className="inline-flex w-fit max-w-full items-center gap-3 rounded-xl bg-[#0d0d0d] px-5 py-3.5 text-white shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-shadow hover:shadow-[0_12px_32px_rgba(0,0,0,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B7A3D]"
+      className={
+        className ??
+        "inline-flex w-fit max-w-full items-center gap-3 rounded-xl bg-[#0d0d0d] px-4 py-3 text-white shadow-lg transition-shadow hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B7A3D] sm:px-5 sm:py-3.5"
+      }
       aria-label="Download Abhyati food packaging app on Google Play"
     >
-      <GooglePlayIcon className="h-9 w-9 shrink-0 text-[#34A853]" />
+      <GooglePlayIcon className="h-8 w-8 shrink-0 text-[#34A853] sm:h-9 sm:w-9" />
       <span className="flex flex-col items-start leading-none">
-        <span className="text-[11px] font-medium uppercase tracking-wide text-white/75">
+        <span className="text-[10px] font-medium uppercase tracking-wide text-white/75 sm:text-[11px]">
           Download on
         </span>
-        <span className="mt-0.5 text-xl font-semibold tracking-tight">
+        <span className="mt-0.5 text-lg font-semibold tracking-tight sm:text-xl">
           Google Play
         </span>
       </span>
     </motion.a>
+  );
+}
+
+function DownloadCopy({ itemVariants, mobileOnDark = false }) {
+  const headingClass = mobileOnDark
+    ? "text-[#4ade80]"
+    : "text-[#1B7A3D]";
+  const bodyClass = mobileOnDark
+    ? "text-white/90"
+    : "text-[#0a0a0a]";
+
+  return (
+    <>
+      <motion.h2
+        id="footer-download-heading"
+        variants={itemVariants}
+        className={`text-balance text-[clamp(1.25rem,4.5vw,2.75rem)] font-bold leading-[1.12] tracking-tight ${headingClass}`}
+      >
+        Download from the Play Store
+      </motion.h2>
+
+      <motion.p
+        variants={itemVariants}
+        className={`max-w-md text-balance text-[clamp(0.9rem,2.8vw,1.35rem)] font-semibold leading-snug ${bodyClass}`}
+      >
+        For all your food packaging items — boxes, bags, containers &amp; bulk
+        supplies for restaurants and catering.
+      </motion.p>
+
+      <PlayStoreButton variants={itemVariants} />
+    </>
   );
 }
 
@@ -65,43 +99,48 @@ const FooterDownloadBanner = () => {
 
   return (
     <section
-      className="relative w-full overflow-hidden rounded-2xl bg-white shadow-[0_4px_40px_rgba(0,0,0,0.08)]"
+      className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl"
       aria-labelledby="footer-download-heading"
     >
-      <img
-        src={BANNER_SRC}
-        alt="Abhyati food packaging — download the app on Google Play"
-        className="block h-auto w-full select-none"
-        loading="lazy"
-        decoding="async"
-      />
+      {/* Desktop / tablet: text on image white area (no extra white card) */}
+      <div className="relative hidden sm:block">
+        <img
+          src={BANNER_SRC}
+          alt=""
+          className="block h-auto w-full select-none"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 flex w-[min(58%,520px)] flex-col justify-center px-[4%] py-6 md:px-[5%] lg:py-8">
+          <motion.div
+            variants={overlayContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={bannerViewport}
+            className="pointer-events-auto flex flex-col gap-3 md:gap-4 lg:gap-5 [color:initial]"
+          >
+            <DownloadCopy itemVariants={itemVariants} />
+          </motion.div>
+        </div>
+      </div>
 
-      {/* Copy overlaid on the banner’s left white area — solid panel for contrast */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 flex w-full max-w-[min(100%,58%)] flex-col justify-center px-4 py-6 sm:px-6 md:px-8 lg:px-10">
+      {/* Mobile: image + copy below (readable on footer, no white box) */}
+      <div className="flex flex-col sm:hidden">
+        <img
+          src={BANNER_SRC}
+          alt=""
+          className="block w-full rounded-t-xl object-cover object-right"
+          loading="lazy"
+          decoding="async"
+        />
         <motion.div
           variants={overlayContainer}
           initial="hidden"
           whileInView="show"
           viewport={bannerViewport}
-          className="pointer-events-auto flex flex-col gap-4 rounded-2xl bg-white/95 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.06)] backdrop-blur-sm md:gap-5 md:p-7 lg:p-8 [color:initial]"
+          className="flex flex-col gap-3 px-1 pt-4"
         >
-          <motion.h2
-            id="footer-download-heading"
-            variants={itemVariants}
-            className="text-balance text-[clamp(1.35rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-tight !text-[#1B7A3D]"
-          >
-            Download from the Play Store
-          </motion.h2>
-
-          <motion.p
-            variants={itemVariants}
-            className="max-w-md text-balance text-[clamp(1rem,1.8vw,1.35rem)] font-semibold leading-snug !text-[#0a0a0a]"
-          >
-            For all your food packaging items — boxes, bags, containers &amp;
-            bulk supplies for restaurants and catering.
-          </motion.p>
-
-          <PlayStoreButton variants={itemVariants} />
+          <DownloadCopy itemVariants={itemVariants} mobileOnDark />
         </motion.div>
       </div>
     </section>

@@ -17,7 +17,10 @@ export const emptyProductForm = {
 export function productToForm(product) {
   if (!product) return { ...emptyProductForm };
   const image =
-    product.image?.startsWith("/api/media") ? "" : product.image || "";
+    product.image?.startsWith("/api/media") ||
+    product.image?.startsWith("data:image/")
+      ? ""
+      : product.image || "";
   return {
     name: product.name ?? "",
     price: product.price != null ? String(product.price) : "",

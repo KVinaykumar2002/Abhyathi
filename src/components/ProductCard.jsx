@@ -45,7 +45,7 @@ export default function ProductCard({ item, className, index = 0 }) {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: (index % 6) * 0.05 }}
       className={cn(
-        "group relative flex h-full w-full max-w-[384px] flex-col rounded-[26px] bg-white p-3",
+        "group relative mx-auto flex h-full w-full max-w-[384px] flex-col rounded-[20px] bg-white p-3 sm:rounded-[26px]",
         "transition-shadow duration-300 hover:shadow-xl",
         className
       )}
@@ -70,7 +70,7 @@ export default function ProductCard({ item, className, index = 0 }) {
 
       <div className="mt-6 flex flex-1 flex-col px-1 pb-1">
         <div className="flex flex-1 flex-col gap-1">
-          <h3 className="min-h-[2.75rem] text-[28px] font-semibold leading-tight tracking-[-1.2px] text-[#0D0C0C] line-clamp-2">
+          <h3 className="min-h-[2.5rem] text-xl font-semibold leading-tight tracking-tight text-[#0D0C0C] line-clamp-2 sm:min-h-[2.75rem] sm:text-[28px] sm:tracking-[-1.2px]">
             {item.name}
           </h3>
           <p className="min-h-[2.5rem] line-clamp-2 text-[15px] leading-tight text-[#0D0C0C]/60">
@@ -96,7 +96,7 @@ export default function ProductCard({ item, className, index = 0 }) {
           <Link
             to="/contact"
             className={cn(
-              "flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-full bg-[#0D0C0C] text-white",
+              "flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#0D0C0C] text-white sm:h-[60px] sm:w-[60px]",
               "transition-transform duration-300 hover:scale-105 active:scale-95",
               "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0D0C0C] focus-visible:outline-offset-2",
               soldOut && "pointer-events-none opacity-40"

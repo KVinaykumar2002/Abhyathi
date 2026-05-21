@@ -32,7 +32,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AdminAuthProvider>
         <BrowserRouter>
-          <div className="min-h-screen bg-surface-base font-primary text-text-primary">
+          <div className="min-h-screen min-w-0 overflow-x-hidden bg-surface-base font-primary text-text-primary">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/menu" element={<Menu />} />

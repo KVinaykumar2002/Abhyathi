@@ -174,7 +174,7 @@ const Footer = () => {
         }}
       />
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 pt-24 pb-12 flex flex-col gap-24 lg:gap-32">
+      <div className="relative z-10 mx-auto flex max-w-[1440px] flex-col gap-16 px-4 pb-10 pt-20 sm:gap-20 sm:px-6 sm:pb-12 sm:pt-24 md:gap-24 lg:gap-32">
         <FooterDownloadBanner />
 
         <motion.div

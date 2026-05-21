@@ -14,7 +14,7 @@ export default function Home() {
   const worksTrackRef = useRef(null);
 
   return (
-    <div className="min-h-screen bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
+    <div className="min-h-screen min-w-0 bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
       <Navbar />
       <main>
         <Hero />
@@ -31,7 +31,7 @@ export default function Home() {
             <WorksHero pinScrollTargetRef={worksTrackRef} />
           </div>
           <div
-            className="relative z-[2] shadow-[0_-32px_64px_rgba(0,0,0,0.35)]"
+            className="relative z-[2] bg-surface-base shadow-[0_-40px_80px_rgba(0,0,0,0.5)]"
             style={{
               marginTop: "calc(-1 * var(--works-hero-h))",
               paddingTop: "var(--works-hero-h)",

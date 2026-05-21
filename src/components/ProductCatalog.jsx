@@ -33,7 +33,7 @@ export default function ProductCatalog({
       id={id}
       className={cn(
         "overflow-x-hidden py-[60px] font-primary",
-        "bg-[#F5F5F5] px-6 md:px-9",
+        "bg-[#F5F5F5] px-4 sm:px-6 md:px-9",
         className
       )}
     >

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { productImageForApi } from "../lib/productImage.js";
 
 export const PRODUCT_CATEGORIES = [
   "Containers",
@@ -17,9 +18,9 @@ const productSchema = new mongoose.Schema(
       enum: PRODUCT_CATEGORIES,
     },
     description: { type: String, required: true, trim: true },
-    /** Public URL or /api/media/:id when stored in GridFS */
-    image: { type: String, required: true, trim: true },
-    /** MongoDB GridFS file id when image binary is stored in DB */
+    /** data:image/...;base64,... URL, http(s) URL, or legacy /api/media/:id */
+    image: { type: String, required: true },
+    /** @deprecated Legacy GridFS id — new uploads use base64 in `image` */
     imageFileId: { type: mongoose.Schema.Types.ObjectId, default: null },
     soldOut: { type: Boolean, default: false },
   },
@@ -30,9 +31,8 @@ productSchema.set("toJSON", {
   virtuals: true,
   transform(_doc, ret) {
     ret.id = ret._id.toString();
-    if (ret.imageFileId) {
-      ret.image = `/api/media/${ret.imageFileId}`;
-    }
+    ret.image = productImageForApi(ret);
+    delete ret.imageFileId;
     delete ret._id;
     delete ret.__v;
     return ret;

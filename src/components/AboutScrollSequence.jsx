@@ -3,34 +3,50 @@ import { motion, useTransform } from "framer-motion";
 import { getAboutFrameUrls, ABOUT_SCROLL_FRAMES } from "@/data/aboutScrollFrames";
 import { useScrollFrameScrub } from "@/hooks/useScrollFrameScrub";
 
-/** ~5s of footage at 30fps → comfortable scroll distance for smooth scrubbing */
-const SCROLL_HEIGHT_VH = 280;
-
 export default function AboutScrollSequence() {
   const trackRef = useRef(null);
   const frameUrls = useMemo(() => getAboutFrameUrls(), []);
   const { canvasRef, scrollYProgress, reducedMotion } = useScrollFrameScrub(
     trackRef,
     frameUrls,
-    { fit: "contain" }
+    { fit: "cover" }
   );
 
   const hintOpacity = useTransform(scrollYProgress, [0, 0.08, 0.92, 1], [1, 0, 0, 1]);
 
+  if (reducedMotion) {
+    return (
+      <section
+        className="relative bg-surface-base py-10 md:py-14"
+        aria-label="Packaging showcase"
+      >
+        <div className="mx-auto flex max-h-[70svh] min-h-[240px] max-w-7xl items-center justify-center px-4 md:px-8">
+          <img
+            src={frameUrls[0]}
+            alt="Abhyati eco-friendly food packaging"
+            className="max-h-[min(70svh,640px)] w-full rounded-2xl object-cover object-center"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
-      className="relative bg-surface-base"
+      className="relative bg-surface-base [--about-scroll-h:125vh] md:[--about-scroll-h:155vh]"
       aria-label="Packaging showcase animation"
     >
       <div
         ref={trackRef}
         className="relative w-full"
-        style={{ height: `${SCROLL_HEIGHT_VH}vh` }}
+        style={{ height: "var(--about-scroll-h)" }}
       >
-        <div className="sticky top-0 z-0 flex h-screen w-full items-center justify-center overflow-hidden bg-surface-base">
+        <div className="sticky top-0 z-0 flex h-[100svh] min-h-[480px] w-full items-center justify-center overflow-hidden bg-surface-base">
           <canvas
             ref={canvasRef}
-            className="h-full w-full max-h-[min(100vh,900px)] max-w-7xl px-4 md:px-8"
+            className="h-full w-full"
             aria-hidden
           />
 

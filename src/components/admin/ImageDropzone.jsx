@@ -135,7 +135,7 @@ export default function ImageDropzone({ file, onFileChange, className }) {
       )}
 
       <p className="text-base text-text-disabled">
-        Stored in MongoDB GridFS when you save the product.
+        Saved as base64 in MongoDB and used directly in the catalog.
       </p>
     </div>
   );

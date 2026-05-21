@@ -2,29 +2,24 @@ import "dotenv/config";
 import { connectDB } from "./config/db.js";
 import { Product } from "./models/Product.js";
 import { catalogSeedItems } from "./data/catalogSeed.js";
+import { fetchUrlToDataUrl } from "./lib/imageBase64.js";
 import {
-  uploadImageFromUrl,
   clearAllProductImages,
-  mediaPath,
   deleteImageFile,
 } from "./lib/gridfs.js";
 
 const force = process.argv.includes("--force");
 
 async function seedProductImages(item) {
-  const safeName = item.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
-  const fileId = await uploadImageFromUrl(
-    item.image,
-    `${safeName}.jpg`
-  );
+  const image = await fetchUrlToDataUrl(item.image);
   return {
     name: item.name,
     price: item.price,
     category: item.category,
     description: item.description,
     soldOut: Boolean(item.soldOut),
-    imageFileId: fileId,
-    image: mediaPath(fileId.toString()),
+    image,
+    imageFileId: null,
   };
 }
 
@@ -40,7 +35,7 @@ async function seed() {
   }
 
   if (force && count > 0) {
-    console.log("Removing existing products and GridFS images…");
+    console.log("Removing existing products and legacy GridFS images…");
     const existing = await Product.find({}, { imageFileId: 1 });
     await Promise.all(
       existing.map((p) => deleteImageFile(p.imageFileId))
@@ -50,7 +45,7 @@ async function seed() {
   }
 
   console.log(
-    `Uploading ${catalogSeedItems.length} product images to MongoDB GridFS…`
+    `Converting ${catalogSeedItems.length} product images to base64…`
   );
 
   const docs = [];
@@ -71,14 +66,15 @@ async function seed() {
         description: item.description,
         soldOut: Boolean(item.soldOut),
         image: item.image,
+        imageFileId: null,
       });
     }
   }
 
   await Product.insertMany(docs);
-  const withGridFs = docs.filter((d) => d.imageFileId).length;
+  const withBase64 = docs.filter((d) => d.image?.startsWith("data:image/")).length;
   console.log(
-    `\nSeeded ${docs.length} products (${withGridFs} images stored in MongoDB GridFS).`
+    `\nSeeded ${docs.length} products (${withBase64} images stored as base64 in MongoDB).`
   );
   process.exit(0);
 }

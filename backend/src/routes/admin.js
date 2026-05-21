@@ -3,16 +3,18 @@ import multer from "multer";
 import { Product, PRODUCT_CATEGORIES } from "../models/Product.js";
 import { requireAdmin } from "../middleware/requireAdmin.js";
 import { formatProduct } from "../lib/formatProduct.js";
+import { deleteImageFile } from "../lib/gridfs.js";
 import {
-  uploadImageBuffer,
-  deleteImageFile,
-  mediaPath,
-} from "../lib/gridfs.js";
+  bufferToDataUrl,
+  fetchUrlToDataUrl,
+  isDataImageUrl,
+  IMAGE_MAX_BYTES,
+} from "../lib/imageBase64.js";
 
 const router = Router();
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 8 * 1024 * 1024 },
+  limits: { fileSize: IMAGE_MAX_BYTES },
   fileFilter: (_req, file, cb) => {
     if (!file.mimetype.startsWith("image/")) {
       return cb(new Error("Only image files are allowed"));
@@ -61,17 +63,21 @@ function validateProduct(data, { partial = false, requireImage = true } = {}) {
 
 async function resolveImage({ file, imageUrl }) {
   if (file) {
-    const fileId = await uploadImageBuffer(
-      file.buffer,
-      file.originalname,
-      file.mimetype
-    );
     return {
-      imageFileId: fileId,
-      image: mediaPath(fileId.toString()),
+      image: bufferToDataUrl(file.buffer, file.mimetype),
+      imageFileId: null,
     };
   }
   if (imageUrl) {
+    if (isDataImageUrl(imageUrl)) {
+      return { image: imageUrl, imageFileId: null };
+    }
+    if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+      return {
+        image: await fetchUrlToDataUrl(imageUrl),
+        imageFileId: null,
+      };
+    }
     return { image: imageUrl, imageFileId: null };
   }
   return null;
@@ -137,11 +143,11 @@ router.put("/products/:id", upload.single("imageFile"), async (req, res, next) =
     );
 
     if (imageMeta) {
-      if (req.file && existing.imageFileId) {
+      if (existing.imageFileId) {
         await deleteImageFile(existing.imageFileId);
       }
       updates.image = imageMeta.image;
-      updates.imageFileId = imageMeta.imageFileId;
+      updates.imageFileId = null;
     }
 
     const product = await Product.findByIdAndUpdate(req.params.id, updates, {
