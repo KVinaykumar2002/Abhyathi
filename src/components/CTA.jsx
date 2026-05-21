@@ -1,5 +1,6 @@
-import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import OrderNowButton from "./OrderNowButton";
 
 const CTA = () => {
   return (
@@ -29,23 +30,16 @@ const CTA = () => {
               options, and packaging that meets the demands of modern food
               service businesses.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.a
-                href="#"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-10 py-4 bg-[#f35e16] text-white rounded-full text-lg font-medium hover:bg-[#d85212] transition-colors"
-              >
-                Request a Quote
-              </motion.a>
-              <motion.a
-                href="/menu"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-10 py-4 bg-transparent border border-white/20 text-white rounded-full text-lg font-medium hover:bg-white hover:text-[#101810] transition-colors"
-              >
-                View Product Catalog
-              </motion.a>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  to="/contact"
+                  className="inline-block px-10 py-4 bg-[#f35e16] text-white rounded-full text-lg font-medium hover:bg-[#d85212] transition-colors"
+                >
+                  Request a Quote
+                </Link>
+              </motion.div>
+              <OrderNowButton to="/menu" className="py-1.5 pr-10 sm:pr-12" />
             </div>
           </div>
         </motion.div>

@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useRef } from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
-import Stats from "../components/Stats";
 import Menu from "../components/Menu";
-import Testimonials from "../components/Testimonials";
+import WorksHero from "../components/WorksHero";
+import ServiceShowcase from "../components/ServiceShowcase";
+import ServiceCardsSection from "../components/ServiceCardsSection";
 import CTA from "../components/CTA";
+import TestimonialsCarousel from "../components/TestimonialsCarousel";
 import Footer from "../components/Footer";
 
 export default function LandingPage() {
+  const worksTrackRef = useRef(null);
+
   return (
     <div className="flex min-h-screen flex-col font-sans selection:bg-[#f35e16]/30 selection:text-[#f35e16]">
       <header className="relative z-[100] shrink-0 isolate overflow-hidden bg-[#101810]">
@@ -15,10 +19,31 @@ export default function LandingPage() {
       </header>
       <main className="relative flex-1">
         <Hero />
-        <Stats />
         <Menu />
-        <Testimonials />
+        <div
+          ref={worksTrackRef}
+          className="relative isolate"
+          style={{ "--works-hero-h": "min(825px, max(72vh, 520px))" }}
+        >
+          <div
+            className="sticky top-0 z-[1] w-full pointer-events-none"
+            style={{ height: "var(--works-hero-h)" }}
+          >
+            <WorksHero pinScrollTargetRef={worksTrackRef} />
+          </div>
+          <div
+            className="relative z-[2] shadow-[0_-32px_64px_rgba(0,0,0,0.35)]"
+            style={{
+              marginTop: "calc(-1 * var(--works-hero-h))",
+              paddingTop: "var(--works-hero-h)",
+            }}
+          >
+            <ServiceShowcase />
+            <ServiceCardsSection />
+          </div>
+        </div>
         <CTA />
+        <TestimonialsCarousel />
       </main>
       <Footer />
 

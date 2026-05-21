@@ -13,6 +13,7 @@ export const menuItems = [
     id: 2,
     name: "Kraft Paper Food Bags",
     price: 28.5,
+    soldOut: true,
     category: "Bags & Wraps",
     description:
       "Grease-resistant kraft bags with reinforced handles. Perfect for bakeries, quick-service restaurants, and retail food outlets.",
@@ -23,6 +24,7 @@ export const menuItems = [
     id: 3,
     name: "Compostable Coffee Cups",
     price: 36.75,
+    soldOut: true,
     category: "Cups & Lids",
     description:
       "Double-wall compostable cups with matching lids. Heat-insulated and suitable for hot beverages on the go.",
@@ -119,11 +121,4 @@ export const menuItems = [
     image:
       "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2069&auto=format&fit=crop",
   },
-];
-
-export const stats = [
-  { label: "Businesses Served", value: "500+" },
-  { label: "Product SKUs", value: "120+" },
-  { label: "Eco-Friendly Range", value: "85%" },
-  { label: "Years of Trust", value: "15+" },
 ];

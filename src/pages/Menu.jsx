@@ -1,23 +1,59 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import {
-  Star,
-  ChevronDown,
-  Clock,
-  Package,
-  Leaf,
-  GlassWater,
-  ShoppingBag,
-  Recycle,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Package, Leaf, GlassWater, ShoppingBag } from "lucide-react";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { menuItems } from '../data/menuData';
+
+/** Catalog hero — kraft / eco packaging lineup (public/image.png) */
+const PRODUCTS_HERO_BG = "/image.png";
+
+/* ─── Top hero — taller band, image under navbar row ─── */
+const ProductsHero = () => (
+  <section
+    aria-label="Products"
+    className="relative isolate flex h-[clamp(420px,min(62vh,680px),820px)] flex-col justify-end overflow-hidden bg-neutral-100 pb-10 text-center md:h-[clamp(480px,min(58vh,720px),880px)] md:pb-14"
+    style={{
+      backgroundImage: `url("${PRODUCTS_HERO_BG}")`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+    }}
+  >
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/[0.12] to-transparent" aria-hidden />
+
+    <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center gap-5 px-6 pb-4 pt-24 md:max-w-5xl md:gap-6 md:pb-6 md:pt-28">
+      <motion.h1
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        className="text-balance font-sans text-3xl font-semibold leading-[1.12] tracking-tight text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.35),0_2px_24px_rgba(0,0,0,0.25)] sm:text-4xl md:text-5xl lg:text-[3.25rem]"
+      >
+        High-Quality Food Packaging Solutions
+      </motion.h1>
+      <motion.p
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+        className="max-w-2xl text-sm font-medium text-white/95 [text-shadow:0_1px_3px_rgba(0,0,0,0.4)] sm:text-base md:text-lg"
+      >
+        Paper Bags · Takeaway containers · Sweet boxes
+      </motion.p>
+      <motion.a
+        href="#menu-grid"
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.98 }}
+        className="inline-flex items-center justify-center rounded-full border-2 border-white bg-white px-8 py-3 text-sm font-semibold text-neutral-950 shadow-lg shadow-black/15 transition-colors hover:border-white hover:bg-white/95 hover:text-neutral-900 md:px-10 md:py-3.5 md:text-[15px]"
+      >
+        Shop all
+      </motion.a>
+    </div>
+  </section>
+);
 
 /* ─── Category Config ─── */
 const categories = [
@@ -28,360 +64,48 @@ const categories = [
   { label: "Eco-Friendly", icon: Leaf, color: "#16a34a" },
 ];
 
-/* ─── Hero Section ─── */
-const MenuHero = () => {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
+/** INR-style list price for catalog (placeholder scale from `price`). */
+function formatCatalogRs(item) {
+  const n = item.priceRs ?? Math.round(item.price * 10);
+  return n.toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+}
 
-  return (
-    <section
-      ref={containerRef}
-      className="relative min-h-[90vh] bg-[#101810] flex items-center overflow-hidden"
-    >
-      {/* Background ambient orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[#f35e16]/5 blur-[120px]" />
-        <div className="absolute bottom-0 left-[-10%] w-[500px] h-[500px] rounded-full bg-[#1a3d1a]/60 blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[#f35e16]/3 blur-[150px]" />
-      </div>
-
-      {/* Dotted grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, #ffffff 1px, transparent 1px)",
-          backgroundSize: "36px 36px",
-        }}
-      />
-
-      <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[70vh]">
-          {/* Left Content */}
-          <motion.div style={{ y, opacity }} className="space-y-8">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2"
-            >
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#f35e16]/30 bg-[#f35e16]/10">
-                <Star size={14} className="text-[#f35e16] fill-[#f35e16]" />
-                <span className="text-[#f35e16] text-sm font-medium tracking-wider uppercase">
-                  Food Service Packaging
-                </span>
-              </div>
-            </motion.div>
-
-            {/* Heading */}
-            <div className="space-y-2 overflow-hidden">
-              {["Quality", "Packaging"].map((word, i) => (
-                <div key={i} className="overflow-hidden">
-                  <motion.h1
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    transition={{
-                      duration: 0.8,
-                      delay: 0.2 + i * 0.15,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className={`font-serif font-semibold leading-[1.05] text-white block ${
-                      i === 1 ? "text-[#f35e16]" : ""
-                    }`}
-                    style={{ fontSize: "clamp(3.5rem, 7vw, 6rem)" }}
-                  >
-                    {word}
-                  </motion.h1>
-                </div>
-              ))}
-            </div>
-
-            {/* Description */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.55 }}
-              className="text-white/60 text-lg leading-relaxed max-w-md font-sans"
-            >
-              Browse Abhyati Food Pak’s full catalog of containers, cups, bags,
-              and compostable disposables — distributed in bulk for restaurants,
-              cafés, catering, and food service operators.
-            </motion.p>
-
-            {/* Stats pills */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.7 }}
-              className="flex flex-wrap gap-4"
-            >
-              {[
-                { icon: Clock, text: "Fast bulk dispatch" },
-                { icon: Star, text: "500+ clients" },
-                { icon: Leaf, text: "85% eco range" },
-              ].map(({ icon: Icon, text }) => (
-                <div
-                  key={text}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"
-                >
-                  <Icon size={14} className="text-[#f35e16]" />
-                  <span className="text-white/70 text-sm font-sans">
-                    {text}
-                  </span>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.85 }}
-              className="flex gap-4"
-            >
-              <motion.a
-                href="#menu-grid"
-                whileHover={{ scale: 1.05, backgroundColor: "#e04e08" }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f35e16] text-white font-medium transition-colors duration-300"
-              >
-                Browse Catalog
-                <ChevronDown size={18} />
-              </motion.a>
-              <motion.a
-                href="#"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white font-medium hover:bg-white/5 transition-all duration-300"
-              >
-                Request Quote
-              </motion.a>
-            </motion.div>
-          </motion.div>
-
-          {/* Right — Decorative Image Composition */}
-          <div className="relative flex items-center justify-center">
-            {/* Large circular main image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-[420px] h-[420px] md:w-[480px] md:h-[480px]"
-            >
-              {/* Outer glowing ring */}
-              <div
-                className="absolute inset-0 rounded-full border-2 border-[#f35e16]/20"
-                style={{ animation: "spin 20s linear infinite" }}
-              />
-              <div className="absolute inset-4 rounded-full border border-[#f35e16]/10" />
-
-              {/* Main food image */}
-              <motion.div
-                className="absolute inset-8 rounded-full overflow-hidden ring-4 ring-[#f35e16]/20 shadow-2xl shadow-[#f35e16]/20"
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.5 }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=2070&auto=format&fit=crop"
-                  alt="Eco-friendly food packaging"
-                  className="w-full h-full object-cover"
-                />
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#101810]/30 to-transparent" />
-              </motion.div>
-
-              {/* Floating accent circles */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-[#f35e16]/20 blur-xl" />
-              <div className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full bg-[#1a4a1a]/40 blur-2xl" />
-            </motion.div>
-
-            {/* Floating card: Eco certified */}
-            <motion.div
-              initial={{ opacity: 0, x: 40, y: -20 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="absolute -top-6 -right-4 md:right-0 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-3 shadow-xl"
-              style={{ animation: "float 4s ease-in-out infinite" }}
-            >
-              <motion.div className="w-12 h-12 rounded-full ring-2 ring-[#f35e16]/40 bg-[#f35e16]/20 flex items-center justify-center">
-                <Recycle size={22} className="text-[#f35e16]" />
-              </motion.div>
-              <div>
-                <p className="text-white text-sm font-medium font-sans">
-                  Eco Certified
-                </p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      size={10}
-                      className="text-[#f35e16] fill-[#f35e16]"
-                    />
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Floating card: SKU count */}
-            <motion.div
-              initial={{ opacity: 0, x: -40, y: 20 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.0 }}
-              className="absolute -bottom-4 -left-4 md:left-0 bg-[#f35e16] rounded-2xl px-5 py-4 shadow-xl"
-              style={{ animation: "floatReverse 5s ease-in-out infinite" }}
-            >
-              <p className="text-white/70 text-xs font-sans uppercase tracking-widest">
-                Catalog
-              </p>
-              <p className="text-white text-3xl font-serif font-bold leading-none mt-1">
-                120+
-              </p>
-              <p className="text-white/70 text-xs font-sans mt-1">
-                Product SKUs
-              </p>
-            </motion.div>
-
-            {/* Floating mini images */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 1.2 }}
-              className="absolute top-1/2 -right-12 w-16 h-16 rounded-xl overflow-hidden ring-2 ring-white/20 shadow-lg hidden lg:block"
-              style={{ animation: "floatSlow 6s ease-in-out infinite" }}
-            >
-              <img
-                src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=200&auto=format&fit=crop"
-                alt="Packaging"
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <span className="text-white/30 text-xs uppercase tracking-[0.3em] font-sans">
-          Scroll
-        </span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center p-1"
-        >
-          <div className="w-1 h-2 rounded-full bg-[#f35e16]" />
-        </motion.div>
-      </motion.div>
-    </section>
-  );
-};
-
-/* ─── Single Menu Card ─── */
+/* ─── Catalog product cell — minimal grid like storefront ─── */
 const MenuCard = ({ item, index }) => {
-  const categoryColors = {
-    Containers: { bg: "#dcfce7", text: "#16a34a", border: "#bbf7d0" },
-    "Bags & Wraps": { bg: "#fee2e2", text: "#dc2626", border: "#fecaca" },
-    "Cups & Lids": { bg: "#dbeafe", text: "#2563eb", border: "#bfdbfe" },
-    "Eco-Friendly": { bg: "#ecfdf5", text: "#059669", border: "#a7f3d0" },
-  };
-  const colors = categoryColors[item.category] || {
-    bg: "#f3f4f6",
-    text: "#6b7280",
-    border: "#e5e7eb",
-  };
+  const soldOut = Boolean(item.soldOut);
 
   return (
-    <motion.div
+    <motion.article
       layout
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.92 }}
-      transition={{ duration: 0.5, delay: index * 0.07 }}
-      className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100"
+      exit={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.35, delay: index * 0.04 }}
+      className="flex flex-col items-center text-center"
     >
-      {/* Image */}
-      <motion.div className="relative h-44 overflow-hidden bg-gray-100">
-        <motion.img
-          src={item.image}
-          alt={item.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-        />
-        {/* Hover overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-        {/* Quick add button */}
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-[#f35e16] text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-lg translate-y-2 group-hover:translate-y-0"
-        >
-          Get Quote
-        </motion.button>
-      </motion.div>
-
-      {/* Content */}
-      <div className="p-5">
-        {/* Top row: price + category */}
-        <motion.div className="flex items-center justify-between mb-2 gap-2">
-          <motion.span
-            className="text-[#f35e16] text-lg font-serif font-bold"
-            whileHover={{ scale: 1.05 }}
-          >
-            From ${item.price.toFixed(2)}
-          </motion.span>
-          <span
-            className="text-[10px] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider shrink-0"
-            style={{
-              backgroundColor: colors.bg,
-              color: colors.text,
-              border: `1px solid ${colors.border}`,
-            }}
-          >
-            {item.category}
+      <div className="relative mx-auto aspect-[4/5] w-full max-w-[260px] rounded-xl bg-white">
+        {soldOut && (
+          <span className="absolute right-2 top-2 z-10 rounded-md border border-neutral-200 bg-neutral-100 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-red-600">
+            Sold out
           </span>
-        </motion.div>
-
-        {/* Name */}
-        <h3 className="text-lg font-serif text-[#101810] mb-2 group-hover:text-[#f35e16] transition-colors duration-300 leading-snug">
-          {item.name}
-        </h3>
-
-        {/* Description */}
-        <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
-          {item.description}
-        </p>
-
-        {/* Bottom row */}
-        <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-          <div className="flex items-center gap-0.5">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                size={10}
-                className="text-[#f35e16] fill-[#f35e16]"
-              />
-            ))}
-            <span className="text-gray-400 text-[10px] ml-0.5 font-sans">(4.8)</span>
-          </div>
-          <div className="flex items-center gap-1 text-gray-400 text-[10px] font-sans">
-            <Package size={10} />
-            <span>Bulk supply</span>
-          </div>
-        </div>
+        )}
+        <img
+          src={item.image}
+          alt=""
+          className={`h-full w-full object-contain p-4 ${soldOut ? "opacity-[0.55] grayscale" : ""}`}
+          loading="lazy"
+        />
       </div>
-    </motion.div>
+      <h3 className="mt-5 max-w-[260px] px-1 text-[12px] font-semibold uppercase leading-snug tracking-wide text-neutral-950 sm:text-[13px]">
+        {item.name}
+      </h3>
+      <p className="mt-2 text-sm text-neutral-600">
+        From RS. {formatCatalogRs(item)}
+      </p>
+    </motion.article>
   );
 };
 
@@ -410,50 +134,28 @@ const MenuGrid = () => {
   };
 
   return (
-    <section id="menu-grid" className="bg-[#f8f6f2] py-24">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section header */}
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#f35e16]/30 bg-[#f35e16]/8 mb-6"
-            style={{ backgroundColor: "rgba(243,94,22,0.08)" }}
-          >
-            <span className="text-[#f35e16] text-xs font-semibold uppercase tracking-[0.2em]">
-              Our Selections
-            </span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-5xl md:text-6xl font-serif text-[#101810] mb-5 leading-tight"
-          >
-            Explore Our <span className="text-[#f35e16]">Catalog</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-500 text-lg leading-relaxed font-sans"
-          >
-            High-quality food service packaging for takeout, delivery, catering,
-            and dine-in — including compostable and recyclable options from
-            Abhyati Food Pak Solutions.
-          </motion.p>
+    <section
+      id="menu-grid"
+      className="border-t border-neutral-100 bg-white pt-8 pb-14 md:pt-10 md:pb-16"
+    >
+      <div className="mx-auto max-w-[1400px] px-5 md:px-8 lg:px-10">
+        <div className="mb-8 flex flex-col items-center gap-2 text-center md:mb-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#f35e16]">
+            Products
+          </p>
+          <h2 className="text-2xl font-semibold tracking-tight text-neutral-950 md:text-3xl">
+            Catalog
+          </h2>
+          <p className="max-w-lg text-sm text-neutral-500">
+            Filter by category — pricing shown as indicative list rates.
+          </p>
         </div>
 
-        {/* Filter tabs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-3 mb-16"
+          className="mb-8 flex flex-wrap justify-center gap-2 md:mb-10 md:gap-2.5"
         >
           {categories.map((cat) => {
             const Icon = cat.icon;
@@ -461,22 +163,21 @@ const MenuGrid = () => {
             return (
               <motion.button
                 key={cat.label}
+                type="button"
                 onClick={() => setActiveCategory(cat.label)}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                className={`relative flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold transition-all duration-300 border ${
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition-colors md:px-5 md:text-sm ${
                   active
-                    ? "bg-[#f35e16] text-white border-[#f35e16] shadow-lg shadow-[#f35e16]/25"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-[#f35e16]/50 hover:text-[#f35e16] shadow-sm"
+                    ? "border-neutral-950 bg-neutral-950 text-white"
+                    : "border-neutral-200 bg-white text-neutral-700 hover:border-[#f35e16]/50 hover:text-[#f35e16]"
                 }`}
               >
-                {Icon && <Icon size={14} />}
+                {Icon && <Icon size={14} className="shrink-0 opacity-80" />}
                 {cat.label}
                 <span
-                  className={`text-[11px] font-bold ml-1 px-2 py-0.5 rounded-full transition-colors ${
-                    active
-                      ? "bg-white/20 text-white"
-                      : "bg-gray-100 text-gray-500"
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums ${
+                    active ? "bg-white/15 text-white" : "bg-neutral-100 text-neutral-500"
                   }`}
                 >
                   {counts[cat.label]}
@@ -486,8 +187,10 @@ const MenuGrid = () => {
           })}
         </motion.div>
 
-        {/* Grid */}
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <motion.div
+          layout
+          className="grid grid-cols-1 gap-y-14 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-16"
+        >
           <AnimatePresence mode="popLayout">
             {mounted &&
               filtered.map((item, index) => (
@@ -496,146 +199,42 @@ const MenuGrid = () => {
           </AnimatePresence>
         </motion.div>
 
-        {/* Empty state */}
         {mounted && filtered.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-24 text-gray-400"
+            className="py-20 text-center text-neutral-500"
           >
-            <p className="text-6xl mb-4">📦</p>
-            <p className="text-xl font-serif">No products in this category yet.</p>
+            <p className="text-lg font-medium text-neutral-800">
+              No products in this category yet.
+            </p>
           </motion.div>
         )}
 
-        {/* Load more / View all CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05, backgroundColor: "#e04e08" }}
-            whileTap={{ scale: 0.95 }}
-            className="px-10 py-4 rounded-full bg-[#f35e16] text-white font-semibold text-base transition-colors duration-300 shadow-xl shadow-[#f35e16]/30"
+        <div className="mt-14 flex flex-col items-center gap-3 text-center md:mt-16">
+          <Link
+            to="/contact"
+            className="rounded-full border-2 border-neutral-950 bg-neutral-950 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#f35e16] hover:border-[#f35e16]"
           >
-            Request Bulk Pricing
-          </motion.button>
-          <p className="text-gray-400 text-sm mt-4 font-sans">
-            New SKUs added regularly · Custom branding available on select lines
+            Request bulk pricing
+          </Link>
+          <p className="max-w-md text-xs text-neutral-500">
+            New SKUs added regularly · Custom branding on select lines
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 };
 
-/* ─── Sustainable Solutions Banner ─── */
-const ChefSpecial = () => (
-  <section className="bg-[#101810] py-20 overflow-hidden relative">
-    <div className="absolute inset-0 pointer-events-none">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[#f35e16]/5 blur-[100px]" />
-    </div>
-    <div className="max-w-7xl mx-auto px-6 relative z-10">
-      <div className="rounded-[2.5rem] bg-gradient-to-br from-[#1a2e1a] to-[#0d1f0d] border border-white/5 overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-          {/* Left */}
-          <div className="p-12 md:p-16 flex flex-col justify-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#f35e16]/15 border border-[#f35e16]/25">
-                <Star size={12} className="text-[#f35e16] fill-[#f35e16]" />
-                <span className="text-[#f35e16] text-xs font-semibold uppercase tracking-widest">
-                  Sustainability
-                </span>
-              </div>
-
-              <h2 className="text-4xl md:text-5xl font-serif text-white leading-tight">
-                Eco-Friendly{" "}
-                <span className="text-[#f35e16] italic">Packaging Line</span>
-              </h2>
-
-              <p className="text-white/50 leading-relaxed font-sans">
-                Help your business reduce plastic waste with our compostable
-                containers, plant-based cups, bamboo cutlery, and recyclable
-                paper solutions — without compromising on durability or presentation.
-              </p>
-
-              <div className="grid grid-cols-2 gap-6 pt-4">
-                {[
-                  { label: "Compostable SKUs", value: "45+" },
-                  { label: "Recyclable Options", value: "60+" },
-                  { label: "Certified Materials", value: "100%" },
-                  { label: "Years in Business", value: "15+" },
-                ].map(({ label, value }) => (
-                  <div key={label} className="space-y-1">
-                    <p className="text-[#f35e16] text-3xl font-serif font-bold">
-                      {value}
-                    </p>
-                    <p className="text-white/40 text-sm font-sans">{label}</p>
-                  </div>
-                ))}
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.05, backgroundColor: "#e04e08" }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f35e16] text-white font-semibold transition-colors duration-300 mt-2"
-              >
-                Explore Eco Range
-              </motion.button>
-            </motion.div>
-          </div>
-
-          {/* Right — image collage */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="relative min-h-[400px] lg:min-h-0"
-          >
-            {/* Main large image */}
-            <div className="absolute inset-4 lg:inset-8 rounded-3xl overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop"
-                alt="Eco-friendly packaging"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#1a2e1a]/30" />
-            </div>
-
-            {/* Small overlay badge */}
-            <div className="absolute bottom-12 left-12 lg:left-4 bg-[#f35e16] rounded-2xl px-6 py-4 shadow-2xl">
-              <p className="text-white/80 text-xs font-sans uppercase tracking-wider">
-                Featured Product
-              </p>
-              <p className="text-white font-serif text-lg font-semibold mt-1">
-                Sugarcane Clamshell Box
-              </p>
-              <p className="text-white/70 text-sm font-sans">From $48.25/case</p>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
 /* ─── Page ─── */
 export default function Menu() {
   return (
-    <div className="min-h-screen font-sans selection:bg-[#f35e16]/30 selection:text-[#f35e16]">
+    <div className="min-h-screen bg-white font-sans selection:bg-[#f35e16]/30 selection:text-[#f35e16]">
       <Navbar />
-      <main>
-        <MenuHero />
+      <main className="bg-white">
+        <ProductsHero />
         <MenuGrid />
-        <ChefSpecial />
       </main>
       <Footer />
     </div>

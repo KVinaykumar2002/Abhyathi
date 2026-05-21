@@ -1,29 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Menu as MenuIcon } from "lucide-react";
+import { X, Menu as MenuIcon, ArrowRight } from "lucide-react";
 import BrandLogo from "./Logo";
 
 const Navbar = () => {
   const [elevated, setElevated] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const lastScrollY = useRef(0);
   const location = useLocation();
   const currentPath = location.pathname;
 
   useEffect(() => {
     const handleScroll = () => {
-      const y = window.scrollY;
-      if (y <= 20) {
-        setElevated(false);
-      } else if (y < lastScrollY.current) {
-        setElevated(true);
-      } else if (y > lastScrollY.current) {
-        setElevated(false);
-      }
-      lastScrollY.current = y;
+      setElevated(window.scrollY > 24);
     };
-
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -33,16 +23,19 @@ const Navbar = () => {
     { label: "Home", href: "/" },
     { label: "Products", href: "/menu" },
     { label: "Testimonials", href: "/testimonials" },
-    { label: "About", href: "#" },
+    { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ];
 
   const isActive = (href) => currentPath === href;
 
+  /** Products hero: frosted bar only on the nav row (not a full-page mask). */
+  const menuNavGlass = currentPath === "/menu" && !elevated;
+
   const Brand = () => (
     <>
       <BrandLogo size="md" className="group-hover:opacity-90 transition-opacity" />
-      <span className="text-2xl font-serif text-white font-medium tracking-tight group-hover:text-[#f35e16] transition-colors duration-300">
+      <span className="text-2xl font-serif font-medium tracking-tight text-neutral-900 transition-colors duration-300 group-hover:text-[#f35e16]">
         Abhyati Food Pak
       </span>
     </>
@@ -53,8 +46,10 @@ const Navbar = () => {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between transition-all duration-500 ${
           elevated
-            ? "border-b border-white/10 bg-[#101810]/95 shadow-lg shadow-black/20 backdrop-blur-md"
-            : "border-b border-transparent bg-transparent"
+            ? "border-b border-black/10 bg-white/95 shadow-md shadow-black/10 backdrop-blur-md"
+            : menuNavGlass
+              ? "border-b border-black/[0.07] bg-white/65 shadow-sm shadow-black/5 backdrop-blur-md"
+              : "border-b border-transparent bg-transparent"
         }`}
       >
         <Link to="/" className="flex items-center gap-3 group">
@@ -65,7 +60,7 @@ const Navbar = () => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="hidden md:flex items-center gap-8 text-white/90 font-sans text-sm font-medium"
+          className="hidden md:flex items-center gap-8 font-sans text-sm font-medium text-neutral-900"
         >
           {navLinks.map((link) =>
             link.href.startsWith("#") ? (
@@ -75,7 +70,7 @@ const Navbar = () => {
                 className={`relative transition-colors duration-300 py-1 group ${
                   isActive(link.href)
                     ? "text-[#f35e16]"
-                    : "text-white/80 hover:text-white"
+                    : "text-neutral-800 hover:text-neutral-950"
                 }`}
               >
                 {link.label}
@@ -94,7 +89,7 @@ const Navbar = () => {
                 className={`relative transition-colors duration-300 py-1 group ${
                   isActive(link.href)
                     ? "text-[#f35e16]"
-                    : "text-white/80 hover:text-white"
+                    : "text-neutral-800 hover:text-neutral-950"
                 }`}
               >
                 {link.label}
@@ -114,15 +109,18 @@ const Navbar = () => {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
               to="/contact"
-              className="hidden md:block px-6 py-2.5 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white hover:text-[#101810] transition-all duration-300"
+              className="hidden md:inline-flex items-center gap-2.5 rounded-full bg-neutral-950 py-1.5 pl-1.5 pr-6 text-sm font-semibold text-[#f35e16] shadow-sm ring-1 ring-white/15 transition-colors hover:bg-neutral-900"
             >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f35e16] text-white">
+                <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
+              </span>
               Contact Us
             </Link>
           </motion.div>
 
           <button
             onClick={() => setMobileOpen(true)}
-            className="md:hidden text-white p-2"
+            className="md:hidden p-2 rounded-lg text-neutral-900 transition-colors hover:bg-black/10"
             aria-label="Open menu"
           >
             <MenuIcon size={24} />
@@ -137,7 +135,7 @@ const Navbar = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed inset-0 z-[100] bg-[#101810] flex flex-col px-8 py-8"
+            className="fixed inset-0 z-[100] bg-white flex flex-col px-8 py-8"
           >
             <motion.div
               initial={{ opacity: 0, y: -20 }}
@@ -150,13 +148,13 @@ const Navbar = () => {
                 onClick={() => setMobileOpen(false)}
               >
                 <BrandLogo size="md" />
-                <span className="text-2xl font-serif text-white font-medium">
+                <span className="text-2xl font-serif text-neutral-900 font-medium">
                   Abhyati Food Pak
                 </span>
               </Link>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="text-white/70 hover:text-white transition-colors"
+                className="text-neutral-600 hover:text-neutral-900 transition-colors p-2 rounded-lg hover:bg-black/5"
                 aria-label="Close menu"
               >
                 <X size={28} />
@@ -178,7 +176,7 @@ const Navbar = () => {
                       className={`text-4xl font-serif transition-colors duration-300 ${
                         isActive(link.href)
                           ? "text-[#f35e16]"
-                          : "text-white hover:text-[#f35e16]"
+                          : "text-neutral-900 hover:text-[#f35e16]"
                       }`}
                     >
                       {link.label}
@@ -190,7 +188,7 @@ const Navbar = () => {
                       className={`text-4xl font-serif transition-colors duration-300 ${
                         isActive(link.href)
                           ? "text-[#f35e16]"
-                          : "text-white hover:text-[#f35e16]"
+                          : "text-neutral-900 hover:text-[#f35e16]"
                       }`}
                     >
                       {link.label}
@@ -205,8 +203,11 @@ const Navbar = () => {
                 <Link
                   to="/contact"
                   onClick={() => setMobileOpen(false)}
-                  className="block w-full px-8 py-4 rounded-full bg-[#f35e16] text-white text-lg font-medium text-center"
+                  className="flex w-full items-center justify-center gap-3 rounded-full bg-neutral-950 px-6 py-4 text-lg font-semibold text-[#f35e16] ring-1 ring-white/15"
                 >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f35e16] text-white">
+                    <ArrowRight className="h-5 w-5" strokeWidth={2.25} aria-hidden />
+                  </span>
                   Contact Us
                 </Link>
               </motion.div>

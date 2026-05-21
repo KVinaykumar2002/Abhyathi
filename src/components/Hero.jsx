@@ -1,13 +1,7 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  PlayCircle,
-  Leaf,
-  Recycle,
-  Droplets,
-} from "lucide-react";
+import { PlayCircle, Leaf, Recycle, Droplets } from "lucide-react";
+import OrderNowButton from "./OrderNowButton";
 
 const HERO_VIDEO = encodeURI("/mp_ (online-video-cutter.com).mp4");
 
@@ -80,15 +74,7 @@ const Hero = () => {
             variants={itemVariants}
             className="mt-6 flex flex-wrap items-center gap-4"
           >
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                to="/menu"
-                className="inline-flex items-center gap-2 rounded-lg bg-[#1a4d3e] px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-[#1a4d3e]/25 transition-colors hover:bg-[#153d32] md:text-base"
-              >
-                Shop Now
-                <ArrowRight size={18} strokeWidth={2.5} />
-              </Link>
-            </motion.div>
+            <OrderNowButton to="/menu" />
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
               <Link
                 to="/menu"
