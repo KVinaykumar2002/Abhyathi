@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import AboutScrollSequence from "../components/AboutScrollSequence";
 
 function StatItem({ icon: Icon, valueType, target, suffix, label, index }) {
   const ref = useRef(null);
@@ -232,6 +233,9 @@ export default function About() {
             </div>
           </motion.div>
         </section>
+
+        {/* Scroll-scrub packaging sequence (middle of page — not in header) */}
+        <AboutScrollSequence />
 
         {/* Stats strip — three metrics, dotted rule below */}
         <section className="border-b border-dashed border-border-muted/80">

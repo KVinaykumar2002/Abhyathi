@@ -13,11 +13,11 @@ export default function OrderNowButton({
   return (
     <MotionLink
       to={to}
-      whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.98 }}
       className={cn(
         "group relative inline-flex min-h-[44px] items-center overflow-visible rounded-ds-xl bg-surface-raised py-ds-1 pl-ds-1 pr-ds-4",
-        "ring-1 ring-border-muted transition-colors duration-fast",
+        "ring-1 ring-border-muted transition-[background-color,transform] duration-fast",
+        "hover:translate-x-2 motion-reduce:hover:translate-x-0",
         "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2",
         className
       )}

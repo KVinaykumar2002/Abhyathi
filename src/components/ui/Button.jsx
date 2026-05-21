@@ -26,6 +26,7 @@ const buttonClassName = (variant, size, error, className) =>
   cn(
     "inline-flex items-center justify-center rounded-ds-sm border font-primary font-normal",
     "transition-[background-color,border-color,transform,filter] duration-fast",
+    "hover:translate-x-2 active:translate-x-1 motion-reduce:hover:translate-x-0 motion-reduce:active:translate-x-0",
     "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2",
     "disabled:pointer-events-none disabled:text-text-disabled disabled:opacity-60",
     error && "border-feedback-error",

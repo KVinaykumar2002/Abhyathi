@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { menuItems } from "@/data/menuData";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui";
+import { useProducts } from "@/hooks/useProducts";
 import { cn } from "@/lib/utils";
 
 export const PRODUCT_CATEGORIES = [
@@ -20,12 +20,9 @@ export default function ProductCatalog({
   className,
 }) {
   const [activeCategory, setActiveCategory] = useState("All Products");
+  const { data: products = [], isLoading, isError } = useProducts(activeCategory);
 
-  let filtered =
-    activeCategory === "All Products"
-      ? menuItems
-      : menuItems.filter((item) => item.category === activeCategory);
-
+  let filtered = products;
   if (limit) {
     filtered = filtered.slice(0, limit);
   }
@@ -74,6 +71,19 @@ export default function ProductCatalog({
           ))}
         </div>
 
+        {isLoading && filtered.length === 0 && (
+          <p className="py-ds-6 text-center text-ds-lg text-text-disabled">
+            Loading products…
+          </p>
+        )}
+
+        {isError && (
+          <p className="mb-ds-3 text-center text-ds-sm text-feedback-error">
+            Could not load products from the server. Showing cached catalog if
+            available.
+          </p>
+        )}
+
         <motion.div layout className="grid grid-cols-1 gap-ds-3 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {filtered.map((item) => (
@@ -82,7 +92,7 @@ export default function ProductCatalog({
           </AnimatePresence>
         </motion.div>
 
-        {filtered.length === 0 && (
+        {!isLoading && filtered.length === 0 && (
           <p className="py-ds-6 text-center text-ds-lg text-text-disabled">
             No products in this category yet.
           </p>

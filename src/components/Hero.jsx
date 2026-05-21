@@ -1,9 +1,11 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { PlayCircle, Leaf, Recycle, Droplets } from "lucide-react";
 import OrderNowButton from "./OrderNowButton";
-
-const HERO_VIDEO = encodeURI("/mp_ (online-video-cutter.com).mp4");
+import ScrollFrameBackground, {
+  HeroScrollTrack,
+} from "./ScrollFrameBackground";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,24 +31,15 @@ const features = [
 ];
 
 const Hero = () => {
-  return (
-    <section className="relative h-[100svh] min-h-[720px] w-full overflow-hidden bg-surface-base">
-      {/* Video layer — block flow inside section, cannot extend above section top */}
-      <div className="absolute inset-0 overflow-hidden">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="block h-full w-full object-cover"
-          aria-hidden
-        >
-          <source src={HERO_VIDEO} type="video/mp4" />
-        </video>
-      </div>
+  const scrollTrackRef = useRef(null);
 
-      {/* Text overlay */}
-      <div className="relative z-[1] flex h-full items-center px-6 pb-8 pt-24 md:px-12 md:pt-28 lg:px-16">
+  return (
+    <HeroScrollTrack trackRef={scrollTrackRef}>
+      <ScrollFrameBackground trackRef={scrollTrackRef} />
+
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
+
+      <div className="relative z-[2] flex h-full items-center px-6 pb-8 pt-24 md:px-12 md:pt-28 lg:px-16 pointer-events-auto">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -75,10 +68,10 @@ const Hero = () => {
             className="mt-6 flex flex-wrap items-center gap-4"
           >
             <OrderNowButton to="/menu" />
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+            <motion.div whileTap={{ scale: 0.98 }}>
               <Link
                 to="/menu"
-                className="inline-flex min-h-[44px] items-center gap-ds-2 rounded-ds-sm border border-border-muted px-ds-3 py-ds-2 text-ds-md font-semibold text-text-primary transition-colors duration-fast hover:border-text-secondary hover:bg-surface-raised md:text-ds-lg"
+                className="inline-flex min-h-[44px] items-center gap-ds-2 rounded-ds-sm border border-border-muted px-ds-3 py-ds-2 text-ds-md font-semibold text-text-primary transition-[border-color,transform] duration-fast hover:border-text-secondary hover:bg-surface-raised hover:translate-x-2 motion-reduce:hover:translate-x-0 md:text-ds-lg"
               >
                 <PlayCircle size={22} strokeWidth={1.75} />
                 Explore Our Products
@@ -103,7 +96,7 @@ const Hero = () => {
           </motion.ul>
         </motion.div>
       </div>
-    </section>
+    </HeroScrollTrack>
   );
 };
 

@@ -8,6 +8,7 @@ import About from './pages/About';
 import Account from './pages/Account';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
+import AdminProducts from './pages/AdminProducts';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient({
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/account" element={<Account />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

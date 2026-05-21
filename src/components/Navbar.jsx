@@ -31,10 +31,11 @@ const Navbar = () => {
 
   const linkClass = (href) =>
     cn(
-      "relative min-h-[44px] inline-flex items-center py-ds-1 font-primary text-ds-sm transition-colors duration-fast group",
+      "relative min-h-[44px] inline-flex items-center gap-2 py-ds-1 font-primary text-ds-sm transition-colors duration-fast",
+      "before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-current before:content-['']",
       isActive(href)
         ? "text-text-secondary"
-        : lightHero
+        : lightHero && !elevated
           ? "text-surface-base hover:text-text-secondary"
           : "text-text-primary hover:text-text-secondary"
     );
@@ -79,21 +80,15 @@ const Navbar = () => {
           {navLinks.map((link) => (
             <Link key={link.label} to={link.href} className={linkClass(link.href)}>
               {link.label}
-              <span
-                className={cn(
-                  "absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-text-secondary transition-transform duration-fast origin-left",
-                  isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                )}
-              />
             </Link>
           ))}
         </motion.div>
 
         <div className="flex items-center gap-ds-2">
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <motion.div whileTap={{ scale: 0.98 }}>
             <Link
               to="/contact"
-              className="hidden min-h-[44px] items-center gap-ds-2 rounded-ds-xl bg-surface-raised py-ds-1 pl-ds-1 pr-ds-3 text-ds-sm font-semibold text-text-secondary ring-1 ring-border-muted transition-colors duration-fast hover:bg-surface-base md:inline-flex focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2"
+              className="group/contact hidden min-h-[44px] items-center gap-ds-2 rounded-ds-xl bg-surface-raised py-ds-1 pl-ds-1 pr-ds-3 text-ds-sm font-semibold text-text-secondary ring-1 ring-border-muted transition-[background-color,transform] duration-fast hover:bg-surface-base hover:translate-x-1 motion-reduce:hover:translate-x-0 md:inline-flex focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2"
             >
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-text-secondary text-surface-base">
                 <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
@@ -159,7 +154,8 @@ const Navbar = () => {
                     to={link.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "font-primary text-ds-3xl transition-colors duration-fast",
+                      "inline-flex items-center gap-3 font-primary text-ds-3xl transition-colors duration-fast",
+                      "before:h-2 before:w-2 before:shrink-0 before:rounded-full before:bg-current before:content-['']",
                       isActive(link.href)
                         ? "text-text-secondary"
                         : "text-text-primary hover:text-text-secondary"
@@ -175,7 +171,7 @@ const Navbar = () => {
               <Link
                 to="/contact"
                 onClick={() => setMobileOpen(false)}
-                className="flex min-h-[44px] w-full items-center justify-center gap-ds-2 rounded-ds-xl bg-surface-raised px-ds-3 py-ds-2 text-ds-lg font-semibold text-text-secondary ring-1 ring-border-muted focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring"
+                className="flex min-h-[44px] w-full items-center justify-center gap-ds-2 rounded-ds-xl bg-surface-raised px-ds-3 py-ds-2 text-ds-lg font-semibold text-text-secondary ring-1 ring-border-muted transition-transform duration-fast hover:translate-x-1 motion-reduce:hover:translate-x-0 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-text-secondary text-surface-base">
                   <ArrowRight className="h-5 w-5" strokeWidth={2.25} aria-hidden />
