@@ -31,7 +31,7 @@ export default function Home() {
             <WorksHero pinScrollTargetRef={worksTrackRef} />
           </div>
           <div
-            className="relative z-[2] bg-surface-base shadow-[0_-40px_80px_rgba(0,0,0,0.5)]"
+            className="relative z-[2] shadow-[0_-32px_64px_rgba(0,0,0,0.35)]"
             style={{
               marginTop: "calc(-1 * var(--works-hero-h))",
               paddingTop: "var(--works-hero-h)",

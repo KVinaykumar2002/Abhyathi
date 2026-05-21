@@ -16,7 +16,6 @@ export default function WorksHero({ pinScrollTargetRef } = {}) {
     offset: pinned ? ["start start", "end start"] : ["start end", "end start"],
   });
 
-  /** Pinned: static title while grids scroll over; unpinned: parallax */
   const yWorks = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
@@ -28,7 +27,11 @@ export default function WorksHero({ pinScrollTargetRef } = {}) {
     pinned ? [0, 0, 0] : [110, 0, -140]
   );
   const yGlow = useTransform(scrollYProgress, [0, 1], pinned ? [0, 0] : [0, -72]);
-  const scaleWorks = useTransform(scrollYProgress, [0, 1], pinned ? [1, 1] : [1, 0.96]);
+  const scaleWorks = useTransform(
+    scrollYProgress,
+    [0, 1],
+    pinned ? [1, 1] : [1, 0.96]
+  );
 
   return (
     <section
@@ -39,8 +42,8 @@ export default function WorksHero({ pinScrollTargetRef } = {}) {
     >
       <div className="relative flex flex-col items-center justify-center w-full h-full select-none">
         <motion.h1
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           style={{
             y: yWorks,
