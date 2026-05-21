@@ -2,25 +2,23 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import { connectDB } from "./config/db.js";
+import { getCorsOptions } from "./config/cors.js";
 import productsRouter from "./routes/products.js";
 import adminRouter from "./routes/admin.js";
+import authRouter from "./routes/auth.js";
 import mediaRouter from "./routes/media.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:4000",
-    credentials: true,
-  })
-);
+app.use(cors(getCorsOptions()));
 app.use(express.json({ limit: "2mb" }));
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
 
+app.use("/api/auth", authRouter);
 app.use("/api/media", mediaRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/admin", adminRouter);

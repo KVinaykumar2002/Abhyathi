@@ -1,3 +1,5 @@
+import { adminAuthHeaders } from "@/lib/adminHeaders";
+
 const API_BASE = import.meta.env.VITE_API_URL || "";
 
 async function parseJson(res) {
@@ -15,7 +17,16 @@ export async function fetchProducts(category) {
   return data.products ?? [];
 }
 
-export async function createProduct(payload, adminKey, imageFile) {
+export async function createProduct(payload, imageFile) {
+  return writeProduct("POST", null, payload, imageFile);
+}
+
+async function writeProduct(method, id, payload, imageFile) {
+  const url =
+    method === "POST"
+      ? `${API_BASE}/api/admin/products`
+      : `${API_BASE}/api/admin/products/${id}`;
+
   let res;
   if (imageFile) {
     const form = new FormData();
@@ -25,29 +36,34 @@ export async function createProduct(payload, adminKey, imageFile) {
       }
     });
     form.append("imageFile", imageFile);
-    res = await fetch(`${API_BASE}/api/admin/products`, {
-      method: "POST",
-      headers: { "x-admin-key": adminKey },
+    res = await fetch(url, {
+      method,
+      headers: adminAuthHeaders(),
       body: form,
     });
   } else {
-    res = await fetch(`${API_BASE}/api/admin/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-admin-key": adminKey,
-      },
-      body: JSON.stringify(payload),
+    const body = { ...payload };
+    if (method === "PUT" && !body.image) {
+      delete body.image;
+    }
+    res = await fetch(url, {
+      method,
+      headers: adminAuthHeaders({ "Content-Type": "application/json" }),
+      body: JSON.stringify(body),
     });
   }
   const data = await parseJson(res);
   return data.product;
 }
 
-export async function deleteProduct(id, adminKey) {
+export async function updateProduct(id, payload, imageFile) {
+  return writeProduct("PUT", id, payload, imageFile);
+}
+
+export async function deleteProduct(id) {
   const res = await fetch(`${API_BASE}/api/admin/products/${id}`, {
     method: "DELETE",
-    headers: { "x-admin-key": adminKey },
+    headers: adminAuthHeaders(),
   });
   return parseJson(res);
 }

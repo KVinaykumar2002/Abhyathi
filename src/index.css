@@ -139,3 +139,9 @@
     transform: translateY(-8px);
   }
 }
+
+/* Admin panel — readable base size (public site unchanged) */
+.admin-ui {
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}

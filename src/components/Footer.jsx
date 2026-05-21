@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { EASE_OUT_SOFT, viewportScrollReplay } from "@/lib/motionPresets";
+import FooterDownloadBanner from "./FooterDownloadBanner";
 
 const gridContainer = {
   hidden: {},
@@ -174,6 +175,8 @@ const Footer = () => {
       />
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 pt-24 pb-12 flex flex-col gap-24 lg:gap-32">
+        <FooterDownloadBanner />
+
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-20"
           variants={gridContainer}

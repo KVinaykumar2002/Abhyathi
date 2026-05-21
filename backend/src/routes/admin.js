@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 import { Product, PRODUCT_CATEGORIES } from "../models/Product.js";
-import { requireAdmin } from "../middleware/adminAuth.js";
+import { requireAdmin } from "../middleware/requireAdmin.js";
 import { formatProduct } from "../lib/formatProduct.js";
 import {
   uploadImageBuffer,

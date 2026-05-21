@@ -11,6 +11,7 @@ cp .env.example .env
 npm install
 npm run seed        # seeds catalog if collection is empty (skips if products exist)
 npm run seed:force  # replaces all products and stores images in MongoDB GridFS
+npm run seed:admin  # creates/updates admin login from ADMIN_EMAIL / ADMIN_PASSWORD
 npm run dev
 ```
 
@@ -21,9 +22,12 @@ Server runs at `http://localhost:5000`.
 | Variable | Description |
 |----------|-------------|
 | `MONGODB_URI` | MongoDB connection string (include database name, e.g. `/abhyathi`) |
-| `ADMIN_API_KEY` | Secret sent as `x-admin-key` header for admin routes |
+| `JWT_SECRET` | Secret for admin login tokens (32+ random characters) |
+| `ADMIN_EMAIL` | Admin login email (create with `npm run seed:admin`) |
+| `ADMIN_PASSWORD` | Admin login password |
+| `ADMIN_NAME` | Optional display name for admin |
 | `PORT` | API port (default `5000`) |
-| `CLIENT_ORIGIN` | Frontend URL for CORS (default `http://localhost:4000`) |
+| `CLIENT_ORIGIN` | `*` = any origin; or comma-separated frontend URLs for production |
 
 ## Endpoints
 
@@ -34,7 +38,12 @@ Server runs at `http://localhost:5000`.
 - `GET /api/media/:fileId` — product image stored in MongoDB GridFS
 - `GET /api/health` — health check
 
-### Admin (header: `x-admin-key: <ADMIN_API_KEY>`)
+### Auth
+
+- `POST /api/auth/login` — body `{ "email", "password" }` → `{ token, admin }`
+- `GET /api/auth/me` — header `Authorization: Bearer <token>`
+
+### Admin (header: `Authorization: Bearer <token>`)
 
 - `POST /api/admin/products` — create product (JSON or `multipart/form-data` with `imageFile`)
 - `PUT /api/admin/products/:id` — update product
