@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { EASE_OUT_SOFT, viewportScrollReplay } from "@/lib/motionPresets";
+import { EASE_OUT_SOFT } from "@/lib/motionPresets";
 
 const PLAY_STORE_URL =
   import.meta.env.VITE_PLAY_STORE_URL || "https://play.google.com/store/apps";
@@ -13,13 +13,15 @@ const overlayContainer = {
   },
 };
 
+const bannerViewport = { once: true, amount: 0.12 };
+
 function slideFromLeft(reduced) {
   return {
-    hidden: { opacity: 0, x: reduced ? 0 : -56 },
+    hidden: { opacity: 1, x: reduced ? 0 : -48 },
     show: {
       opacity: 1,
       x: 0,
-      transition: { duration: reduced ? 0.35 : 0.7, ease: EASE_OUT_SOFT },
+      transition: { duration: reduced ? 0.35 : 0.65, ease: EASE_OUT_SOFT },
     },
   };
 }
@@ -74,26 +76,26 @@ const FooterDownloadBanner = () => {
         decoding="async"
       />
 
-      {/* Copy sits in the banner’s left white area */}
-      <div className="absolute inset-y-0 left-0 flex w-full max-w-[min(100%,54%)] flex-col justify-center px-5 py-8 sm:px-8 md:px-10 lg:px-14 lg:py-10">
+      {/* Copy overlaid on the banner’s left white area — solid panel for contrast */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 flex w-full max-w-[min(100%,58%)] flex-col justify-center px-4 py-6 sm:px-6 md:px-8 lg:px-10">
         <motion.div
           variants={overlayContainer}
           initial="hidden"
           whileInView="show"
-          viewport={viewportScrollReplay}
-          className="flex flex-col gap-4 md:gap-5"
+          viewport={bannerViewport}
+          className="pointer-events-auto flex flex-col gap-4 rounded-2xl bg-white/95 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.06)] backdrop-blur-sm md:gap-5 md:p-7 lg:p-8 [color:initial]"
         >
           <motion.h2
             id="footer-download-heading"
             variants={itemVariants}
-            className="text-balance text-[clamp(1.35rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-tight text-[#1B7A3D]"
+            className="text-balance text-[clamp(1.35rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-tight !text-[#1B7A3D]"
           >
             Download from the Play Store
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
-            className="max-w-md text-balance text-[clamp(1rem,1.8vw,1.35rem)] font-semibold leading-snug text-[#0a0a0a]"
+            className="max-w-md text-balance text-[clamp(1rem,1.8vw,1.35rem)] font-semibold leading-snug !text-[#0a0a0a]"
           >
             For all your food packaging items — boxes, bags, containers &amp;
             bulk supplies for restaurants and catering.

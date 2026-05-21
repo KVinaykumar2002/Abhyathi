@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || "";
+import { API_BASE } from "@/lib/apiBase";
 
 /** Resolve product image for <img src> (GridFS path or full URL). */
 export function productImageSrc(image) {

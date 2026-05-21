@@ -387,7 +387,7 @@ export default function About() {
                 />
               </motion.div>
 
-              <div className="relative flex flex-col justify-center bg-surface-base/85 px-6 py-12 backdrop-blur-md md:px-10 md:py-14 lg:px-12 lg:py-16">
+              <div className="relative flex flex-col justify-center bg-white/92 px-6 py-12 shadow-[inset_1px_0_0_rgba(0,0,0,0.06)] backdrop-blur-lg md:px-10 md:py-14 lg:px-12 lg:py-16">
                 <div
                   aria-hidden
                   className="pointer-events-none absolute right-[-10%] top-1/2 h-[min(90%,420px)] w-[min(90%,420px)] -translate-y-1/2 opacity-[0.12]"
@@ -405,7 +405,7 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewportScrollReplay}
                   transition={{ delay: 0.05 }}
-                  className="relative z-[1] max-w-lg text-2xl font-bold leading-snug tracking-tight text-text-primary md:text-3xl lg:text-[1.85rem] xl:text-4xl"
+                  className="relative z-[1] max-w-lg text-2xl font-bold leading-snug tracking-tight text-[#0a0a0a] md:text-3xl lg:text-[1.85rem] xl:text-4xl"
                 >
                   Didn&apos;t find your answer?{" "}
                   <span className="text-text-secondary">Contact us!</span>
@@ -415,12 +415,12 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewportScrollReplay}
                   transition={{ delay: 0.1 }}
-                  className="relative z-[1] mt-4 max-w-lg text-sm leading-relaxed text-text-disabled md:text-base"
+                  className="relative z-[1] mt-4 max-w-lg text-sm leading-relaxed text-neutral-600 md:text-base"
                 >
                   Tell us about bulk orders, custom branding, or eco ranges—we
                   reply with clear next steps and timelines.
                 </motion.p>
-                <div className="relative z-[1] my-8 h-px w-full max-w-lg border-t border-dashed border-border-muted" />
+                <div className="relative z-[1] my-8 h-px w-full max-w-lg border-t border-dashed border-neutral-300" />
                 <div className="relative z-[1] flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                   <motion.a
                     href="tel:+910000000000"

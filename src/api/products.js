@@ -1,6 +1,5 @@
 import { adminAuthHeaders } from "@/lib/adminHeaders";
-
-const API_BASE = import.meta.env.VITE_API_URL || "";
+import { API_BASE } from "@/lib/apiBase";
 
 async function parseJson(res) {
   const data = await res.json().catch(() => ({}));
