@@ -4,6 +4,7 @@ import express from "express";
 import { connectDB } from "./config/db.js";
 import productsRouter from "./routes/products.js";
 import adminRouter from "./routes/admin.js";
+import mediaRouter from "./routes/media.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +21,7 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
 
+app.use("/api/media", mediaRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/admin", adminRouter);
 

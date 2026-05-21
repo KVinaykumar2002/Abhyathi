@@ -1,56 +1,111 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Heart, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { productImageSrc } from "@/lib/productImage";
 
-export default function ProductCard({ item, className }) {
+function FavoriteButton({ disabled }) {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  if (disabled) return null;
+
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsFavorite((v) => !v);
+      }}
+      className={cn(
+        "absolute left-3 top-3 z-10 flex h-[53px] w-[53px] items-center justify-center rounded-full",
+        "border border-white/10 bg-white/10 backdrop-blur-md transition-all duration-300",
+        "hover:bg-white/20",
+        isFavorite ? "text-red-500" : "text-white"
+      )}
+      aria-label="Add to favorites"
+    >
+      <Heart className={cn("h-5 w-5", isFavorite && "fill-current")} />
+    </button>
+  );
+}
+
+export default function ProductCard({ item, className, index = 0 }) {
   const soldOut = Boolean(item.soldOut);
+  const priceLabel = soldOut
+    ? "Sold out"
+    : `From $${Number(item.price).toFixed(2)}`;
 
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.35 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: (index % 6) * 0.05 }}
       className={cn(
-        "group overflow-hidden rounded-ds-md border border-border-muted bg-surface-raised",
-        "transition-[border-color,box-shadow] duration-fast hover:shadow-xl hover:border-text-secondary/30",
+        "group relative flex h-full w-full max-w-[384px] flex-col rounded-[26px] bg-white p-3",
+        "transition-shadow duration-300 hover:shadow-xl",
         className
       )}
     >
-      <div className="relative h-44 overflow-hidden bg-surface-base">
+      <div className="relative aspect-[6/5] w-full overflow-hidden rounded-[26px] bg-neutral-100">
+        <FavoriteButton disabled={soldOut} />
         {soldOut && (
-          <span className="absolute right-ds-2 top-ds-2 z-10 rounded-ds-xl border border-border-muted bg-surface-raised px-ds-2 py-ds-1 text-ds-xs font-bold uppercase tracking-wide text-feedback-error">
+          <span className="absolute right-3 top-3 z-10 rounded-full bg-[#0D0C0C]/80 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-white">
             Sold out
           </span>
         )}
         <img
-          src={item.image}
+          src={productImageSrc(item.image)}
           alt={item.name}
           className={cn(
-            "h-full w-full object-cover transition-transform duration-slow group-hover:scale-105",
+            "h-full w-full object-cover transition-transform duration-500 group-hover:scale-105",
             soldOut && "opacity-55 grayscale"
           )}
           loading="lazy"
         />
       </div>
 
-      <div className="p-ds-3">
-        <div className="mb-ds-2 flex items-start justify-between gap-ds-2">
-          <span className="font-primary text-ds-lg font-semibold text-text-secondary">
-            From ${item.price}
-          </span>
-          <span className="shrink-0 rounded-ds-xl border border-border-muted px-ds-2 py-ds-1 text-ds-xs font-medium uppercase tracking-wider text-text-disabled">
-            {item.category}
-          </span>
+      <div className="mt-6 flex flex-1 flex-col px-1 pb-1">
+        <div className="flex flex-1 flex-col gap-1">
+          <h3 className="min-h-[2.75rem] text-[28px] font-semibold leading-tight tracking-[-1.2px] text-[#0D0C0C] line-clamp-2">
+            {item.name}
+          </h3>
+          <p className="min-h-[2.5rem] line-clamp-2 text-[15px] leading-tight text-[#0D0C0C]/60">
+            {item.description}
+          </p>
+          {item.category && (
+            <span className="text-xs font-medium uppercase tracking-wider text-[#0D0C0C]/40">
+              {item.category}
+            </span>
+          )}
         </div>
 
-        <h3 className="mb-ds-2 font-primary text-ds-lg leading-snug text-text-primary transition-colors duration-fast group-hover:text-text-secondary">
-          {item.name}
-        </h3>
+        <div className="mt-6 flex items-end justify-between gap-3">
+          <span
+            className={cn(
+              "text-[17px] font-medium",
+              soldOut ? "text-red-600" : "text-[#0D0C0C]"
+            )}
+          >
+            {priceLabel}
+          </span>
 
-        <p className="line-clamp-2 text-ds-sm leading-relaxed text-text-disabled">
-          {item.description}
-        </p>
+          <Link
+            to="/contact"
+            className={cn(
+              "flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-full bg-[#0D0C0C] text-white",
+              "transition-transform duration-300 hover:scale-105 active:scale-95",
+              "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0D0C0C] focus-visible:outline-offset-2",
+              soldOut && "pointer-events-none opacity-40"
+            )}
+            aria-label={`Enquire about ${item.name}`}
+          >
+            <ArrowRight className="h-[25px] w-[25px]" strokeWidth={2} />
+          </Link>
+        </div>
       </div>
     </motion.article>
   );

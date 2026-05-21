@@ -9,7 +9,8 @@ cd backend
 cp .env.example .env
 # Edit .env with your MongoDB URI and ADMIN_API_KEY
 npm install
-npm run seed   # optional: adds sample products if collection is empty
+npm run seed        # seeds catalog if collection is empty (skips if products exist)
+npm run seed:force  # replaces all products and stores images in MongoDB GridFS
 npm run dev
 ```
 
@@ -30,11 +31,12 @@ Server runs at `http://localhost:5000`.
 
 - `GET /api/products` — list products (`?category=Containers` optional)
 - `GET /api/products/:id` — single product
+- `GET /api/media/:fileId` — product image stored in MongoDB GridFS
 - `GET /api/health` — health check
 
 ### Admin (header: `x-admin-key: <ADMIN_API_KEY>`)
 
-- `POST /api/admin/products` — create product
+- `POST /api/admin/products` — create product (JSON or `multipart/form-data` with `imageFile`)
 - `PUT /api/admin/products/:id` — update product
 - `DELETE /api/admin/products/:id` — delete product
 

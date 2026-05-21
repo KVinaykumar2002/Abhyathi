@@ -31,11 +31,11 @@ const features = [
 ];
 
 const Hero = () => {
-  const scrollTrackRef = useRef(null);
+  const heroRef = useRef(null);
 
   return (
-    <HeroScrollTrack trackRef={scrollTrackRef}>
-      <ScrollFrameBackground trackRef={scrollTrackRef} />
+    <HeroScrollTrack trackRef={heroRef}>
+      <ScrollFrameBackground />
 
       <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-black/75 via-black/45 to-black/20" />
 

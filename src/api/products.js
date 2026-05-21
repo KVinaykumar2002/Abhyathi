@@ -15,15 +15,31 @@ export async function fetchProducts(category) {
   return data.products ?? [];
 }
 
-export async function createProduct(payload, adminKey) {
-  const res = await fetch(`${API_BASE}/api/admin/products`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-admin-key": adminKey,
-    },
-    body: JSON.stringify(payload),
-  });
+export async function createProduct(payload, adminKey, imageFile) {
+  let res;
+  if (imageFile) {
+    const form = new FormData();
+    Object.entries(payload).forEach(([key, value]) => {
+      if (value !== undefined && value !== "") {
+        form.append(key, String(value));
+      }
+    });
+    form.append("imageFile", imageFile);
+    res = await fetch(`${API_BASE}/api/admin/products`, {
+      method: "POST",
+      headers: { "x-admin-key": adminKey },
+      body: form,
+    });
+  } else {
+    res = await fetch(`${API_BASE}/api/admin/products`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-key": adminKey,
+      },
+      body: JSON.stringify(payload),
+    });
+  }
   const data = await parseJson(res);
   return data.product;
 }

@@ -1,15 +1,33 @@
 import { Router } from "express";
+import multer from "multer";
 import { Product, PRODUCT_CATEGORIES } from "../models/Product.js";
 import { requireAdmin } from "../middleware/adminAuth.js";
+import { formatProduct } from "../lib/formatProduct.js";
+import {
+  uploadImageBuffer,
+  deleteImageFile,
+  mediaPath,
+} from "../lib/gridfs.js";
 
 const router = Router();
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 8 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (!file.mimetype.startsWith("image/")) {
+      return cb(new Error("Only image files are allowed"));
+    }
+    cb(null, true);
+  },
+});
+
 router.use(requireAdmin);
 
-function parseProductBody(body) {
+function parseProductFields(body) {
   const { name, price, category, description, image, soldOut } = body;
   return {
     name: name?.trim(),
-    price: price !== undefined ? Number(price) : undefined,
+    price: price !== undefined && price !== "" ? Number(price) : undefined,
     category,
     description: description?.trim(),
     image: image?.trim(),
@@ -17,7 +35,7 @@ function parseProductBody(body) {
   };
 }
 
-function validateProduct(data, { partial = false } = {}) {
+function validateProduct(data, { partial = false, requireImage = true } = {}) {
   const errors = [];
   if (!partial || data.name !== undefined) {
     if (!data.name) errors.push("name is required");
@@ -35,33 +53,81 @@ function validateProduct(data, { partial = false } = {}) {
   if (!partial || data.description !== undefined) {
     if (!data.description) errors.push("description is required");
   }
-  if (!partial || data.image !== undefined) {
-    if (!data.image) errors.push("image URL is required");
+  if (requireImage && (!partial || data.image !== undefined)) {
+    if (!data.image) errors.push("image URL or image file is required");
   }
   return errors;
 }
 
-/** POST /api/admin/products — create product */
-router.post("/products", async (req, res, next) => {
+async function resolveImage({ file, imageUrl }) {
+  if (file) {
+    const fileId = await uploadImageBuffer(
+      file.buffer,
+      file.originalname,
+      file.mimetype
+    );
+    return {
+      imageFileId: fileId,
+      image: mediaPath(fileId.toString()),
+    };
+  }
+  if (imageUrl) {
+    return { image: imageUrl, imageFileId: null };
+  }
+  return null;
+}
+
+/** POST /api/admin/products — create product (JSON or multipart with imageFile) */
+router.post("/products", upload.single("imageFile"), async (req, res, next) => {
   try {
-    const data = parseProductBody(req.body);
-    const errors = validateProduct(data);
+    const data = parseProductFields(req.body);
+    const imageMeta = await resolveImage({
+      file: req.file,
+      imageUrl: data.image,
+    });
+
+    const errors = validateProduct(
+      { ...data, image: imageMeta?.image },
+      { requireImage: !imageMeta }
+    );
     if (errors.length) {
       return res.status(400).json({ message: "Validation failed", errors });
     }
 
-    const product = await Product.create(data);
-    res.status(201).json({ product });
+    const product = await Product.create({
+      name: data.name,
+      price: data.price,
+      category: data.category,
+      description: data.description,
+      soldOut: data.soldOut,
+      image: imageMeta.image,
+      imageFileId: imageMeta.imageFileId,
+    });
+
+    res.status(201).json({ product: formatProduct(product) });
   } catch (err) {
     next(err);
   }
 });
 
 /** PUT /api/admin/products/:id */
-router.put("/products/:id", async (req, res, next) => {
+router.put("/products/:id", upload.single("imageFile"), async (req, res, next) => {
   try {
-    const data = parseProductBody(req.body);
-    const errors = validateProduct(data, { partial: true });
+    const existing = await Product.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const data = parseProductFields(req.body);
+    const imageMeta = await resolveImage({
+      file: req.file,
+      imageUrl: data.image,
+    });
+
+    const errors = validateProduct(data, {
+      partial: true,
+      requireImage: false,
+    });
     if (errors.length) {
       return res.status(400).json({ message: "Validation failed", errors });
     }
@@ -70,16 +136,20 @@ router.put("/products/:id", async (req, res, next) => {
       Object.entries(data).filter(([, v]) => v !== undefined)
     );
 
+    if (imageMeta) {
+      if (req.file && existing.imageFileId) {
+        await deleteImageFile(existing.imageFileId);
+      }
+      updates.image = imageMeta.image;
+      updates.imageFileId = imageMeta.imageFileId;
+    }
+
     const product = await Product.findByIdAndUpdate(req.params.id, updates, {
       new: true,
       runValidators: true,
     });
 
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    res.json({ product });
+    res.json({ product: formatProduct(product) });
   } catch (err) {
     if (err.name === "CastError") {
       return res.status(400).json({ message: "Invalid product id" });
@@ -94,6 +164,9 @@ router.delete("/products/:id", async (req, res, next) => {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
+    }
+    if (product.imageFileId) {
+      await deleteImageFile(product.imageFileId);
     }
     res.json({ message: "Product deleted", id: req.params.id });
   } catch (err) {

@@ -1,49 +1,85 @@
 import "dotenv/config";
 import { connectDB } from "./config/db.js";
 import { Product } from "./models/Product.js";
+import { catalogSeedItems } from "./data/catalogSeed.js";
+import {
+  uploadImageFromUrl,
+  clearAllProductImages,
+  mediaPath,
+  deleteImageFile,
+} from "./lib/gridfs.js";
 
-const seedItems = [
-  {
-    name: "Biodegradable Meal Containers",
-    price: 42.99,
-    category: "Containers",
-    description:
-      "Sturdy, leak-resistant clamshell containers made from plant-based materials. Ideal for takeout, catering, and meal prep.",
-    image:
-      "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop",
-  },
-  {
-    name: "Kraft Paper Food Bags",
-    price: 28.5,
-    soldOut: true,
-    category: "Bags & Wraps",
-    description:
-      "Grease-resistant kraft bags with reinforced handles. Perfect for bakeries, quick-service restaurants, and retail food outlets.",
-    image:
-      "https://images.unsplash.com/photo-1607083206968-13611e41cbd2?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    name: "Compostable Coffee Cups",
-    price: 36.75,
-    soldOut: true,
-    category: "Cups & Lids",
-    description:
-      "Double-wall compostable cups with matching lids. Heat-insulated and suitable for hot beverages on the go.",
-    image:
-      "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=1200&auto=format&fit=crop",
-  },
-];
+const force = process.argv.includes("--force");
+
+async function seedProductImages(item) {
+  const safeName = item.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+  const fileId = await uploadImageFromUrl(
+    item.image,
+    `${safeName}.jpg`
+  );
+  return {
+    name: item.name,
+    price: item.price,
+    category: item.category,
+    description: item.description,
+    soldOut: Boolean(item.soldOut),
+    imageFileId: fileId,
+    image: mediaPath(fileId.toString()),
+  };
+}
 
 async function seed() {
   await connectDB();
+
   const count = await Product.countDocuments();
-  if (count > 0) {
-    console.log(`Database already has ${count} products — skipping seed.`);
+  if (count > 0 && !force) {
+    console.log(
+      `Database already has ${count} products — skipping seed. Run with --force to replace.`
+    );
     process.exit(0);
   }
 
-  await Product.insertMany(seedItems);
-  console.log(`Seeded ${seedItems.length} sample products.`);
+  if (force && count > 0) {
+    console.log("Removing existing products and GridFS images…");
+    const existing = await Product.find({}, { imageFileId: 1 });
+    await Promise.all(
+      existing.map((p) => deleteImageFile(p.imageFileId))
+    );
+    await clearAllProductImages();
+    await Product.deleteMany({});
+  }
+
+  console.log(
+    `Uploading ${catalogSeedItems.length} product images to MongoDB GridFS…`
+  );
+
+  const docs = [];
+  for (let i = 0; i < catalogSeedItems.length; i++) {
+    const item = catalogSeedItems[i];
+    process.stdout.write(`  [${i + 1}/${catalogSeedItems.length}] ${item.name}… `);
+    try {
+      const doc = await seedProductImages(item);
+      docs.push(doc);
+      console.log("ok");
+    } catch (err) {
+      console.log("failed");
+      console.error(`    ${err.message}`);
+      docs.push({
+        name: item.name,
+        price: item.price,
+        category: item.category,
+        description: item.description,
+        soldOut: Boolean(item.soldOut),
+        image: item.image,
+      });
+    }
+  }
+
+  await Product.insertMany(docs);
+  const withGridFs = docs.filter((d) => d.imageFileId).length;
+  console.log(
+    `\nSeeded ${docs.length} products (${withGridFs} images stored in MongoDB GridFS).`
+  );
   process.exit(0);
 }
 

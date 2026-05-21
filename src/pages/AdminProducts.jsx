@@ -8,6 +8,7 @@ import {
   deleteProduct,
   fetchProducts,
 } from "@/api/products";
+import { productImageSrc } from "@/lib/productImage";
 
 const ADMIN_KEY_STORAGE = "abhyathi_admin_key";
 
@@ -28,6 +29,7 @@ export default function AdminProducts() {
   const [form, setForm] = useState(emptyForm);
   const [status, setStatus] = useState({ type: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["products", "all"],
@@ -54,6 +56,15 @@ export default function AdminProducts() {
 
     setSubmitting(true);
     try {
+      if (!imageFile && !form.image.trim()) {
+        setStatus({
+          type: "error",
+          message: "Add an image file or image URL.",
+        });
+        setSubmitting(false);
+        return;
+      }
+
       await createProduct(
         {
           name: form.name,
@@ -63,9 +74,11 @@ export default function AdminProducts() {
           image: form.image,
           soldOut: form.soldOut,
         },
-        adminKey.trim()
+        adminKey.trim(),
+        imageFile
       );
       setForm(emptyForm);
+      setImageFile(null);
       setStatus({ type: "success", message: "Product uploaded successfully." });
       await queryClient.invalidateQueries({ queryKey: ["products"] });
     } catch (err) {
@@ -162,14 +175,29 @@ export default function AdminProducts() {
               </select>
             </div>
           </div>
+          <div className="flex flex-col gap-ds-1 font-primary">
+            <label htmlFor="imageFile" className="text-ds-sm text-text-primary">
+              Product image file
+            </label>
+            <input
+              id="imageFile"
+              name="imageFile"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+              className="min-h-[44px] w-full rounded-ds-sm border border-border-muted bg-surface-raised px-ds-2 py-ds-2 text-ds-sm text-text-primary file:mr-3 file:rounded-full file:border-0 file:bg-text-secondary file:px-3 file:py-1 file:text-ds-sm file:text-surface-base"
+            />
+            <p className="text-ds-sm text-text-disabled">
+              Uploads image binary to MongoDB GridFS (recommended).
+            </p>
+          </div>
           <Input
-            label="Image URL"
+            label="Or image URL"
             name="image"
             type="url"
-            required
             value={form.image}
             onChange={(e) => updateField("image", e.target.value)}
-            helper="Public image URL (e.g. Unsplash or your CDN)."
+            helper="Optional if you uploaded a file above."
           />
           <div className="flex flex-col gap-ds-1 font-primary">
             <label htmlFor="description" className="text-ds-sm text-text-primary">
@@ -222,8 +250,8 @@ export default function AdminProducts() {
           ) : products.length === 0 ? (
             <p className="mt-ds-2 text-ds-md text-text-disabled">
               No products yet. Run{" "}
-              <code className="text-ds-sm">npm run seed</code> in backend/ or
-              upload one above.
+              <code className="text-ds-sm">npm run seed:force</code> in backend/
+              to load all catalog images into MongoDB, or upload above.
             </p>
           ) : (
             <ul className="mt-ds-3 divide-y divide-border-muted rounded-ds-md border border-border-muted">
@@ -232,11 +260,20 @@ export default function AdminProducts() {
                   key={p.id}
                   className="flex flex-wrap items-center justify-between gap-ds-2 p-ds-3"
                 >
-                  <div>
-                    <p className="font-medium text-text-primary">{p.name}</p>
-                    <p className="text-ds-sm text-text-disabled">
-                      {p.category} · ${p.price}
-                    </p>
+                  <div className="flex items-center gap-ds-3">
+                    {p.image && (
+                      <img
+                        src={productImageSrc(p.image)}
+                        alt=""
+                        className="h-14 w-14 shrink-0 rounded-ds-sm object-cover"
+                      />
+                    )}
+                    <div>
+                      <p className="font-medium text-text-primary">{p.name}</p>
+                      <p className="text-ds-sm text-text-disabled">
+                        {p.category} · ${p.price}
+                      </p>
+                    </div>
                   </div>
                   <Button
                     type="button"

@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductCard from "@/components/ProductCard";
-import { Button } from "@/components/ui";
 import { useProducts } from "@/hooks/useProducts";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +21,7 @@ export default function ProductCatalog({
 }) {
   const [activeCategory, setActiveCategory] = useState("All Products");
   const { data: products = [], isLoading, isError } = useProducts(activeCategory);
+  const isPreview = Boolean(limit);
 
   let filtered = products;
   if (limit) {
@@ -28,42 +29,72 @@ export default function ProductCatalog({
   }
 
   return (
-    <section id={id} className={cn("section-pad bg-surface-base", className)}>
-      <div className="mx-auto max-w-7xl px-ds-3">
-        <div className="mb-ds-4 text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+    <section
+      id={id}
+      className={cn(
+        "overflow-x-hidden py-[60px] font-primary",
+        "bg-[#F5F5F5] px-6 md:px-9",
+        className
+      )}
+    >
+      <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-12">
+        {/* Showcase header */}
+        <div className="flex w-full flex-col items-start justify-between gap-8 md:flex-row md:items-end">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="mb-ds-3 font-primary text-ds-3xl text-text-primary md:text-ds-4xl"
+            className="max-w-[531px]"
           >
-            Our Product Range
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            <h2 className="text-[clamp(2.5rem,6vw,4.75rem)] font-extrabold leading-[1.1] tracking-[-3px] text-[#0D0C0C]">
+              {isPreview ? (
+                <>
+                  Our Product
+                  <br />
+                  Range
+                </>
+              ) : (
+                <>
+                  Quality Food
+                  <br />
+                  Packaging
+                </>
+              )}
+            </h2>
+            <p className="mt-4 max-w-md text-[17px] leading-relaxed text-[#0D0C0C]/60">
+              Explore containers, cups, bags, and compostable disposables — built
+              for restaurants, cloud kitchens, and catering at scale.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="mx-auto max-w-2xl text-ds-lg text-text-disabled"
+            className="pb-1 md:pb-4"
           >
-            Explore our catalog of containers, cups, bags, and compostable
-            disposables — sourced for quality, sustainability, and reliable bulk
-            supply.
-          </motion.p>
+            <Link
+              to="/menu"
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#0D0C0C] px-9 py-3 text-[17px] font-medium text-white transition-all hover:bg-neutral-800 active:scale-95"
+            >
+              {isPreview ? "Shop All" : "View Catalog"}
+            </Link>
+          </motion.div>
         </div>
 
-        <div className="mb-ds-4 flex flex-wrap justify-center gap-ds-2">
+        {/* Category filters */}
+        <div className="flex w-full flex-wrap justify-center gap-2 md:justify-start">
           {PRODUCT_CATEGORIES.map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => setActiveCategory(cat)}
               className={cn(
-                "min-h-[44px] rounded-ds-xl border px-ds-4 py-ds-2 text-ds-sm font-medium transition-all duration-fast",
-                "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring focus-visible:outline-offset-2",
+                "min-h-[44px] rounded-full border px-5 py-2 text-sm font-medium transition-all duration-300",
+                "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0D0C0C] focus-visible:outline-offset-2",
                 activeCategory === cat
-                  ? "border-text-secondary bg-text-secondary text-surface-base"
-                  : "border-border-muted bg-surface-raised text-text-disabled hover:border-text-secondary hover:text-text-secondary"
+                  ? "border-[#0D0C0C] bg-[#0D0C0C] text-white"
+                  : "border-[#0D0C0C]/15 bg-white text-[#0D0C0C]/70 hover:border-[#0D0C0C]/40 hover:text-[#0D0C0C]"
               )}
             >
               {cat}
@@ -72,41 +103,41 @@ export default function ProductCatalog({
         </div>
 
         {isLoading && filtered.length === 0 && (
-          <p className="py-ds-6 text-center text-ds-lg text-text-disabled">
+          <p className="py-12 text-center text-[17px] text-[#0D0C0C]/50">
             Loading products…
           </p>
         )}
 
         {isError && (
-          <p className="mb-ds-3 text-center text-ds-sm text-feedback-error">
+          <p className="text-center text-sm text-red-600">
             Could not load products from the server. Showing cached catalog if
             available.
           </p>
         )}
 
-        <motion.div layout className="grid grid-cols-1 gap-ds-3 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          layout
+          className="grid w-full grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3"
+        >
           <AnimatePresence mode="popLayout">
-            {filtered.map((item) => (
-              <ProductCard key={item.id} item={item} />
+            {filtered.map((item, index) => (
+              <div key={item.id} className="flex h-full justify-center">
+                <ProductCard item={item} index={index} className="h-full" />
+              </div>
             ))}
           </AnimatePresence>
         </motion.div>
 
         {!isLoading && filtered.length === 0 && (
-          <p className="py-ds-6 text-center text-ds-lg text-text-disabled">
+          <p className="py-12 text-center text-[17px] text-[#0D0C0C]/50">
             No products in this category yet.
           </p>
         )}
 
         {showViewAll && (
-          <div className="mt-ds-4 text-center">
-            <Button to="/menu" variant="primary" size="lg">
-              View Full Catalog
-            </Button>
-            <p className="mt-ds-2 text-ds-sm text-text-disabled">
-              120+ SKUs across containers, cups, bags, and eco-friendly lines
-            </p>
-          </div>
+          <p className="text-center text-sm text-[#0D0C0C]/45">
+            120+ SKUs across containers, cups, bags, and eco-friendly lines
+          </p>
         )}
       </div>
     </section>
