@@ -37,7 +37,7 @@ export default function AdminLayout() {
             </span>
             <div>
               <p className="text-lg font-semibold text-text-primary">Abhyati Admin</p>
-              <p className="text-base text-text-disabled">Product management</p>
+              <p className="text-base text-text-disabled">Content & catalog</p>
             </div>
           </Link>
         </div>
@@ -51,7 +51,7 @@ export default function AdminLayout() {
             <Package className="h-5 w-5 shrink-0" strokeWidth={1.75} />
             Products
           </NavLink>
-          <NavLink to="/admin/site-content" className={navLinkClass}>
+          <NavLink to="/admin/site-content/home" className={navLinkClass}>
             <FileText className="h-5 w-5 shrink-0" strokeWidth={1.75} />
             Site Content
           </NavLink>
