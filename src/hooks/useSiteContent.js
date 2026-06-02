@@ -19,6 +19,9 @@ export function useAdminSiteContent() {
   return useQuery({
     queryKey: ["admin", "site-content"],
     queryFn: fetchAdminSiteContent,
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 }
 
@@ -26,9 +29,13 @@ export function useUpdateSiteContent() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateSiteContent,
-    onSuccess: (siteContent) => {
+    onSuccess: async (siteContent) => {
       queryClient.setQueryData(["site-content"], siteContent);
       queryClient.setQueryData(["admin", "site-content"], siteContent);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["site-content"] }),
+        queryClient.invalidateQueries({ queryKey: ["admin", "site-content"] }),
+      ]);
     },
   });
 }
