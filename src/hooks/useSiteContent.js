@@ -19,9 +19,9 @@ export function useAdminSiteContent() {
   return useQuery({
     queryKey: ["admin", "site-content"],
     queryFn: fetchAdminSiteContent,
-    staleTime: 0,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
+    staleTime: 1000 * 60 * 5,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 }
 
