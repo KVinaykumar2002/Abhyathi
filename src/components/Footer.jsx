@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { EASE_OUT_SOFT, viewportScrollReplay } from "@/lib/motionPresets";
+import { useSiteContent } from "@/hooks/useSiteContent";
 import FooterDownloadBanner from "./FooterDownloadBanner";
 import BrandLogo from "./Logo";
 
@@ -60,22 +61,9 @@ const NAV_LINKS = [
   { label: "About Us", href: "/about" },
   { label: "Community", href: "/testimonials" },
   { label: "Menu", href: "/menu" },
+  { label: "Stores", href: "/stores" },
+  { label: "Catalogue", href: "/Abhyati catlog (1).pdf" },
   { label: "Contact Us", href: "/contact" },
-];
-
-const CONTACT_INFO = [
-  {
-    label: "info@abhyatifoodpak.com",
-    href: "mailto:info@abhyatifoodpak.com",
-  },
-  { label: "+91 (000) 000-0000", href: "tel:+910000000000" },
-  { label: "Abhyati Food Pak Solutions Pvt Ltd, India", href: "#" },
-];
-
-const SOCIAL_LINKS = [
-  { label: "Facebook", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "Tiktok", href: "#" },
 ];
 
 const LEGAL_LINKS = [
@@ -152,7 +140,30 @@ const FooterColumn = ({ title, links, className, pathname }) => {
 
 const Footer = () => {
   const { pathname } = useLocation();
+  const { data: siteContent } = useSiteContent();
   const footerRef = useRef(null);
+  const contact = siteContent?.contact ?? {};
+  const contactInfo = [
+    {
+      label: contact.email || "info@abhyatifoodpak.com",
+      href: `mailto:${contact.email || "info@abhyatifoodpak.com"}`,
+    },
+    {
+      label: contact.phone || "+91 (000) 000-0000",
+      href: `tel:${(contact.phone || "+910000000000").replace(/[^\d+]/g, "")}`,
+    },
+    {
+      label: [contact.companyName || "Abhyati Food Pak Solutions Pvt Ltd", contact.addressLine1 || "India"]
+        .filter(Boolean)
+        .join(", "),
+      href: contact.googleMapsUrl || "#",
+    },
+  ];
+  const socialLinks =
+    siteContent?.socialLinks?.map((item) => ({
+      label: item.platform,
+      href: item.url,
+    })) ?? [];
 
   const { scrollYProgress } = useScroll({
     target: footerRef,
@@ -199,12 +210,12 @@ const Footer = () => {
           <FooterColumn links={NAV_LINKS} pathname={pathname} />
           <FooterBrandColumn />
           <FooterColumn
-            links={CONTACT_INFO}
+            links={contactInfo}
             pathname={pathname}
             className="lg:col-span-1 lg:max-w-[340px]"
           />
           <FooterColumn
-            links={SOCIAL_LINKS}
+            links={socialLinks.length > 0 ? socialLinks : [{ label: "Facebook", href: "#" }]}
             pathname={pathname}
             className="lg:items-end lg:text-right"
           />

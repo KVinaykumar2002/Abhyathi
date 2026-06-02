@@ -25,6 +25,8 @@ const Navbar = () => {
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Products", href: "/menu" },
+    { label: "Stores", href: "/stores" },
+    { label: "Catalogue", href: "/Abhyati catlog (1).pdf", external: true },
     { label: "Testimonials", href: "/testimonials" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
@@ -43,7 +45,7 @@ const Navbar = () => {
 
   const linkClass = (href) =>
     cn(
-      "relative min-h-[44px] inline-flex items-center gap-2 py-ds-1 font-primary text-ds-sm transition-colors duration-fast",
+      "relative min-h-[44px] inline-flex items-center gap-2 py-ds-1 font-primary text-ds-lg transition-colors duration-fast",
       "before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-current before:content-['']",
       isActive(href)
         ? "text-text-secondary"
@@ -92,11 +94,21 @@ const Navbar = () => {
           transition={{ delay: 0.3 }}
           className="hidden items-center gap-ds-4 md:flex"
         >
-          {navLinks.map((link) => (
-            <Link key={link.label} to={link.href} onClick={handleNavClick} className={linkClass(link.href)}>
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) =>
+            link.external ? (
+              <a
+                key={link.label}
+                href={link.href}
+                className={linkClass(link.href)}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link key={link.label} to={link.href} onClick={handleNavClick} className={linkClass(link.href)}>
+                {link.label}
+              </Link>
+            )
+          )}
         </motion.div>
 
         <div className="flex items-center gap-ds-2">
@@ -166,19 +178,33 @@ const Navbar = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <Link
-                    to={link.href}
-                    onClick={handleNavClick}
-                    className={cn(
-                      "inline-flex items-center gap-3 font-primary text-ds-3xl transition-colors duration-fast",
-                      "before:h-2 before:w-2 before:shrink-0 before:rounded-full before:bg-current before:content-['']",
-                      isActive(link.href)
-                        ? "text-text-secondary"
-                        : "text-text-primary hover:text-text-secondary"
-                    )}
-                  >
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      onClick={handleNavClick}
+                      className={cn(
+                        "inline-flex items-center gap-3 font-primary text-[2.25rem] transition-colors duration-fast",
+                        "before:h-2 before:w-2 before:shrink-0 before:rounded-full before:bg-current before:content-['']",
+                        "text-text-primary hover:text-text-secondary"
+                      )}
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      onClick={handleNavClick}
+                      className={cn(
+                        "inline-flex items-center gap-3 font-primary text-[2.25rem] transition-colors duration-fast",
+                        "before:h-2 before:w-2 before:shrink-0 before:rounded-full before:bg-current before:content-['']",
+                        isActive(link.href)
+                          ? "text-text-secondary"
+                          : "text-text-primary hover:text-text-secondary"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </motion.div>
               ))}
             </nav>

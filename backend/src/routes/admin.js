@@ -4,6 +4,9 @@ import { Product, PRODUCT_CATEGORIES } from "../models/Product.js";
 import { requireAdmin } from "../middleware/requireAdmin.js";
 import { formatProduct } from "../lib/formatProduct.js";
 import { deleteImageFile } from "../lib/gridfs.js";
+import { SiteContent } from "../models/SiteContent.js";
+import { DEFAULT_SITE_CONTENT } from "../lib/defaultSiteContent.js";
+import { getOrCreateSiteContent } from "../lib/getSiteContent.js";
 import {
   bufferToDataUrl,
   fetchUrlToDataUrl,
@@ -24,6 +27,78 @@ const upload = multer({
 });
 
 router.use(requireAdmin);
+
+function normalizeSlides(slides = []) {
+  if (!Array.isArray(slides)) return [];
+  return slides
+    .map((slide, index) => ({
+      type: slide?.type === "video" ? "video" : "image",
+      mediaUrl: String(slide?.mediaUrl ?? "").trim(),
+      title: String(slide?.title ?? "").trim(),
+      subtitle: String(slide?.subtitle ?? "").trim(),
+      ctaText: String(slide?.ctaText ?? "").trim(),
+      ctaHref: String(slide?.ctaHref ?? "").trim(),
+      order: Number.isFinite(Number(slide?.order)) ? Number(slide.order) : index,
+      isActive: slide?.isActive !== false,
+    }))
+    .filter((slide) => slide.mediaUrl);
+}
+
+function normalizeSocialLinks(links = []) {
+  if (!Array.isArray(links)) return [];
+  return links
+    .map((item) => ({
+      platform: String(item?.platform ?? "").trim(),
+      url: String(item?.url ?? "").trim(),
+    }))
+    .filter((item) => item.platform && item.url);
+}
+
+function normalizeStoreEntries(entries = []) {
+  if (!Array.isArray(entries)) return [];
+  return entries
+    .map((entry) => ({
+      name: String(entry?.name ?? "").trim(),
+      address: String(entry?.address ?? "").trim(),
+      phone: String(entry?.phone ?? "").trim(),
+      hours: String(entry?.hours ?? "").trim(),
+    }))
+    .filter((entry) => entry.name);
+}
+
+function normalizeTestimonials(entries = []) {
+  if (!Array.isArray(entries)) return [];
+  return entries
+    .map((item) => ({
+      name: String(item?.name ?? "").trim(),
+      role: String(item?.role ?? "").trim(),
+      quote: String(item?.quote ?? "").trim(),
+      image: String(item?.image ?? "").trim(),
+    }))
+    .filter((item) => item.name && item.quote);
+}
+
+function normalizeSiteContentPayload(payload = {}) {
+  return {
+    homeSlides: normalizeSlides(payload.homeSlides),
+    productSlides: normalizeSlides(payload.productSlides),
+    about: {
+      ...DEFAULT_SITE_CONTENT.about,
+      ...(payload.about ?? {}),
+    },
+    contact: {
+      ...DEFAULT_SITE_CONTENT.contact,
+      ...(payload.contact ?? {}),
+    },
+    socialLinks: normalizeSocialLinks(payload.socialLinks),
+    testimonials: normalizeTestimonials(payload.testimonials),
+    stores: {
+      ...DEFAULT_SITE_CONTENT.stores,
+      ...(payload.stores ?? {}),
+      entries: normalizeStoreEntries(payload?.stores?.entries),
+    },
+  };
+}
 
 function parseProductFields(body) {
   const { name, price, category, description, image, soldOut } = body;
@@ -179,6 +254,33 @@ router.delete("/products/:id", async (req, res, next) => {
     if (err.name === "CastError") {
       return res.status(400).json({ message: "Invalid product id" });
     }
+    next(err);
+  }
+});
+
+/** GET /api/admin/site-content */
+router.get("/site-content", async (_req, res, next) => {
+  try {
+    const siteContent = await getOrCreateSiteContent();
+    res.json({ siteContent });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/** PUT /api/admin/site-content */
+router.put("/site-content", async (req, res, next) => {
+  try {
+    const payload = normalizeSiteContentPayload(req.body?.siteContent ?? req.body ?? {});
+    const existing = await SiteContent.findOne();
+    const siteContent = existing
+      ? await SiteContent.findByIdAndUpdate(existing._id, payload, {
+          new: true,
+          runValidators: true,
+        })
+      : await SiteContent.create(payload);
+    res.json({ siteContent });
+  } catch (err) {
     next(err);
   }
 });

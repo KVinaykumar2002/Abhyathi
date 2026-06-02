@@ -19,6 +19,7 @@ import {
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AboutScrollSequence from "../components/AboutScrollSequence";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 function StatItem({ icon: Icon, valueType, target, suffix, label, index }) {
   const ref = useRef(null);
@@ -119,6 +120,10 @@ function FeaturePill({
 }
 
 export default function About() {
+  const { data: siteContent } = useSiteContent();
+  const about = siteContent?.about ?? {};
+  const contact = siteContent?.contact ?? {};
+
   return (
     <div className="min-h-screen min-w-0 overflow-x-hidden bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
       <Navbar />
@@ -133,7 +138,7 @@ export default function About() {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="text-4xl font-bold tracking-tight text-text-primary md:text-5xl lg:text-[3.25rem]"
             >
-              About Us
+              {about.heroTitle || "About Us"}
             </motion.h1>
             <motion.nav
               initial={{ opacity: 0, y: 10 }}
@@ -175,10 +180,10 @@ export default function About() {
                   <div className="absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-text-secondary text-white shadow-lg shadow-text-secondary/35 ring-4 ring-surface-base">
                     <Eye className="h-6 w-6" strokeWidth={2} aria-hidden />
                   </div>
-                  <h2 className="text-lg font-bold md:text-xl">Our Vision</h2>
+                  <h2 className="text-lg font-bold md:text-xl">{about.visionTitle || "Our Vision"}</h2>
                   <p className="mt-3 text-sm leading-relaxed text-white/80 md:text-[15px]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit
-                    tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+                    {about.visionText ||
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo."}
                   </p>
                 </motion.article>
                 <motion.article
@@ -191,10 +196,10 @@ export default function About() {
                   <div className="absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-surface-base text-text-primary shadow-md ring-4 ring-text-secondary">
                     <Target className="h-6 w-6" strokeWidth={2} aria-hidden />
                   </div>
-                  <h2 className="text-lg font-bold md:text-xl">Our Mission</h2>
+                  <h2 className="text-lg font-bold md:text-xl">{about.missionTitle || "Our Mission"}</h2>
                   <p className="mt-3 text-sm leading-relaxed text-white/95 md:text-[15px]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    {about.missionText ||
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
                   </p>
                 </motion.article>
               </div>
@@ -207,13 +212,11 @@ export default function About() {
                 className="flex flex-col justify-center text-white lg:pl-2"
               >
                 <h2 className="text-2xl font-bold leading-tight tracking-tight md:text-3xl lg:text-[2rem] xl:text-[2.15rem]">
-                  Excellence In{" "}
-                  <span className="text-text-secondary">Food Service</span> Packaging
+                  {about.excellenceTitle || "Excellence In Food Service Packaging"}
                 </h2>
                 <p className="mt-5 text-sm leading-relaxed text-white/85 md:text-base">
-                  From bulk containers and cups to bags and compostable lines—we
-                  help restaurants, cloud kitchens, and caterers ship consistent
-                  quality with packaging that performs on the shelf and on the road.
+                  {about.excellenceText ||
+                    "From bulk containers and cups to bags and compostable lines—we help restaurants, cloud kitchens, and caterers ship consistent quality with packaging that performs on the shelf and on the road."}
                 </p>
                 <div className="my-8 border-t border-dashed border-text-secondary/45" />
                 <p className="text-sm font-semibold tracking-wide text-white">
@@ -266,7 +269,7 @@ export default function About() {
         </section>
 
         {/* Why Choose Us — 3 equal columns: copy | mockup | cards (matches reference layout) */}
-        <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-20 lg:px-12 lg:py-24">
+        <section className="relative z-[2] mx-auto max-w-7xl bg-surface-base px-6 py-16 md:px-10 md:py-20 lg:px-12 lg:py-24">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-3 lg:gap-8 xl:gap-12">
             <motion.div
               initial={{ opacity: 0, x: -40 }}
@@ -275,13 +278,12 @@ export default function About() {
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="flex max-w-lg flex-col justify-center lg:max-w-none lg:pr-2"
             >
-              <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-bold leading-[1.15] tracking-tight text-text-primary">
-                Why Choose Us
+              <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-bold leading-[1.15] tracking-tight text-white">
+                {about.whyChooseUsTitle || "Why Choose Us"}
               </h2>
-              <p className="mt-5 text-[15px] leading-relaxed text-text-disabled md:text-base">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit
-                tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              <p className="mt-5 text-[15px] leading-relaxed text-white/80 md:text-base">
+                {about.whyChooseUsText ||
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
               </p>
               <motion.div
                 whileHover={{ scale: 1.02 }}
@@ -405,8 +407,7 @@ export default function About() {
                   transition={{ delay: 0.05 }}
                   className="relative z-[1] max-w-lg text-2xl font-bold leading-snug tracking-tight text-[#0a0a0a] md:text-3xl lg:text-[1.85rem] xl:text-4xl"
                 >
-                  Didn&apos;t find your answer?{" "}
-                  <span className="text-text-secondary">Contact us!</span>
+                  {about.ctaHeading || "Didn't find your answer? Contact us!"}
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 12 }}
@@ -415,13 +416,13 @@ export default function About() {
                   transition={{ delay: 0.1 }}
                   className="relative z-[1] mt-4 max-w-lg text-sm leading-relaxed text-neutral-600 md:text-base"
                 >
-                  Tell us about bulk orders, custom branding, or eco ranges—we
-                  reply with clear next steps and timelines.
+                  {about.ctaText ||
+                    "Tell us about bulk orders, custom branding, or eco ranges—we reply with clear next steps and timelines."}
                 </motion.p>
                 <div className="relative z-[1] my-8 h-px w-full max-w-lg border-t border-dashed border-neutral-300" />
                 <div className="relative z-[1] flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                   <motion.a
-                    href="tel:+910000000000"
+                    href={`tel:${(contact.phone || "+910000000000").replace(/[^\d+]/g, "")}`}
                     initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={viewportScrollReplay}
@@ -435,13 +436,13 @@ export default function About() {
                     </span>
                     <div className="min-w-0 text-left">
                       <p className="truncate text-sm font-bold text-text-primary">
-                        +91 (000) 000-0000
+                        {contact.phone || "+91 (000) 000-0000"}
                       </p>
                       <p className="text-xs text-text-disabled">Call sales & support</p>
                     </div>
                   </motion.a>
                   <motion.a
-                    href="mailto:info@abhyatifoodpak.com"
+                    href={`mailto:${contact.email || "info@abhyatifoodpak.com"}`}
                     initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={viewportScrollReplay}
@@ -454,7 +455,7 @@ export default function About() {
                       <Mail className="h-5 w-5" strokeWidth={2} />
                     </span>
                     <div className="min-w-0 text-left">
-                      <p className="truncate text-sm font-bold">info@abhyatifoodpak.com</p>
+                      <p className="truncate text-sm font-bold">{contact.email || "info@abhyatifoodpak.com"}</p>
                       <p className="text-xs text-white/85">We reply within one business day</p>
                     </div>
                   </motion.a>

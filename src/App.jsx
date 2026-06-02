@@ -15,6 +15,9 @@ import Privacy from './pages/Privacy';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminProducts from './pages/AdminProducts';
+import AdminSiteContent from './pages/AdminSiteContent';
+import Stores from './pages/Stores';
+import Catalogue from './pages/Catalogue';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient({
@@ -41,6 +44,8 @@ export default function App() {
               <Route path="/testimonials" element={<TestimonialsPage />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
+              <Route path="/stores" element={<Stores />} />
+              <Route path="/catalogue" element={<Catalogue />} />
               <Route path="/account" element={<Account />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
@@ -56,6 +61,7 @@ export default function App() {
               >
                 <Route index element={<AdminDashboard />} />
                 <Route path="products" element={<AdminProducts />} />
+                <Route path="site-content" element={<AdminSiteContent />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

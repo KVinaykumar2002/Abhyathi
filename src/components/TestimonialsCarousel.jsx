@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight, MoveLeft, MoveRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const TESTIMONIALS = [
   {
@@ -173,6 +174,9 @@ function TestimonialCard({ testimonial, index }) {
 const MotionLink = motion(Link);
 
 export default function TestimonialsCarousel() {
+  const { data: siteContent } = useSiteContent();
+  const testimonials =
+    (siteContent?.testimonials ?? []).length > 0 ? siteContent.testimonials : TESTIMONIALS;
   const [isDragging, setIsDragging] = useState(false);
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
@@ -276,9 +280,9 @@ export default function TestimonialsCarousel() {
             onDragEnd={() => setIsDragging(false)}
             className="flex gap-6 px-6 md:px-10 w-max"
           >
-            {TESTIMONIALS.map((testimonial, idx) => (
+            {testimonials.map((testimonial, idx) => (
               <TestimonialCard
-                key={testimonial.id}
+                key={testimonial.id || `${testimonial.name}-${idx}`}
                 testimonial={testimonial}
                 index={idx}
               />

@@ -4,9 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, MapPin, Phone, Clock, Send } from "lucide-react";
 import PageShell from "../components/PageShell";
 import { Input, Button } from "@/components/ui";
-
-const MAP_EMBED_URL =
-  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15282225.511792574!2d73.7250243!3d20.7503013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjDCsDQ1JzAxLjEiTiA3M8KwNDMnMzAuMSJF!5e0!3m2!1sen!2sin!4v1716153600000!5m2!1sen!2sin";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const ContactHero = () => (
   <section className="relative overflow-hidden border-b border-border-muted bg-surface-raised pt-24">
@@ -86,14 +84,24 @@ const ContactForm = () => {
   );
 };
 
-const contactDetails = [
-  { icon: MapPin, title: "Location", lines: ["Abhyati Food Pak Solutions Pvt Ltd", "India"] },
-  { icon: Phone, title: "Phone", lines: ["+91 (000) 000-0000"] },
-  { icon: Mail, title: "Email", lines: ["info@abhyatifoodpak.com"] },
-  { icon: Clock, title: "Business Hours", lines: ["Mon – Sat: 9:00 AM – 6:00 PM", "Sunday: Closed"] },
-];
-
 export default function Contact() {
+  const { data: siteContent } = useSiteContent();
+  const contact = siteContent?.contact ?? {};
+  const contactDetails = [
+    {
+      icon: MapPin,
+      title: "Location",
+      lines: [contact.companyName || "Abhyati Food Pak Solutions Pvt Ltd", contact.addressLine1 || "India"].filter(Boolean),
+    },
+    { icon: Phone, title: "Phone", lines: [contact.phone || "+91 (000) 000-0000"] },
+    { icon: Mail, title: "Email", lines: [contact.email || "info@abhyatifoodpak.com"] },
+    {
+      icon: Clock,
+      title: "Business Hours",
+      lines: [contact.businessHoursLine1 || "Mon – Sat: 9:00 AM – 6:00 PM", contact.businessHoursLine2 || "Sunday: Closed"].filter(Boolean),
+    },
+  ];
+
   return (
     <PageShell mainClassName="">
       <ContactHero />
@@ -146,7 +154,7 @@ export default function Contact() {
             <div className="overflow-hidden rounded-ds-md border border-border-muted shadow-lg">
               <iframe
                 title="Abhyati Food Pak location on Google Maps"
-                src={MAP_EMBED_URL}
+                src={contact.mapEmbedUrl || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15282225.511792574!2d73.7250243!3d20.7503013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjDCsDQ1JzAxLjEiTiA3M8KwNDMnMzAuMSJF!5e0!3m2!1sen!2sin!4v1716153600000!5m2!1sen!2sin"}
                 width="100%"
                 height="480"
                 style={{ border: 0 }}
@@ -157,7 +165,7 @@ export default function Contact() {
               />
             </div>
             <a
-              href="https://www.google.com/maps"
+              href={contact.googleMapsUrl || "https://www.google.com/maps"}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex min-h-[44px] items-center gap-ds-1 text-ds-sm font-medium text-text-secondary transition-colors duration-fast hover:text-text-primary hover:underline focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring"

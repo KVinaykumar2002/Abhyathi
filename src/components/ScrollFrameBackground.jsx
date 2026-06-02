@@ -1,7 +1,5 @@
 import { useRef, useEffect } from "react";
 
-const HERO_VIDEO_SRC = "/mp_%20(online-video-cutter.com).mp4";
-
 /**
  * Hero section — full viewport with looping background video.
  */
@@ -18,10 +16,13 @@ export function HeroScrollTrack({ trackRef, children }) {
 /**
  * Hero background video — autoplays (muted) for reliable browser support.
  */
-export default function ScrollFrameBackground() {
+export default function ScrollFrameBackground({ slide }) {
   const videoRef = useRef(null);
+  const isVideo = slide?.type === "video";
+  const mediaUrl = slide?.mediaUrl;
 
   useEffect(() => {
+    if (!isVideo) return undefined;
     const video = videoRef.current;
     if (!video) return;
 
@@ -42,13 +43,26 @@ export default function ScrollFrameBackground() {
     }
 
     return () => video.removeEventListener("loadeddata", play);
-  }, []);
+  }, [isVideo, mediaUrl]);
+
+  if (!mediaUrl) return null;
+
+  if (!isVideo) {
+    return (
+      <img
+        className="absolute inset-0 h-full w-full object-cover"
+        src={mediaUrl}
+        alt=""
+        aria-hidden
+      />
+    );
+  }
 
   return (
     <video
       ref={videoRef}
       className="absolute inset-0 h-full w-full object-cover"
-      src={HERO_VIDEO_SRC}
+      src={mediaUrl}
       autoPlay
       muted
       loop

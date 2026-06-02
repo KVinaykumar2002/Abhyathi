@@ -2,6 +2,7 @@ import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Package,
+  FileText,
   LogOut,
   ExternalLink,
   Shield,
@@ -49,6 +50,10 @@ export default function AdminLayout() {
           <NavLink to="/admin/products" className={navLinkClass}>
             <Package className="h-5 w-5 shrink-0" strokeWidth={1.75} />
             Products
+          </NavLink>
+          <NavLink to="/admin/site-content" className={navLinkClass}>
+            <FileText className="h-5 w-5 shrink-0" strokeWidth={1.75} />
+            Site Content
           </NavLink>
           <a
             href="/"

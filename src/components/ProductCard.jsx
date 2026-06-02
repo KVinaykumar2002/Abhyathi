@@ -35,7 +35,7 @@ export default function ProductCard({ item, className, index = 0 }) {
   const soldOut = Boolean(item.soldOut);
   const priceLabel = soldOut
     ? "Sold out"
-    : `From $${Number(item.price).toFixed(2)}`;
+    : `From ₹${Number(item.price).toFixed(2)}`;
 
   return (
     <motion.article

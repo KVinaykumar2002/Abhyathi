@@ -7,6 +7,7 @@ import productsRouter from "./routes/products.js";
 import adminRouter from "./routes/admin.js";
 import authRouter from "./routes/auth.js";
 import mediaRouter from "./routes/media.js";
+import siteContentRouter from "./routes/siteContent.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/media", mediaRouter);
 app.use("/api/products", productsRouter);
+app.use("/api/site-content", siteContentRouter);
 app.use("/api/admin", adminRouter);
 
 app.use((err, _req, res, _next) => {
