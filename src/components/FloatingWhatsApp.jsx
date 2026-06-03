@@ -1,10 +1,7 @@
 import { useLocation } from "react-router-dom";
-import { useSiteContent } from "@/hooks/useSiteContent";
 
-function toWhatsAppDigits(phone) {
-  const digits = String(phone ?? "").replace(/\D/g, "");
-  return digits.length >= 10 ? digits : "";
-}
+/** India country code + 8520889934 */
+const WHATSAPP_NUMBER = "918520889934";
 
 function WhatsAppIcon({ className }) {
   return (
@@ -21,14 +18,10 @@ function WhatsAppIcon({ className }) {
 
 export default function FloatingWhatsApp() {
   const { pathname } = useLocation();
-  const { data: siteContent } = useSiteContent();
-  const contact = siteContent?.contact;
 
   if (pathname.startsWith("/admin")) return null;
 
-  const digits = toWhatsAppDigits(contact?.phone || "+910000000000");
-  if (digits.length < 10) return null;
-  const href = `https://wa.me/${digits}?text=${encodeURIComponent(
+  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     "Hello Abhyati Food Pak, I would like to enquire about your products."
   )}`;
 
@@ -37,7 +30,7 @@ export default function FloatingWhatsApp() {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Chat with us on WhatsApp"
+      aria-label="Chat with us on WhatsApp at 8520889934"
       className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_4px_20px_rgba(37,211,102,0.45)] transition-transform duration-200 hover:scale-105 hover:shadow-[0_6px_24px_rgba(37,211,102,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] sm:bottom-6 sm:right-6"
     >
       <WhatsAppIcon className="h-7 w-7" />
