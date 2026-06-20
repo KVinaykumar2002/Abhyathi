@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 const SECTIONS = [
   { to: "home", label: "Home Hero" },
   { to: "products", label: "Products Hero" },
+  { to: "catalogue", label: "Catalogue PDF" },
   { to: "about", label: "About Page" },
   { to: "contact", label: "Contact Page" },
   { to: "stores", label: "Stores Page" },

@@ -82,6 +82,11 @@ const siteContentSchema = new mongoose.Schema(
       subtitle: { type: String, trim: true, default: "" },
       entries: { type: [storeSchema], default: [] },
     },
+    cataloguePdf: {
+      fileId: { type: mongoose.Schema.Types.ObjectId, default: null },
+      originalName: { type: String, trim: true, default: "" },
+      uploadedAt: { type: Date, default: null },
+    },
   },
   { timestamps: true }
 );
@@ -92,6 +97,9 @@ siteContentSchema.set("toJSON", {
     ret.id = ret._id.toString();
     delete ret._id;
     delete ret.__v;
+    if (ret.cataloguePdf?.fileId) {
+      ret.cataloguePdf.fileId = ret.cataloguePdf.fileId.toString();
+    }
     return ret;
   },
 });

@@ -90,4 +90,9 @@ export const DEFAULT_SITE_CONTENT = {
       },
     ],
   },
+  cataloguePdf: {
+    fileId: null,
+    originalName: "",
+    uploadedAt: null,
+  },
 };

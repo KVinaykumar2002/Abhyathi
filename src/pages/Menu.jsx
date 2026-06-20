@@ -5,6 +5,7 @@ import PageShell from "../components/PageShell";
 import { Button } from "@/components/ui";
 import MediaCarousel from "@/components/MediaCarousel";
 import { useSiteContent } from "@/hooks/useSiteContent";
+import { CATALOGUE_PDF_FALLBACK, cataloguePdfHref } from "@/lib/cataloguePdfUrl";
 
 const DEFAULT_PRODUCT_SLIDES = [
   {
@@ -33,7 +34,7 @@ const DEFAULT_PRODUCT_SLIDES = [
     title: "Designed for Food Delivery",
     subtitle: "Keep food fresh and secure in transit.",
     ctaText: "View Catalogue",
-    ctaHref: "/Abhyati catlog (1).pdf",
+    ctaHref: CATALOGUE_PDF_FALLBACK,
     order: 2,
     isActive: true,
   },
@@ -55,8 +56,13 @@ const ProductsHero = () => {
   const productSlides = useMemo(() => {
     const configured = (siteContent?.productSlides ?? []).filter((slide) => slide?.mediaUrl);
     if (configured.length >= 2) return configured;
-    return DEFAULT_PRODUCT_SLIDES;
-  }, [siteContent?.productSlides]);
+    const catalogueHref = cataloguePdfHref(siteContent);
+    return DEFAULT_PRODUCT_SLIDES.map((slide) =>
+      slide.ctaHref === CATALOGUE_PDF_FALLBACK
+        ? { ...slide, ctaHref: catalogueHref }
+        : slide
+    );
+  }, [siteContent?.productSlides, siteContent?.cataloguePdf]);
   const title = activeSlide?.title || "High-Quality Food Packaging Solutions";
   const subtitle = activeSlide?.subtitle || "Paper Bags · Takeaway containers · Sweet boxes";
   const ctaText = activeSlide?.ctaText?.trim() || "Shop all";

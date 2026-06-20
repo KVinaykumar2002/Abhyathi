@@ -24,6 +24,7 @@ import AdminContentContact from './pages/admin/content/AdminContentContact';
 import AdminContentStores from './pages/admin/content/AdminContentStores';
 import AdminContentTestimonials from './pages/admin/content/AdminContentTestimonials';
 import AdminContentSocial from './pages/admin/content/AdminContentSocial';
+import AdminContentCatalogue from './pages/admin/content/AdminContentCatalogue';
 import Stores from './pages/Stores';
 import Catalogue from './pages/Catalogue';
 import NotFound from './pages/NotFound';
@@ -74,6 +75,7 @@ export default function App() {
                   <Route index element={<Navigate to="home" replace />} />
                   <Route path="home" element={<AdminContentHome />} />
                   <Route path="products" element={<AdminContentProducts />} />
+                  <Route path="catalogue" element={<AdminContentCatalogue />} />
                   <Route path="about" element={<AdminContentAbout />} />
                   <Route path="contact" element={<AdminContentContact />} />
                   <Route path="stores" element={<AdminContentStores />} />

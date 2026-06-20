@@ -3,7 +3,12 @@ import multer from "multer";
 import { Product, PRODUCT_CATEGORIES } from "../models/Product.js";
 import { requireAdmin } from "../middleware/requireAdmin.js";
 import { formatProduct } from "../lib/formatProduct.js";
-import { deleteImageFile } from "../lib/gridfs.js";
+import {
+  CATALOGUE_PDF_MAX_BYTES,
+  deleteCataloguePdfFile,
+  deleteImageFile,
+  uploadCataloguePdfBuffer,
+} from "../lib/gridfs.js";
 import { SiteContent } from "../models/SiteContent.js";
 import { DEFAULT_SITE_CONTENT } from "../lib/defaultSiteContent.js";
 import { getOrCreateSiteContent } from "../lib/getSiteContent.js";
@@ -21,6 +26,17 @@ const upload = multer({
   fileFilter: (_req, file, cb) => {
     if (!file.mimetype.startsWith("image/")) {
       return cb(new Error("Only image files are allowed"));
+    }
+    cb(null, true);
+  },
+});
+
+const pdfUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: CATALOGUE_PDF_MAX_BYTES },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype !== "application/pdf") {
+      return cb(new Error("Only PDF files are allowed"));
     }
     cb(null, true);
   },
@@ -254,6 +270,74 @@ router.delete("/products/:id", async (req, res, next) => {
     if (err.name === "CastError") {
       return res.status(400).json({ message: "Invalid product id" });
     }
+    next(err);
+  }
+});
+
+/** POST /api/admin/catalogue-pdf — upload or replace catalogue PDF */
+router.post("/catalogue-pdf", pdfUpload.single("pdfFile"), async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "PDF file is required" });
+    }
+
+    const siteContent = await getOrCreateSiteContent();
+    const previousFileId = siteContent.cataloguePdf?.fileId;
+
+    const fileId = await uploadCataloguePdfBuffer(
+      req.file.buffer,
+      req.file.originalname || "catalogue.pdf",
+      req.file.mimetype
+    );
+
+    const updated = await SiteContent.findByIdAndUpdate(
+      siteContent._id,
+      {
+        cataloguePdf: {
+          fileId,
+          originalName: req.file.originalname || "catalogue.pdf",
+          uploadedAt: new Date(),
+        },
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (previousFileId) {
+      await deleteCataloguePdfFile(previousFileId);
+    }
+
+    res.json({ siteContent: updated });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/** DELETE /api/admin/catalogue-pdf — remove catalogue PDF */
+router.delete("/catalogue-pdf", async (_req, res, next) => {
+  try {
+    const siteContent = await getOrCreateSiteContent();
+    const previousFileId = siteContent.cataloguePdf?.fileId;
+
+    if (!previousFileId) {
+      return res.status(404).json({ message: "No catalogue PDF to remove" });
+    }
+
+    await deleteCataloguePdfFile(previousFileId);
+
+    const updated = await SiteContent.findByIdAndUpdate(
+      siteContent._id,
+      {
+        cataloguePdf: {
+          fileId: null,
+          originalName: "",
+          uploadedAt: null,
+        },
+      },
+      { new: true, runValidators: true }
+    );
+
+    res.json({ siteContent: updated });
+  } catch (err) {
     next(err);
   }
 });

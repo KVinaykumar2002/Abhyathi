@@ -1,9 +1,10 @@
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { EASE_OUT_SOFT, viewportScrollReplay } from "@/lib/motionPresets";
 import { useSiteContent } from "@/hooks/useSiteContent";
+import { cataloguePdfHref } from "@/lib/cataloguePdfUrl";
 import FooterDownloadBanner from "./FooterDownloadBanner";
 import BrandLogo from "./Logo";
 
@@ -56,13 +57,12 @@ const FOOTER_GRID_PATTERN =
       `</svg>`
   );
 
-const NAV_LINKS = [
+const BASE_NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Community", href: "/testimonials" },
   { label: "Menu", href: "/menu" },
   { label: "Stores", href: "/stores" },
-  { label: "Catalogue", href: "/Abhyati catlog (1).pdf" },
   { label: "Contact Us", href: "/contact" },
 ];
 
@@ -72,11 +72,24 @@ const LEGAL_LINKS = [
 ];
 
 function FooterLinkAnchor({ link, pathname }) {
-  const isActive = link.href.startsWith("/") && link.href === pathname;
+  const isActive = link.href.startsWith("/") && !link.external && link.href === pathname;
   const className = cn(
     "text-[18px] font-medium transition-all duration-300 hover:opacity-100",
     isActive ? "text-white opacity-100" : "text-white opacity-50"
   );
+
+  if (link.external) {
+    return (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+      >
+        {link.label}
+      </a>
+    );
+  }
 
   if (link.href.startsWith("/")) {
     return (
@@ -142,6 +155,14 @@ const Footer = () => {
   const { pathname } = useLocation();
   const { data: siteContent } = useSiteContent();
   const footerRef = useRef(null);
+  const navLinks = useMemo(
+    () => [
+      ...BASE_NAV_LINKS.slice(0, 5),
+      { label: "Catalogue", href: cataloguePdfHref(siteContent), external: true },
+      BASE_NAV_LINKS[5],
+    ],
+    [siteContent]
+  );
   const contact = siteContent?.contact ?? {};
   const contactInfo = [
     {
@@ -207,7 +228,7 @@ const Footer = () => {
           whileInView="show"
           viewport={viewportScrollReplay}
         >
-          <FooterColumn links={NAV_LINKS} pathname={pathname} />
+          <FooterColumn links={navLinks} pathname={pathname} />
           <FooterBrandColumn />
           <FooterColumn
             links={contactInfo}

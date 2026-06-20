@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Menu as MenuIcon, ArrowRight } from "lucide-react";
 import BrandLogo from "./Logo";
 import { cn } from "@/lib/utils";
+import { useSiteContent } from "@/hooks/useSiteContent";
+import { cataloguePdfHref } from "@/lib/cataloguePdfUrl";
 
 const Navbar = () => {
   const [elevated, setElevated] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
+  const { data: siteContent } = useSiteContent();
 
   useEffect(() => {
     const handleScroll = () => setElevated(window.scrollY > 24);
@@ -22,15 +25,18 @@ const Navbar = () => {
     setElevated(window.scrollY > 24);
   }, [currentPath]);
 
-  const navLinks = [
-    { label: "Home", href: "/" },
-    { label: "Products", href: "/menu" },
-    { label: "Stores", href: "/stores" },
-    { label: "Catalogue", href: "/Abhyati catlog (1).pdf", external: true },
-    { label: "Testimonials", href: "/testimonials" },
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
-  ];
+  const navLinks = useMemo(
+    () => [
+      { label: "Home", href: "/" },
+      { label: "Products", href: "/menu" },
+      { label: "Stores", href: "/stores" },
+      { label: "Catalogue", href: cataloguePdfHref(siteContent), external: true },
+      { label: "Testimonials", href: "/testimonials" },
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
+    ],
+    [siteContent]
+  );
 
   const isActive = (href) => currentPath === href;
 
