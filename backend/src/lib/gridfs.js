@@ -4,7 +4,7 @@ import { GridFSBucket } from "mongodb";
 const BUCKET_NAME = "productImages";
 const CATALOGUE_BUCKET_NAME = "cataloguePdfs";
 
-export const CATALOGUE_PDF_MAX_BYTES = 20 * 1024 * 1024;
+export const CATALOGUE_PDF_MAX_BYTES = 50 * 1024 * 1024;
 
 export function getImageBucket() {
   const db = mongoose.connection.db;

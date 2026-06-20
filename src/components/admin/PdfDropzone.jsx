@@ -107,7 +107,7 @@ export default function PdfDropzone({ file, onFileChange, className }) {
             </span>
             <p className="text-lg font-medium text-text-primary">Drag & drop a PDF here</p>
             <p className="mt-ds-2 text-base text-text-disabled">
-              or click to browse · PDF only · max 20 MB
+              or click to browse · PDF only · max 50 MB
             </p>
           </>
         )}
