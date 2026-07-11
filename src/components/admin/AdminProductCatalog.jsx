@@ -1,10 +1,7 @@
 import { useMemo, useState } from "react";
 import { LayoutGrid, List, Pencil, Trash2 } from "lucide-react";
-import { PRODUCT_CATEGORIES } from "@/components/ProductCatalog";
 import { productImageSrc } from "@/lib/productImage";
 import { cn } from "@/lib/utils";
-
-const CATALOG_CATEGORIES = PRODUCT_CATEGORIES.filter((c) => c !== "All Products");
 
 function ActionButtons({ product, onEdit, onDelete }) {
   return (
@@ -154,6 +151,7 @@ function ProductList({ products, viewMode, onEdit, onDelete }) {
 
 export default function AdminProductCatalog({
   products,
+  categories = [],
   viewMode,
   onViewModeChange,
   onEdit,
@@ -161,34 +159,46 @@ export default function AdminProductCatalog({
   isLoading,
 }) {
   const [activeCategory, setActiveCategory] = useState("All Products");
+  const catalogCategories = categories;
+  const safeActive =
+    activeCategory === "All Products" || catalogCategories.includes(activeCategory)
+      ? activeCategory
+      : "All Products";
 
   const counts = useMemo(() => {
-    const map = Object.fromEntries(CATALOG_CATEGORIES.map((c) => [c, 0]));
+    const map = Object.fromEntries(catalogCategories.map((c) => [c, 0]));
     for (const p of products) {
-      if (map[p.category] !== undefined) map[p.category] += 1;
+      map[p.category] = (map[p.category] || 0) + 1;
     }
     return map;
-  }, [products]);
+  }, [products, catalogCategories]);
 
   const filteredProducts = useMemo(() => {
-    if (activeCategory === "All Products") return products;
-    return products.filter((p) => p.category === activeCategory);
-  }, [products, activeCategory]);
+    if (safeActive === "All Products") return products;
+    return products.filter((p) => p.category === safeActive);
+  }, [products, safeActive]);
 
   const groupedByCategory = useMemo(() => {
-    if (activeCategory !== "All Products") return null;
-    return CATALOG_CATEGORIES.map((category) => ({
+    if (safeActive !== "All Products") return null;
+    const known = catalogCategories.map((category) => ({
       category,
       items: products.filter((p) => p.category === category),
-    })).filter((group) => group.items.length > 0);
-  }, [products, activeCategory]);
+    }));
+    const knownSet = new Set(catalogCategories);
+    const orphans = products.filter((p) => p.category && !knownSet.has(p.category));
+    const orphanGroups = [...new Set(orphans.map((p) => p.category))].map((category) => ({
+      category,
+      items: orphans.filter((p) => p.category === category),
+    }));
+    return [...known, ...orphanGroups].filter((group) => group.items.length > 0);
+  }, [products, catalogCategories, safeActive]);
 
   return (
     <section className="rounded-ds-md border border-border-muted bg-surface-raised p-ds-4">
       <div className="mb-ds-4 flex flex-wrap items-center justify-between gap-ds-3">
         <h2 className="text-xl font-semibold text-text-primary md:text-2xl">
           Catalog ({filteredProducts.length}
-          {activeCategory !== "All Products" ? ` · ${activeCategory}` : ""})
+          {safeActive !== "All Products" ? ` · ${safeActive}` : ""})
         </h2>
         <div
           className="inline-flex rounded-ds-sm border border-border-muted bg-surface-base p-0.5"
@@ -232,11 +242,11 @@ export default function AdminProductCatalog({
         <button
           type="button"
           role="tab"
-          aria-selected={activeCategory === "All Products"}
+          aria-selected={safeActive === "All Products"}
           onClick={() => setActiveCategory("All Products")}
           className={cn(
             "inline-flex min-h-[40px] items-center rounded-ds-sm border px-ds-3 text-sm font-medium transition-colors",
-            activeCategory === "All Products"
+            safeActive === "All Products"
               ? "border-text-secondary bg-text-secondary text-surface-base"
               : "border-border-muted bg-surface-base text-text-disabled hover:text-text-primary"
           )}
@@ -244,16 +254,16 @@ export default function AdminProductCatalog({
           All Products
           <span className="ml-2 opacity-80">({products.length})</span>
         </button>
-        {CATALOG_CATEGORIES.map((category) => (
+        {catalogCategories.map((category) => (
           <button
             key={category}
             type="button"
             role="tab"
-            aria-selected={activeCategory === category}
+            aria-selected={safeActive === category}
             onClick={() => setActiveCategory(category)}
             className={cn(
               "inline-flex min-h-[40px] items-center rounded-ds-sm border px-ds-3 text-sm font-medium transition-colors",
-              activeCategory === category
+              safeActive === category
                 ? "border-text-secondary bg-text-secondary text-surface-base"
                 : "border-border-muted bg-surface-base text-text-disabled hover:text-text-primary"
             )}
@@ -272,9 +282,9 @@ export default function AdminProductCatalog({
         </p>
       ) : filteredProducts.length === 0 ? (
         <p className="text-lg text-text-disabled">
-          No products in &quot;{activeCategory}&quot; yet.
+          No products in &quot;{safeActive}&quot; yet.
         </p>
-      ) : activeCategory === "All Products" && groupedByCategory ? (
+      ) : safeActive === "All Products" && groupedByCategory ? (
         <div className="space-y-ds-5">
           {groupedByCategory.map(({ category, items }) => (
             <div key={category}>

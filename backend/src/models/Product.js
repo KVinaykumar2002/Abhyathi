@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { productImageForApi } from "../lib/productImage.js";
 
-export const PRODUCT_CATEGORIES = [
+/** Fallback defaults when site content has no categories yet. Not a fixed enum. */
+export const DEFAULT_PRODUCT_CATEGORIES = [
   "Containers",
   "Bags & Wraps",
   "Cups & Lids",
@@ -15,7 +16,7 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: PRODUCT_CATEGORIES,
+      trim: true,
     },
     description: { type: String, required: true, trim: true },
     /** data:image/...;base64,... URL, http(s) URL, or legacy /api/media/:id */

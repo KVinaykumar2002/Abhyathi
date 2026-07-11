@@ -1,6 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
-import { Product, PRODUCT_CATEGORIES } from "../models/Product.js";
+import { Product, DEFAULT_PRODUCT_CATEGORIES } from "../models/Product.js";
 import { requireAdmin } from "../middleware/requireAdmin.js";
 import { formatProduct } from "../lib/formatProduct.js";
 import {
@@ -110,6 +110,21 @@ function normalizeTestimonialStats(stats = {}) {
   };
 }
 
+function normalizeProductCategories(categories = []) {
+  if (!Array.isArray(categories)) return [...DEFAULT_PRODUCT_CATEGORIES];
+  const seen = new Set();
+  const normalized = [];
+  for (const item of categories) {
+    const name = String(item ?? "").trim();
+    if (!name) continue;
+    const key = name.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    normalized.push(name);
+  }
+  return normalized;
+}
+
 function normalizeSiteContentPayload(payload = {}) {
   return {
     homeSlides: normalizeSlides(payload.homeSlides),
@@ -128,6 +143,9 @@ function normalizeSiteContentPayload(payload = {}) {
       ...DEFAULT_SITE_CONTENT.testimonialStats,
       ...normalizeTestimonialStats(payload.testimonialStats),
     },
+    productCategories: normalizeProductCategories(
+      payload.productCategories ?? DEFAULT_SITE_CONTENT.productCategories
+    ),
     stores: {
       ...DEFAULT_SITE_CONTENT.stores,
       ...(payload.stores ?? {}),
@@ -141,14 +159,22 @@ function parseProductFields(body) {
   return {
     name: name?.trim(),
     price: price !== undefined && price !== "" ? Number(price) : undefined,
-    category,
+    category: category?.trim?.() ?? category,
     description: description?.trim(),
     image: image?.trim(),
     soldOut: soldOut === true || soldOut === "true",
   };
 }
 
-function validateProduct(data, { partial = false, requireImage = true } = {}) {
+async function getAllowedProductCategories() {
+  const content = await getOrCreateSiteContent();
+  const cats = Array.isArray(content.productCategories)
+    ? content.productCategories.map((c) => String(c).trim()).filter(Boolean)
+    : [];
+  return cats.length > 0 ? cats : [...DEFAULT_PRODUCT_CATEGORIES];
+}
+
+function validateProduct(data, { partial = false, requireImage = true, categories = [] } = {}) {
   const errors = [];
   if (!partial || data.name !== undefined) {
     if (!data.name) errors.push("name is required");
@@ -159,8 +185,10 @@ function validateProduct(data, { partial = false, requireImage = true } = {}) {
     }
   }
   if (!partial || data.category !== undefined) {
-    if (!data.category || !PRODUCT_CATEGORIES.includes(data.category)) {
-      errors.push(`category must be one of: ${PRODUCT_CATEGORIES.join(", ")}`);
+    if (!data.category) {
+      errors.push("category is required");
+    } else if (categories.length > 0 && !categories.includes(data.category)) {
+      errors.push(`category must be one of: ${categories.join(", ")}`);
     }
   }
   if (!partial || data.description !== undefined) {
@@ -202,10 +230,11 @@ router.post("/products", upload.single("imageFile"), async (req, res, next) => {
       file: req.file,
       imageUrl: data.image,
     });
+    const categories = await getAllowedProductCategories();
 
     const errors = validateProduct(
       { ...data, image: imageMeta?.image },
-      { requireImage: !imageMeta }
+      { requireImage: !imageMeta, categories }
     );
     if (errors.length) {
       return res.status(400).json({ message: "Validation failed", errors });
@@ -240,10 +269,12 @@ router.put("/products/:id", upload.single("imageFile"), async (req, res, next) =
       file: req.file,
       imageUrl: data.image,
     });
+    const categories = await getAllowedProductCategories();
 
     const errors = validateProduct(data, {
       partial: true,
       requireImage: false,
+      categories,
     });
     if (errors.length) {
       return res.status(400).json({ message: "Validation failed", errors });

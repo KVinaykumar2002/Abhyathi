@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
+import AdminCategoryManager from "@/components/admin/AdminCategoryManager";
 import AdminProductCatalog from "@/components/admin/AdminProductCatalog";
 import ProductFormPanel from "@/components/admin/ProductFormPanel";
 import { Button } from "@/components/ui";
@@ -10,10 +11,14 @@ import {
   fetchProducts,
   updateProduct,
 } from "@/api/products";
+import { useAdminSiteContent } from "@/hooks/useSiteContent";
+import { resolveProductCategories } from "@/lib/productCategories";
 
 export default function AdminProducts() {
   const queryClient = useQueryClient();
   const formRef = useRef(null);
+  const { data: siteContent } = useAdminSiteContent();
+  const categories = resolveProductCategories(siteContent);
 
   const [viewMode, setViewMode] = useState("table");
   const [formOpen, setFormOpen] = useState(false);
@@ -86,7 +91,7 @@ export default function AdminProducts() {
             Products
           </h1>
           <p className="mt-ds-2 text-lg text-text-disabled">
-            Manage catalog items by category. Changes sync to the public storefront.
+            Manage categories and catalog items. Changes sync to the public storefront.
           </p>
         </div>
         <Button
@@ -95,11 +100,14 @@ export default function AdminProducts() {
           size="lg"
           className="gap-ds-2 text-lg"
           onClick={openCreateForm}
+          disabled={categories.length === 0}
         >
           <Plus className="h-5 w-5" />
           Add product
         </Button>
       </div>
+
+      <AdminCategoryManager products={products} />
 
       {status.message && (
         <p
@@ -116,6 +124,7 @@ export default function AdminProducts() {
         <ProductFormPanel
           mode={formMode}
           product={editingProduct}
+          categories={categories}
           open={formOpen}
           onClose={closeForm}
           onSaved={handleSave}
@@ -124,6 +133,7 @@ export default function AdminProducts() {
 
       <AdminProductCatalog
         products={products}
+        categories={categories}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         onEdit={openEditForm}

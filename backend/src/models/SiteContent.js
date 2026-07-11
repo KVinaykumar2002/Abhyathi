@@ -84,6 +84,7 @@ const siteContentSchema = new mongoose.Schema(
       products: { type: Number, default: 1500 },
       rating: { type: Number, default: 5 },
     },
+    productCategories: { type: [String], default: [] },
     stores: {
       title: { type: String, trim: true, default: "Stores" },
       subtitle: { type: String, trim: true, default: "" },

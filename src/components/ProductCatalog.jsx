@@ -1,17 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductCard from "@/components/ProductCard";
 import { useProducts } from "@/hooks/useProducts";
+import { useSiteContent } from "@/hooks/useSiteContent";
+import { resolveProductCategories } from "@/lib/productCategories";
 import { cn } from "@/lib/utils";
-
-export const PRODUCT_CATEGORIES = [
-  "All Products",
-  "Containers",
-  "Bags & Wraps",
-  "Cups & Lids",
-  "Eco-Friendly",
-];
 
 export default function ProductCatalog({
   limit,
@@ -19,9 +13,18 @@ export default function ProductCatalog({
   id = "menu-grid",
   className,
 }) {
+  const { data: siteContent } = useSiteContent();
+  const categories = useMemo(
+    () => ["All Products", ...resolveProductCategories(siteContent)],
+    [siteContent]
+  );
   const [activeCategory, setActiveCategory] = useState("All Products");
   const { data: products = [], isLoading, isError } = useProducts(activeCategory);
   const isPreview = Boolean(limit);
+
+  const safeActive = categories.includes(activeCategory)
+    ? activeCategory
+    : "All Products";
 
   let filtered = products;
   if (limit) {
@@ -38,7 +41,6 @@ export default function ProductCatalog({
       )}
     >
       <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-12">
-        {/* Showcase header */}
         <div className="flex w-full flex-col items-start justify-between gap-8 md:flex-row md:items-end">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -82,9 +84,8 @@ export default function ProductCatalog({
           </motion.div>
         </div>
 
-        {/* Category filters */}
         <div className="flex w-full flex-wrap justify-center gap-2 md:justify-start">
-          {PRODUCT_CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               type="button"
@@ -92,7 +93,7 @@ export default function ProductCatalog({
               className={cn(
                 "min-h-[44px] rounded-full border px-5 py-2 text-sm font-medium transition-all duration-300",
                 "focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0D0C0C] focus-visible:outline-offset-2",
-                activeCategory === cat
+                safeActive === cat
                   ? "border-[#0D0C0C] bg-[#0D0C0C] text-white"
                   : "border-[#0D0C0C]/15 bg-white text-[#0D0C0C]/70 hover:border-[#0D0C0C]/40 hover:text-[#0D0C0C]"
               )}

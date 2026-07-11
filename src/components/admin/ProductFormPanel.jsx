@@ -2,20 +2,24 @@ import { useEffect, useState } from "react";
 import { Pencil, Plus, X } from "lucide-react";
 import ImageDropzone from "@/components/admin/ImageDropzone";
 import { Button, Input } from "@/components/ui";
-import { PRODUCT_CATEGORIES } from "@/components/ProductCatalog";
 import { productImageSrc } from "@/lib/productImage";
 
 export const emptyProductForm = {
   name: "",
   price: "",
-  category: PRODUCT_CATEGORIES[1] ?? "Containers",
+  category: "",
   description: "",
   image: "",
   soldOut: false,
 };
 
-export function productToForm(product) {
-  if (!product) return { ...emptyProductForm };
+export function productToForm(product, categories = []) {
+  if (!product) {
+    return {
+      ...emptyProductForm,
+      category: categories[0] ?? "",
+    };
+  }
   const image =
     product.image?.startsWith("/api/media") ||
     product.image?.startsWith("data:image/")
@@ -24,7 +28,7 @@ export function productToForm(product) {
   return {
     name: product.name ?? "",
     price: product.price != null ? String(product.price) : "",
-    category: product.category ?? emptyProductForm.category,
+    category: product.category ?? categories[0] ?? "",
     description: product.description ?? "",
     image,
     soldOut: Boolean(product.soldOut),
@@ -34,6 +38,7 @@ export function productToForm(product) {
 export default function ProductFormPanel({
   mode,
   product,
+  categories = [],
   open,
   onClose,
   onSaved,
@@ -44,14 +49,13 @@ export default function ProductFormPanel({
   const [error, setError] = useState("");
 
   const isEdit = mode === "edit";
-  const categories = PRODUCT_CATEGORIES.filter((c) => c !== "All Products");
 
   useEffect(() => {
     if (!open) return;
-    setForm(productToForm(product));
+    setForm(productToForm(product, categories));
     setImageFile(null);
     setError("");
-  }, [open, product, mode]);
+  }, [open, product, mode, categories]);
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -63,6 +67,11 @@ export default function ProductFormPanel({
     setSubmitting(true);
 
     try {
+      if (!form.category) {
+        setError("Select a category. Add one above if the list is empty.");
+        return;
+      }
+
       const needsImage = !isEdit;
       if (needsImage && !imageFile && !form.image.trim()) {
         setError("Add an image file or image URL.");
@@ -82,7 +91,7 @@ export default function ProductFormPanel({
       );
 
       if (!isEdit) {
-        setForm(emptyProductForm);
+        setForm(productToForm(null, categories));
         setImageFile(null);
       }
       onClose();
@@ -158,18 +167,25 @@ export default function ProductFormPanel({
           <label htmlFor="form-category" className="text-base font-medium text-text-primary">
             Category
           </label>
-          <select
-            id="form-category"
-            value={form.category}
-            onChange={(e) => updateField("category", e.target.value)}
-            className="min-h-[48px] rounded-ds-sm border border-border-muted bg-surface-base px-ds-3 text-lg text-text-primary focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring"
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+          {categories.length === 0 ? (
+            <p className="text-base text-feedback-error">
+              No categories yet. Add a category above before saving a product.
+            </p>
+          ) : (
+            <select
+              id="form-category"
+              value={form.category}
+              onChange={(e) => updateField("category", e.target.value)}
+              required
+              className="min-h-[48px] rounded-ds-sm border border-border-muted bg-surface-base px-ds-3 text-lg text-text-primary focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus-ring"
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
         <div className="md:col-span-2">
@@ -217,7 +233,13 @@ export default function ProductFormPanel({
         )}
 
         <div className="flex flex-wrap gap-ds-3 md:col-span-2">
-          <Button type="submit" variant="primary" size="lg" className="text-lg" disabled={submitting}>
+          <Button
+            type="submit"
+            variant="primary"
+            size="lg"
+            className="text-lg"
+            disabled={submitting || categories.length === 0}
+          >
             {submitting ? "Saving…" : isEdit ? "Update product" : "Save product"}
           </Button>
           <Button type="button" variant="secondary" size="lg" className="text-lg" onClick={onClose}>

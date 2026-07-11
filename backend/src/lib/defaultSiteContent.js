@@ -82,6 +82,12 @@ export const DEFAULT_SITE_CONTENT = {
     products: 1500,
     rating: 5,
   },
+  productCategories: [
+    "Containers",
+    "Bags & Wraps",
+    "Cups & Lids",
+    "Eco-Friendly",
+  ],
   stores: {
     title: "Stores",
     subtitle:
