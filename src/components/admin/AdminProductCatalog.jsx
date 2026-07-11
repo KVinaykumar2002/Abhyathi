@@ -1,6 +1,10 @@
+import { useMemo, useState } from "react";
 import { LayoutGrid, List, Pencil, Trash2 } from "lucide-react";
+import { PRODUCT_CATEGORIES } from "@/components/ProductCatalog";
 import { productImageSrc } from "@/lib/productImage";
 import { cn } from "@/lib/utils";
+
+const CATALOG_CATEGORIES = PRODUCT_CATEGORIES.filter((c) => c !== "All Products");
 
 function ActionButtons({ product, onEdit, onDelete }) {
   return (
@@ -141,6 +145,13 @@ function GridView({ products, onEdit, onDelete }) {
   );
 }
 
+function ProductList({ products, viewMode, onEdit, onDelete }) {
+  if (viewMode === "table") {
+    return <TableView products={products} onEdit={onEdit} onDelete={onDelete} />;
+  }
+  return <GridView products={products} onEdit={onEdit} onDelete={onDelete} />;
+}
+
 export default function AdminProductCatalog({
   products,
   viewMode,
@@ -149,11 +160,35 @@ export default function AdminProductCatalog({
   onDelete,
   isLoading,
 }) {
+  const [activeCategory, setActiveCategory] = useState("All Products");
+
+  const counts = useMemo(() => {
+    const map = Object.fromEntries(CATALOG_CATEGORIES.map((c) => [c, 0]));
+    for (const p of products) {
+      if (map[p.category] !== undefined) map[p.category] += 1;
+    }
+    return map;
+  }, [products]);
+
+  const filteredProducts = useMemo(() => {
+    if (activeCategory === "All Products") return products;
+    return products.filter((p) => p.category === activeCategory);
+  }, [products, activeCategory]);
+
+  const groupedByCategory = useMemo(() => {
+    if (activeCategory !== "All Products") return null;
+    return CATALOG_CATEGORIES.map((category) => ({
+      category,
+      items: products.filter((p) => p.category === category),
+    })).filter((group) => group.items.length > 0);
+  }, [products, activeCategory]);
+
   return (
     <section className="rounded-ds-md border border-border-muted bg-surface-raised p-ds-4">
       <div className="mb-ds-4 flex flex-wrap items-center justify-between gap-ds-3">
         <h2 className="text-xl font-semibold text-text-primary md:text-2xl">
-          Catalog ({products.length})
+          Catalog ({filteredProducts.length}
+          {activeCategory !== "All Products" ? ` · ${activeCategory}` : ""})
         </h2>
         <div
           className="inline-flex rounded-ds-sm border border-border-muted bg-surface-base p-0.5"
@@ -189,16 +224,80 @@ export default function AdminProductCatalog({
         </div>
       </div>
 
+      <div
+        className="mb-ds-4 flex flex-wrap gap-ds-2"
+        role="tablist"
+        aria-label="Filter by category"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeCategory === "All Products"}
+          onClick={() => setActiveCategory("All Products")}
+          className={cn(
+            "inline-flex min-h-[40px] items-center rounded-ds-sm border px-ds-3 text-sm font-medium transition-colors",
+            activeCategory === "All Products"
+              ? "border-text-secondary bg-text-secondary text-surface-base"
+              : "border-border-muted bg-surface-base text-text-disabled hover:text-text-primary"
+          )}
+        >
+          All Products
+          <span className="ml-2 opacity-80">({products.length})</span>
+        </button>
+        {CATALOG_CATEGORIES.map((category) => (
+          <button
+            key={category}
+            type="button"
+            role="tab"
+            aria-selected={activeCategory === category}
+            onClick={() => setActiveCategory(category)}
+            className={cn(
+              "inline-flex min-h-[40px] items-center rounded-ds-sm border px-ds-3 text-sm font-medium transition-colors",
+              activeCategory === category
+                ? "border-text-secondary bg-text-secondary text-surface-base"
+                : "border-border-muted bg-surface-base text-text-disabled hover:text-text-primary"
+            )}
+          >
+            {category}
+            <span className="ml-2 opacity-80">({counts[category] ?? 0})</span>
+          </button>
+        ))}
+      </div>
+
       {isLoading ? (
         <p className="text-lg text-text-disabled">Loading products…</p>
       ) : products.length === 0 ? (
         <p className="text-lg text-text-disabled">
           No products yet. Click &quot;Add product&quot; to create one.
         </p>
-      ) : viewMode === "table" ? (
-        <TableView products={products} onEdit={onEdit} onDelete={onDelete} />
+      ) : filteredProducts.length === 0 ? (
+        <p className="text-lg text-text-disabled">
+          No products in &quot;{activeCategory}&quot; yet.
+        </p>
+      ) : activeCategory === "All Products" && groupedByCategory ? (
+        <div className="space-y-ds-5">
+          {groupedByCategory.map(({ category, items }) => (
+            <div key={category}>
+              <div className="mb-ds-3 flex items-baseline justify-between gap-ds-2 border-b border-border-muted pb-ds-2">
+                <h3 className="text-lg font-semibold text-text-primary">{category}</h3>
+                <span className="text-sm text-text-disabled">{items.length} products</span>
+              </div>
+              <ProductList
+                products={items}
+                viewMode={viewMode}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
+            </div>
+          ))}
+        </div>
       ) : (
-        <GridView products={products} onEdit={onEdit} onDelete={onDelete} />
+        <ProductList
+          products={filteredProducts}
+          viewMode={viewMode}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       )}
     </section>
   );

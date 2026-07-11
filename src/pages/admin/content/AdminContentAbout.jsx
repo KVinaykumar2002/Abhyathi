@@ -3,6 +3,7 @@ import { Input } from "@/components/ui";
 import AdminSectionSaveBar from "@/components/admin/AdminSectionSaveBar";
 import { useAdminSiteContent } from "@/hooks/useSiteContent";
 import { useSiteContentSectionSave } from "@/hooks/useSiteContentSectionSave";
+import { DEFAULT_TRUST_STATS } from "@/components/TrustStats";
 
 function TextAreaField({ label, value, onChange, rows = 3 }) {
   return (
@@ -22,10 +23,18 @@ export default function AdminContentAbout() {
   const { data, isLoading } = useAdminSiteContent();
   const { saveSection, isPending } = useSiteContentSectionSave();
   const [about, setAbout] = useState({});
+  const [testimonialStats, setTestimonialStats] = useState({ ...DEFAULT_TRUST_STATS });
   const [status, setStatus] = useState("");
 
   useEffect(() => {
     if (data?.about) setAbout(data.about);
+    if (data?.testimonialStats) {
+      setTestimonialStats({
+        customers: data.testimonialStats.customers ?? DEFAULT_TRUST_STATS.customers,
+        products: data.testimonialStats.products ?? DEFAULT_TRUST_STATS.products,
+        rating: data.testimonialStats.rating ?? DEFAULT_TRUST_STATS.rating,
+      });
+    }
   }, [data]);
 
   function set(key, value) {
@@ -35,7 +44,14 @@ export default function AdminContentAbout() {
   async function handleSave() {
     setStatus("");
     try {
-      await saveSection({ about });
+      await saveSection({
+        about,
+        testimonialStats: {
+          customers: Number(testimonialStats.customers) || 0,
+          products: Number(testimonialStats.products) || 0,
+          rating: Number(testimonialStats.rating) || 0,
+        },
+      });
       setStatus("About page saved.");
     } catch (err) {
       setStatus(err.message || "Save failed.");
@@ -62,6 +78,45 @@ export default function AdminContentAbout() {
         <TextAreaField label="Why Choose Us Text" value={about.whyChooseUsText} onChange={(v) => set("whyChooseUsText", v)} />
         <TextAreaField label="CTA Text" value={about.ctaText} onChange={(v) => set("ctaText", v)} />
       </div>
+
+      <div className="mt-ds-4 rounded-ds-sm border border-border-muted p-ds-3">
+        <p className="mb-ds-2 font-medium text-text-primary">Trust Statistics</p>
+        <p className="mb-ds-3 text-sm text-text-disabled">
+          Shared with the Testimonials page.
+        </p>
+        <div className="grid gap-ds-3 md:grid-cols-3">
+          <Input
+            label="Customers (5000+)"
+            type="number"
+            min={0}
+            value={testimonialStats.customers ?? 0}
+            onChange={(e) =>
+              setTestimonialStats((prev) => ({ ...prev, customers: e.target.value }))
+            }
+          />
+          <Input
+            label="Products (1500+)"
+            type="number"
+            min={0}
+            value={testimonialStats.products ?? 0}
+            onChange={(e) =>
+              setTestimonialStats((prev) => ({ ...prev, products: e.target.value }))
+            }
+          />
+          <Input
+            label="Customer Rating (out of 5)"
+            type="number"
+            min={0}
+            max={5}
+            step={0.1}
+            value={testimonialStats.rating ?? 5}
+            onChange={(e) =>
+              setTestimonialStats((prev) => ({ ...prev, rating: e.target.value }))
+            }
+          />
+        </div>
+      </div>
+
       <AdminSectionSaveBar onSave={handleSave} isPending={isPending} statusMessage={status} label="Save About Page" />
     </section>
   );

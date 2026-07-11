@@ -86,7 +86,7 @@ export default function AdminProducts() {
             Products
           </h1>
           <p className="mt-ds-2 text-lg text-text-disabled">
-            Add, edit, or remove catalog items. Changes sync to the public storefront.
+            Manage catalog items by category. Changes sync to the public storefront.
           </p>
         </div>
         <Button

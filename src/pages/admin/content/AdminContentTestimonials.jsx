@@ -5,6 +5,7 @@ import SiteImageDropzone from "@/components/admin/SiteImageDropzone";
 import AdminSectionSaveBar from "@/components/admin/AdminSectionSaveBar";
 import { useAdminSiteContent } from "@/hooks/useSiteContent";
 import { useSiteContentSectionSave } from "@/hooks/useSiteContentSectionSave";
+import { DEFAULT_TRUST_STATS } from "@/components/TrustStats";
 
 function TextAreaField({ label, value, onChange }) {
   return (
@@ -24,15 +25,16 @@ export default function AdminContentTestimonials() {
   const { data, isLoading } = useAdminSiteContent();
   const { saveSection, isPending } = useSiteContentSectionSave();
   const [testimonials, setTestimonials] = useState([]);
-  const [testimonialStats, setTestimonialStats] = useState({ projects: 0, clients: 0 });
+  const [testimonialStats, setTestimonialStats] = useState({ ...DEFAULT_TRUST_STATS });
   const [status, setStatus] = useState("");
 
   useEffect(() => {
     if (data?.testimonials) setTestimonials(data.testimonials);
     if (data?.testimonialStats) {
       setTestimonialStats({
-        projects: data.testimonialStats.projects ?? 0,
-        clients: data.testimonialStats.clients ?? 0,
+        customers: data.testimonialStats.customers ?? DEFAULT_TRUST_STATS.customers,
+        products: data.testimonialStats.products ?? DEFAULT_TRUST_STATS.products,
+        rating: data.testimonialStats.rating ?? DEFAULT_TRUST_STATS.rating,
       });
     }
   }, [data]);
@@ -49,8 +51,9 @@ export default function AdminContentTestimonials() {
       await saveSection({
         testimonials,
         testimonialStats: {
-          projects: Number(testimonialStats.projects) || 0,
-          clients: Number(testimonialStats.clients) || 0,
+          customers: Number(testimonialStats.customers) || 0,
+          products: Number(testimonialStats.products) || 0,
+          rating: Number(testimonialStats.rating) || 0,
         },
       });
       setStatus("Testimonials saved.");
@@ -83,27 +86,38 @@ export default function AdminContentTestimonials() {
       </div>
 
       <div className="mb-ds-4 rounded-ds-sm border border-border-muted p-ds-3">
-        <p className="mb-ds-2 font-medium text-text-primary">Statistics Counters</p>
+        <p className="mb-ds-2 font-medium text-text-primary">Trust Statistics</p>
         <p className="mb-ds-3 text-sm text-text-disabled">
-          Shown below customer reviews on the testimonials section.
+          Shown on the Testimonials and About pages.
         </p>
-        <div className="grid gap-ds-3 md:grid-cols-2">
+        <div className="grid gap-ds-3 md:grid-cols-3">
           <Input
-            label="Number of Projects"
+            label="Customers (5000+)"
             type="number"
             min={0}
-            value={testimonialStats.projects ?? 0}
+            value={testimonialStats.customers ?? 0}
             onChange={(e) =>
-              setTestimonialStats((prev) => ({ ...prev, projects: e.target.value }))
+              setTestimonialStats((prev) => ({ ...prev, customers: e.target.value }))
             }
           />
           <Input
-            label="Number of Clients"
+            label="Products (1500+)"
             type="number"
             min={0}
-            value={testimonialStats.clients ?? 0}
+            value={testimonialStats.products ?? 0}
             onChange={(e) =>
-              setTestimonialStats((prev) => ({ ...prev, clients: e.target.value }))
+              setTestimonialStats((prev) => ({ ...prev, products: e.target.value }))
+            }
+          />
+          <Input
+            label="Customer Rating (out of 5)"
+            type="number"
+            min={0}
+            max={5}
+            step={0.1}
+            value={testimonialStats.rating ?? 5}
+            onChange={(e) =>
+              setTestimonialStats((prev) => ({ ...prev, rating: e.target.value }))
             }
           />
         </div>

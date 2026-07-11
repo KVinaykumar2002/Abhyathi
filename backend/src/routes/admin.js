@@ -97,11 +97,16 @@ function normalizeTestimonials(entries = []) {
 }
 
 function normalizeTestimonialStats(stats = {}) {
-  const projects = Number(stats?.projects);
-  const clients = Number(stats?.clients);
+  const customers = Number(stats?.customers ?? stats?.clients);
+  const products = Number(stats?.products ?? stats?.projects);
+  const rating = Number(stats?.rating);
   return {
-    projects: Number.isFinite(projects) && projects >= 0 ? Math.round(projects) : 0,
-    clients: Number.isFinite(clients) && clients >= 0 ? Math.round(clients) : 0,
+    customers: Number.isFinite(customers) && customers >= 0 ? Math.round(customers) : 5000,
+    products: Number.isFinite(products) && products >= 0 ? Math.round(products) : 1500,
+    rating:
+      Number.isFinite(rating) && rating >= 0
+        ? Math.min(5, Math.max(0, Math.round(rating * 10) / 10))
+        : 5,
   };
 }
 

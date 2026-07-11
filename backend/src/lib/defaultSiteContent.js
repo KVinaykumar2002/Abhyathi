@@ -78,8 +78,9 @@ export const DEFAULT_SITE_CONTENT = {
     },
   ],
   testimonialStats: {
-    projects: 6100,
-    clients: 5800,
+    customers: 5000,
+    products: 1500,
+    rating: 5,
   },
   stores: {
     title: "Stores",

@@ -80,8 +80,9 @@ const siteContentSchema = new mongoose.Schema(
     socialLinks: { type: [socialLinkSchema], default: [] },
     testimonials: { type: [testimonialSchema], default: [] },
     testimonialStats: {
-      projects: { type: Number, default: 0 },
-      clients: { type: Number, default: 0 },
+      customers: { type: Number, default: 5000 },
+      products: { type: Number, default: 1500 },
+      rating: { type: Number, default: 5 },
     },
     stores: {
       title: { type: String, trim: true, default: "Stores" },

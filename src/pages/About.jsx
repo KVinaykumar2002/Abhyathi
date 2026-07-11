@@ -1,11 +1,7 @@
-import { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, useInView, animate } from "framer-motion";
+import { motion } from "framer-motion";
 import { viewportScrollReplay } from "@/lib/motionPresets";
 import {
-  Package,
-  Users,
-  BadgeCheck,
   ThumbsUp,
   Headphones,
   Leaf,
@@ -19,58 +15,8 @@ import {
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AboutScrollSequence from "../components/AboutScrollSequence";
+import TrustStats from "../components/TrustStats";
 import { useSiteContent } from "@/hooks/useSiteContent";
-
-function StatItem({ icon: Icon, valueType, target, suffix, label, index }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-8% 0px", amount: 0.5 });
-  const [text, setText] = useState(
-    valueType === "float" ? `0.0${suffix}` : `0${suffix}`
-  );
-
-  useEffect(() => {
-    if (!inView) return;
-    if (valueType === "float") {
-      setText(`0.0${suffix}`);
-      const ctrl = animate(0, target, {
-        duration: 1.4,
-        ease: [0.16, 1, 0.3, 1],
-        onUpdate: (latest) => setText(`${latest.toFixed(1)}${suffix}`),
-      });
-      return () => ctrl.stop();
-    }
-    setText(`0${suffix}`);
-    const ctrl = animate(0, target, {
-      duration: 1.2,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (latest) => setText(`${Math.round(latest)}${suffix}`),
-    });
-    return () => ctrl.stop();
-  }, [inView, target, suffix, valueType]);
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ ...viewportScrollReplay, margin: "-5% 0px" }}
-      transition={{ duration: 0.55, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className="flex flex-col items-center text-center sm:flex-row sm:items-center sm:gap-5 sm:text-left"
-    >
-      <span className="mb-4 flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-border-muted bg-text-secondary/10 text-text-secondary sm:mb-0">
-        <Icon className="h-7 w-7" strokeWidth={1.75} />
-      </span>
-      <div>
-        <p className="text-4xl font-bold tracking-tight text-text-primary md:text-5xl">
-          {text}
-        </p>
-        <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-text-disabled">
-          {label}
-        </p>
-      </div>
-    </motion.div>
-  );
-}
 
 function FeaturePill({
   icon: Icon,
@@ -240,31 +186,8 @@ export default function About() {
         <AboutScrollSequence />
 
         <section className="relative z-[1] -mt-[45vh] border-b border-dashed border-border-muted/80 bg-surface-base md:-mt-[55vh]">
-          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-14 sm:grid-cols-3 sm:gap-8 md:px-10 lg:px-12 lg:py-16">
-            <StatItem
-              icon={Package}
-              valueType="int"
-              target={23}
-              suffix=""
-              label="Experience"
-              index={0}
-            />
-            <StatItem
-              icon={Users}
-              valueType="float"
-              target={5.8}
-              suffix="+"
-              label="Customer Rate"
-              index={1}
-            />
-            <StatItem
-              icon={BadgeCheck}
-              valueType="float"
-              target={6.1}
-              suffix="+"
-              label="Project Done"
-              index={2}
-            />
+          <div className="mx-auto max-w-7xl px-6 py-14 md:px-10 lg:px-12 lg:py-16">
+            <TrustStats variant="light" />
           </div>
         </section>
 
