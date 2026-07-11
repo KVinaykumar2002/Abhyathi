@@ -24,10 +24,17 @@ export default function AdminContentTestimonials() {
   const { data, isLoading } = useAdminSiteContent();
   const { saveSection, isPending } = useSiteContentSectionSave();
   const [testimonials, setTestimonials] = useState([]);
+  const [testimonialStats, setTestimonialStats] = useState({ projects: 0, clients: 0 });
   const [status, setStatus] = useState("");
 
   useEffect(() => {
     if (data?.testimonials) setTestimonials(data.testimonials);
+    if (data?.testimonialStats) {
+      setTestimonialStats({
+        projects: data.testimonialStats.projects ?? 0,
+        clients: data.testimonialStats.clients ?? 0,
+      });
+    }
   }, [data]);
 
   function update(index, key, value) {
@@ -39,7 +46,13 @@ export default function AdminContentTestimonials() {
   async function handleSave() {
     setStatus("");
     try {
-      await saveSection({ testimonials });
+      await saveSection({
+        testimonials,
+        testimonialStats: {
+          projects: Number(testimonialStats.projects) || 0,
+          clients: Number(testimonialStats.clients) || 0,
+        },
+      });
       setStatus("Testimonials saved.");
     } catch (err) {
       setStatus(err.message || "Save failed.");
@@ -68,6 +81,34 @@ export default function AdminContentTestimonials() {
           Add Testimonial
         </Button>
       </div>
+
+      <div className="mb-ds-4 rounded-ds-sm border border-border-muted p-ds-3">
+        <p className="mb-ds-2 font-medium text-text-primary">Statistics Counters</p>
+        <p className="mb-ds-3 text-sm text-text-disabled">
+          Shown below customer reviews on the testimonials section.
+        </p>
+        <div className="grid gap-ds-3 md:grid-cols-2">
+          <Input
+            label="Number of Projects"
+            type="number"
+            min={0}
+            value={testimonialStats.projects ?? 0}
+            onChange={(e) =>
+              setTestimonialStats((prev) => ({ ...prev, projects: e.target.value }))
+            }
+          />
+          <Input
+            label="Number of Clients"
+            type="number"
+            min={0}
+            value={testimonialStats.clients ?? 0}
+            onChange={(e) =>
+              setTestimonialStats((prev) => ({ ...prev, clients: e.target.value }))
+            }
+          />
+        </div>
+      </div>
+
       <div className="space-y-ds-4">
         {testimonials.map((item, index) => (
           <div key={`t-${index}`} className="rounded-ds-sm border border-border-muted p-ds-3">

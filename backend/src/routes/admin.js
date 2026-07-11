@@ -78,6 +78,8 @@ function normalizeStoreEntries(entries = []) {
       address: String(entry?.address ?? "").trim(),
       phone: String(entry?.phone ?? "").trim(),
       hours: String(entry?.hours ?? "").trim(),
+      image: String(entry?.image ?? "").trim(),
+      googleMapsUrl: String(entry?.googleMapsUrl ?? "").trim(),
     }))
     .filter((entry) => entry.name);
 }
@@ -94,6 +96,15 @@ function normalizeTestimonials(entries = []) {
     .filter((item) => item.name && item.quote);
 }
 
+function normalizeTestimonialStats(stats = {}) {
+  const projects = Number(stats?.projects);
+  const clients = Number(stats?.clients);
+  return {
+    projects: Number.isFinite(projects) && projects >= 0 ? Math.round(projects) : 0,
+    clients: Number.isFinite(clients) && clients >= 0 ? Math.round(clients) : 0,
+  };
+}
+
 function normalizeSiteContentPayload(payload = {}) {
   return {
     homeSlides: normalizeSlides(payload.homeSlides),
@@ -108,6 +119,10 @@ function normalizeSiteContentPayload(payload = {}) {
     },
     socialLinks: normalizeSocialLinks(payload.socialLinks),
     testimonials: normalizeTestimonials(payload.testimonials),
+    testimonialStats: {
+      ...DEFAULT_SITE_CONTENT.testimonialStats,
+      ...normalizeTestimonialStats(payload.testimonialStats),
+    },
     stores: {
       ...DEFAULT_SITE_CONTENT.stores,
       ...(payload.stores ?? {}),

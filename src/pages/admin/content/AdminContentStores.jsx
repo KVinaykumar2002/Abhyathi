@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button, Input } from "@/components/ui";
+import SiteImageDropzone from "@/components/admin/SiteImageDropzone";
 import AdminSectionSaveBar from "@/components/admin/AdminSectionSaveBar";
 import { useAdminSiteContent } from "@/hooks/useSiteContent";
 import { useSiteContentSectionSave } from "@/hooks/useSiteContentSectionSave";
+
+const EMPTY_STORE = {
+  name: "",
+  address: "",
+  phone: "",
+  hours: "",
+  image: "",
+  googleMapsUrl: "",
+};
 
 export default function AdminContentStores() {
   const { data, isLoading } = useAdminSiteContent();
@@ -46,7 +56,7 @@ export default function AdminContentStores() {
           onClick={() =>
             setStores((prev) => ({
               ...prev,
-              entries: [...(prev.entries ?? []), { name: "", address: "", phone: "", hours: "" }],
+              entries: [...(prev.entries ?? []), { ...EMPTY_STORE }],
             }))
           }
         >
@@ -74,11 +84,31 @@ export default function AdminContentStores() {
                 <Trash2 className="h-4 w-4" />
               </button>
             </div>
-            <div className="grid gap-ds-2 md:grid-cols-2">
-              <Input label="Name" value={entry.name ?? ""} onChange={(e) => updateEntry(index, "name", e.target.value)} />
-              <Input label="Phone" value={entry.phone ?? ""} onChange={(e) => updateEntry(index, "phone", e.target.value)} />
-              <Input label="Address" value={entry.address ?? ""} onChange={(e) => updateEntry(index, "address", e.target.value)} />
-              <Input label="Hours" value={entry.hours ?? ""} onChange={(e) => updateEntry(index, "hours", e.target.value)} />
+            <div className="grid gap-ds-3 lg:grid-cols-2">
+              <div className="space-y-ds-2">
+                <Input label="Name" value={entry.name ?? ""} onChange={(e) => updateEntry(index, "name", e.target.value)} />
+                <Input label="Address" value={entry.address ?? ""} onChange={(e) => updateEntry(index, "address", e.target.value)} />
+                <Input
+                  label="Google Maps URL"
+                  value={entry.googleMapsUrl ?? ""}
+                  onChange={(e) => updateEntry(index, "googleMapsUrl", e.target.value)}
+                  placeholder="https://maps.google.com/..."
+                />
+                <Input label="Phone" value={entry.phone ?? ""} onChange={(e) => updateEntry(index, "phone", e.target.value)} />
+                <Input label="Hours" value={entry.hours ?? ""} onChange={(e) => updateEntry(index, "hours", e.target.value)} />
+              </div>
+              <div className="space-y-ds-2">
+                <SiteImageDropzone
+                  label="Store Image"
+                  value={entry.image ?? ""}
+                  onChange={(url) => updateEntry(index, "image", url)}
+                />
+                <Input
+                  label="Or image URL"
+                  value={entry.image ?? ""}
+                  onChange={(e) => updateEntry(index, "image", e.target.value)}
+                />
+              </div>
             </div>
           </div>
         ))}

@@ -43,6 +43,8 @@ const storeSchema = new mongoose.Schema(
     address: { type: String, trim: true, default: "" },
     phone: { type: String, trim: true, default: "" },
     hours: { type: String, trim: true, default: "" },
+    image: { type: String, trim: true, default: "" },
+    googleMapsUrl: { type: String, trim: true, default: "" },
   },
   { _id: true }
 );
@@ -77,6 +79,10 @@ const siteContentSchema = new mongoose.Schema(
     },
     socialLinks: { type: [socialLinkSchema], default: [] },
     testimonials: { type: [testimonialSchema], default: [] },
+    testimonialStats: {
+      projects: { type: Number, default: 0 },
+      clients: { type: Number, default: 0 },
+    },
     stores: {
       title: { type: String, trim: true, default: "Stores" },
       subtitle: { type: String, trim: true, default: "" },

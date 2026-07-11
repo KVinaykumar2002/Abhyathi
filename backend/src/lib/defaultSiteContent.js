@@ -77,6 +77,10 @@ export const DEFAULT_SITE_CONTENT = {
         "https://images.unsplash.com/photo-1556910103-1c02745a30bf?w=400&h=400&fit=crop&q=80",
     },
   ],
+  testimonialStats: {
+    projects: 6100,
+    clients: 5800,
+  },
   stores: {
     title: "Stores",
     subtitle:
@@ -87,6 +91,8 @@ export const DEFAULT_SITE_CONTENT = {
         address: "Anna Nagar, Chennai, Tamil Nadu",
         phone: "+91 (000) 000-0000",
         hours: "Mon - Sat: 9:00 AM - 6:00 PM",
+        image: "",
+        googleMapsUrl: "https://www.google.com/maps",
       },
     ],
   },

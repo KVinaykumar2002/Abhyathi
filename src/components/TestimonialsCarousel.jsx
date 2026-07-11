@@ -1,6 +1,6 @@
 import { useState, useRef, useLayoutEffect, useEffect } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight, MoveLeft, MoveRight } from "lucide-react";
+import { motion, useMotionValue, useSpring, useInView, animate } from "framer-motion";
+import { ArrowRight, MoveLeft, MoveRight, BadgeCheck, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useSiteContent } from "@/hooks/useSiteContent";
@@ -79,6 +79,59 @@ const TESTIMONIALS = [
       "https://images.unsplash.com/photo-1517677204091-0d74fd337a16?w=400&h=400&fit=crop&q=80",
   },
 ];
+
+const DEFAULT_STATS = { projects: 6100, clients: 5800 };
+
+function formatStatValue(value) {
+  if (value >= 1000) {
+    const inThousands = value / 1000;
+    return Number.isInteger(inThousands)
+      ? `${inThousands}k`
+      : `${inThousands.toFixed(1).replace(/\.0$/, "")}k`;
+  }
+  return String(value);
+}
+
+function StatCounter({ icon: Icon, target, label, index }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-8% 0px", amount: 0.5 });
+  const [text, setText] = useState("0");
+
+  useEffect(() => {
+    if (!inView) return;
+    setText("0");
+    const ctrl = animate(0, target, {
+      duration: 1.2,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (latest) => setText(formatStatValue(Math.round(latest))),
+    });
+    return () => ctrl.stop();
+  }, [inView, target]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-5% 0px" }}
+      transition={{ duration: 0.55, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-col items-center text-center sm:flex-row sm:items-center sm:gap-5 sm:text-left"
+    >
+      <span className="mb-4 flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5 text-text-secondary sm:mb-0">
+        <Icon className="h-7 w-7" strokeWidth={1.75} />
+      </span>
+      <div>
+        <p className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+          {text}
+          <span className="text-text-secondary">+</span>
+        </p>
+        <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-white/50">
+          {label}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
 
 function CustomCursor({ containerRef }) {
   const mouseX = useMotionValue(0);
@@ -177,6 +230,10 @@ export default function TestimonialsCarousel() {
   const { data: siteContent } = useSiteContent();
   const testimonials =
     (siteContent?.testimonials ?? []).length > 0 ? siteContent.testimonials : TESTIMONIALS;
+  const stats = {
+    projects: siteContent?.testimonialStats?.projects ?? DEFAULT_STATS.projects,
+    clients: siteContent?.testimonialStats?.clients ?? DEFAULT_STATS.clients,
+  };
   const [isDragging, setIsDragging] = useState(false);
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
@@ -290,6 +347,21 @@ export default function TestimonialsCarousel() {
           </motion.div>
 
           <CustomCursor containerRef={containerRef} />
+        </div>
+
+        <div className="grid w-full max-w-3xl grid-cols-1 gap-10 border-t border-white/10 px-6 pt-10 sm:grid-cols-2 sm:gap-8 md:px-10">
+          <StatCounter
+            icon={BadgeCheck}
+            target={stats.projects}
+            label="Number of Projects"
+            index={0}
+          />
+          <StatCounter
+            icon={Users}
+            target={stats.clients}
+            label="Number of Clients"
+            index={1}
+          />
         </div>
       </div>
 
