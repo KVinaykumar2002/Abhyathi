@@ -89,7 +89,7 @@ export default function AdminContentStores() {
                 <Input label="Name" value={entry.name ?? ""} onChange={(e) => updateEntry(index, "name", e.target.value)} />
                 <Input label="Address" value={entry.address ?? ""} onChange={(e) => updateEntry(index, "address", e.target.value)} />
                 <Input
-                  label="Google Maps URL"
+                  label="Location (Google Maps URL)"
                   value={entry.googleMapsUrl ?? ""}
                   onChange={(e) => updateEntry(index, "googleMapsUrl", e.target.value)}
                   placeholder="https://maps.google.com/..."
@@ -99,12 +99,12 @@ export default function AdminContentStores() {
               </div>
               <div className="space-y-ds-2">
                 <SiteImageDropzone
-                  label="Store Image"
+                  label="Store Photo"
                   value={entry.image ?? ""}
                   onChange={(url) => updateEntry(index, "image", url)}
                 />
                 <Input
-                  label="Or image URL"
+                  label="Or photo URL"
                   value={entry.image ?? ""}
                   onChange={(e) => updateEntry(index, "image", e.target.value)}
                 />

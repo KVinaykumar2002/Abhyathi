@@ -1,8 +1,16 @@
-import { MapPin, ExternalLink } from "lucide-react";
+import { MapPin, ExternalLink, Store } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import { Button } from "@/components/ui";
 import { useSiteContent } from "@/hooks/useSiteContent";
 import { productImageSrc } from "@/lib/productImage";
+
+function mapsUrlForStore(store) {
+  const direct = String(store?.googleMapsUrl ?? "").trim();
+  if (direct) return direct;
+  const address = String(store?.address ?? "").trim();
+  if (!address) return "";
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
 
 export default function Stores() {
   const { data: siteContent } = useSiteContent();
@@ -24,20 +32,26 @@ export default function Stores() {
           <div className="mt-ds-5 grid gap-ds-3 text-left md:grid-cols-2">
             {entries.map((store, index) => {
               const imageSrc = productImageSrc(store.image);
+              const mapsUrl = mapsUrlForStore(store);
               return (
                 <article
                   key={`${store.name}-${index}`}
                   className="overflow-hidden rounded-ds-md border border-border-muted bg-surface-raised"
                 >
-                  {imageSrc ? (
-                    <div className="aspect-[16/10] w-full overflow-hidden bg-surface-base">
+                  <div className="aspect-[16/10] w-full overflow-hidden bg-surface-base">
+                    {imageSrc ? (
                       <img
                         src={imageSrc}
                         alt={store.name || "Store"}
                         className="h-full w-full object-cover"
                       />
-                    </div>
-                  ) : null}
+                    ) : (
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-text-disabled">
+                        <Store className="h-10 w-10 text-text-secondary/70" aria-hidden />
+                        <span className="text-ds-sm">Photo coming soon</span>
+                      </div>
+                    )}
+                  </div>
                   <div className="p-ds-3">
                     {store.name && (
                       <h2 className="text-ds-lg font-semibold text-text-primary">
@@ -50,15 +64,15 @@ export default function Stores() {
                         <span>{store.address}</span>
                       </p>
                     )}
-                    {store.googleMapsUrl && (
+                    {mapsUrl && (
                       <a
-                        href={store.googleMapsUrl}
+                        href={mapsUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="mt-ds-2 inline-flex items-center gap-1.5 text-ds-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
                       >
                         <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-                        View on Google Maps
+                        View location on Google Maps
                       </a>
                     )}
                     {store.phone && (

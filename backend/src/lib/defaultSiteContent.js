@@ -98,8 +98,10 @@ export const DEFAULT_SITE_CONTENT = {
         address: "Anna Nagar, Chennai, Tamil Nadu",
         phone: "+91 (000) 000-0000",
         hours: "Mon - Sat: 9:00 AM - 6:00 PM",
-        image: "",
-        googleMapsUrl: "https://www.google.com/maps",
+        image:
+          "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=800&fit=crop&q=80",
+        googleMapsUrl:
+          "https://www.google.com/maps/search/?api=1&query=Anna%20Nagar%2C%20Chennai%2C%20Tamil%20Nadu",
       },
     ],
   },
