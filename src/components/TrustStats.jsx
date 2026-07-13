@@ -15,7 +15,10 @@ function AnimatedNumber({ target, suffix = "", inView }) {
   const [text, setText] = useState(`0${suffix}`);
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView) {
+      setText(`0${suffix}`);
+      return undefined;
+    }
     setText(`0${suffix}`);
     const ctrl = animate(0, target, {
       duration: 1.2,
@@ -73,7 +76,11 @@ export default function TrustStats({ variant = "light", className }) {
   };
 
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-8% 0px", amount: 0.35 });
+  const inView = useInView(ref, {
+    ...viewportScrollReplay,
+    margin: "-8% 0px",
+    amount: 0.35,
+  });
 
   const isDark = variant === "dark";
   const iconWrap = isDark

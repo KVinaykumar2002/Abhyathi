@@ -1,6 +1,6 @@
 import { useState, useRef, useLayoutEffect, useEffect } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight, MoveLeft, MoveRight } from "lucide-react";
+import { motion, useMotionValue } from "framer-motion";
+import { ArrowRight, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useSiteContent } from "@/hooks/useSiteContent";
@@ -81,57 +81,26 @@ const TESTIMONIALS = [
   },
 ];
 
-function CustomCursor({ containerRef }) {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        mouseX.set(e.clientX - rect.left);
-        mouseY.set(e.clientY - rect.top);
-      }
-    };
-    const handleMouseEnter = () => setIsVisible(true);
-    const handleMouseLeave = () => setIsVisible(false);
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("mousemove", handleMouseMove);
-      container.addEventListener("mouseenter", handleMouseEnter);
-      container.addEventListener("mouseleave", handleMouseLeave);
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener("mousemove", handleMouseMove);
-        container.removeEventListener("mouseenter", handleMouseEnter);
-        container.removeEventListener("mouseleave", handleMouseLeave);
-      }
-    };
-  }, [containerRef, mouseX, mouseY]);
-
-  const springConfig = { damping: 20, stiffness: 150 };
-  const smoothX = useSpring(mouseX, springConfig);
-  const smoothY = useSpring(mouseY, springConfig);
-
+function TestimonialStars({ rating = 5 }) {
+  const filled = Math.max(0, Math.min(5, Math.round(Number(rating) || 5)));
   return (
-    <motion.div
-      className="absolute z-50 pointer-events-none hidden md:flex items-center gap-2 px-4 py-2 bg-surface-base/10 backdrop-blur-md border border-white/20 rounded-full"
-      style={{
-        left: smoothX,
-        top: smoothY,
-        x: "-50%",
-        y: "-50%",
-        opacity: isVisible ? 1 : 0,
-      }}
+    <span
+      className="inline-flex items-center gap-0.5"
+      aria-label={`${filled} out of 5 stars`}
     >
-      <span className="text-white text-sm font-medium">Drag</span>
-      <div className="flex gap-1">
-        <MoveLeft size={14} className="text-white" />
-        <MoveRight size={14} className="text-white" />
-      </div>
-    </motion.div>
+      {Array.from({ length: 5 }, (_, i) => (
+        <Star
+          key={i}
+          className={cn(
+            "h-3.5 w-3.5 md:h-4 md:w-4",
+            i < filled
+              ? "fill-text-secondary text-text-secondary"
+              : "text-white/25"
+          )}
+          strokeWidth={1.5}
+        />
+      ))}
+    </span>
   );
 }
 
@@ -154,8 +123,9 @@ function TestimonialCard({ testimonial, index }) {
         )}
       />
       <div className="relative h-full w-full p-2 bg-surface-base/10 backdrop-blur-3xl border border-white/10 rounded-2xl overflow-hidden">
-        <div className="h-full w-full bg-[#0b0b0b] rounded-xl p-4 md:p-6 flex flex-col gap-2 md:gap-4">
-          <div className="flex flex-col">
+        <div className="h-full w-full bg-[#0b0b0b] rounded-xl p-4 md:p-6 flex flex-col gap-2 md:gap-3">
+          <div className="flex flex-col gap-1.5">
+            <TestimonialStars rating={testimonial.rating ?? 5} />
             <h4 className="text-white font-medium text-base md:text-lg">
               {testimonial.name}
             </h4>
@@ -163,7 +133,7 @@ function TestimonialCard({ testimonial, index }) {
               {testimonial.role}
             </span>
           </div>
-          <p className="text-white/50 text-sm leading-relaxed overflow-hidden line-clamp-6 md:line-clamp-4 italic">
+          <p className="text-white/50 text-sm leading-relaxed overflow-hidden line-clamp-5 md:line-clamp-4 italic">
             {testimonial.quote}
           </p>
         </div>
@@ -289,8 +259,6 @@ export default function TestimonialsCarousel() {
               />
             ))}
           </motion.div>
-
-          <CustomCursor containerRef={containerRef} />
         </div>
 
         <TrustStats

@@ -1,17 +1,19 @@
-import { useRef } from 'react';
+// import { useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Menu from '../components/Menu';
-import WorksHero from '../components/WorksHero';
-import ServiceShowcase from '../components/ServiceShowcase';
-import ServiceCardsSection from '../components/ServiceCardsSection';
+// import WorksHero from '../components/WorksHero';
+// import ServiceShowcase from '../components/ServiceShowcase';
+// import ServiceCardsSection from '../components/ServiceCardsSection';
+import IndustryImageCarousel from '../components/IndustryImageCarousel';
+import BagasseProductCarousel from '../components/BagasseProductCarousel';
 import CTA from '../components/CTA';
 import TestimonialsCarousel from '../components/TestimonialsCarousel';
 import Footer from '../components/Footer';
 
 export default function Home() {
   /** Scroll track: sticky WORKS pins only while the two 2-column grids scroll over it, then scrolls away normally. */
-  const worksTrackRef = useRef(null);
+  // const worksTrackRef = useRef(null);
 
   return (
     <div className="min-h-screen min-w-0 bg-surface-base font-primary selection:bg-text-secondary/30 selection:text-text-secondary">
@@ -19,6 +21,7 @@ export default function Home() {
       <main>
         <Hero />
         <Menu />
+        {/* Works / last projects section + service grids
         <div
           ref={worksTrackRef}
           className="relative isolate"
@@ -41,6 +44,9 @@ export default function Home() {
             <ServiceCardsSection />
           </div>
         </div>
+        */}
+        <BagasseProductCarousel />
+        <IndustryImageCarousel />
         <CTA />
         <TestimonialsCarousel />
       </main>
