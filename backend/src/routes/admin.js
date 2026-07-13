@@ -156,9 +156,17 @@ function normalizeSiteContentPayload(payload = {}) {
 
 function parseProductFields(body) {
   const { name, price, category, description, image, soldOut } = body;
+  let parsedPrice;
+  if (price === undefined) {
+    parsedPrice = undefined;
+  } else if (price === "" || price === null) {
+    parsedPrice = null;
+  } else {
+    parsedPrice = Number(price);
+  }
   return {
     name: name?.trim(),
-    price: price !== undefined && price !== "" ? Number(price) : undefined,
+    price: parsedPrice,
     category: category?.trim?.() ?? category,
     description: description?.trim(),
     image: image?.trim(),
@@ -180,7 +188,11 @@ function validateProduct(data, { partial = false, requireImage = true, categorie
     if (!data.name) errors.push("name is required");
   }
   if (!partial || data.price !== undefined) {
-    if (data.price === undefined || Number.isNaN(data.price) || data.price < 0) {
+    if (
+      data.price !== null &&
+      data.price !== undefined &&
+      (Number.isNaN(data.price) || data.price < 0)
+    ) {
       errors.push("price must be a non-negative number");
     }
   }
@@ -242,7 +254,7 @@ router.post("/products", upload.single("imageFile"), async (req, res, next) => {
 
     const product = await Product.create({
       name: data.name,
-      price: data.price,
+      price: data.price ?? null,
       category: data.category,
       description: data.description,
       soldOut: data.soldOut,

@@ -30,7 +30,9 @@ async function writeProduct(method, id, payload, imageFile) {
   if (imageFile) {
     const form = new FormData();
     Object.entries(payload).forEach(([key, value]) => {
-      if (value !== undefined && value !== "") {
+      if (value === null) {
+        form.append(key, "");
+      } else if (value !== undefined && value !== "") {
         form.append(key, String(value));
       }
     });

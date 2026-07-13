@@ -116,7 +116,13 @@ export default function BagasseProductCarousel() {
                     aria-label={`Product selection ${pageIndex + 1} of ${pages.length}`}
                   >
                     {pageProducts.map((product) => {
-                      const price = Number(product.price).toFixed(2);
+                      const hasPrice =
+                        product.price != null &&
+                        product.price !== "" &&
+                        !Number.isNaN(Number(product.price));
+                      const price = hasPrice
+                        ? Number(product.price).toFixed(2)
+                        : null;
                       return (
                         <article
                           key={product.id ?? product.name}
@@ -140,9 +146,13 @@ export default function BagasseProductCarousel() {
                               </Link>
                             </h3>
                             <p className="m-0 pt-1 text-left text-ds-lg font-semibold leading-6 text-text-secondary">
-                              <span aria-label={`Price ${price} rupees`}>
-                                ₹{price}
-                              </span>
+                              {price ? (
+                                <span aria-label={`Price ${price} rupees`}>
+                                  ₹{price}
+                                </span>
+                              ) : (
+                                <span>Enquire</span>
+                              )}
                             </p>
                           </div>
                         </article>

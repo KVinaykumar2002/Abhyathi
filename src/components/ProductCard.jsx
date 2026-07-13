@@ -33,9 +33,12 @@ function FavoriteButton({ disabled }) {
 
 export default function ProductCard({ item, className, index = 0 }) {
   const soldOut = Boolean(item.soldOut);
+  const hasPrice = item.price != null && item.price !== "" && !Number.isNaN(Number(item.price));
   const priceLabel = soldOut
     ? "Sold out"
-    : `From ₹${Number(item.price).toFixed(2)}`;
+    : hasPrice
+      ? `From ₹${Number(item.price).toFixed(2)}`
+      : "Enquire";
 
   return (
     <motion.article

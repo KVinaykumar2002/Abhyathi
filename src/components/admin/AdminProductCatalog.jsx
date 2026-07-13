@@ -65,7 +65,9 @@ function TableView({ products, onEdit, onDelete }) {
               </td>
               <td className="px-ds-3 py-ds-3 text-base text-text-disabled">{p.category}</td>
               <td className="px-ds-3 py-ds-3 text-lg font-medium text-text-primary">
-                ₹{Number(p.price).toFixed(2)}
+                {p.price != null && p.price !== ""
+                  ? `₹${Number(p.price).toFixed(2)}`
+                  : "—"}
               </td>
               <td className="px-ds-3 py-ds-3">
                 <span
@@ -131,7 +133,9 @@ function GridView({ products, onEdit, onDelete }) {
             </p>
             <div className="mt-ds-4 flex items-center justify-between border-t border-border-muted pt-ds-3">
               <span className="text-lg font-semibold text-text-secondary">
-                ₹{Number(p.price).toFixed(2)}
+                {p.price != null && p.price !== ""
+                  ? `₹${Number(p.price).toFixed(2)}`
+                  : "—"}
               </span>
               <ActionButtons product={p} onEdit={onEdit} onDelete={onDelete} />
             </div>

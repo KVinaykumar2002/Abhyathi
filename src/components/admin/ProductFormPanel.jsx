@@ -72,6 +72,11 @@ export default function ProductFormPanel({
         return;
       }
 
+      if (form.price.trim() !== "" && Number.isNaN(Number(form.price))) {
+        setError("Price must be a valid number.");
+        return;
+      }
+
       const needsImage = !isEdit;
       if (needsImage && !imageFile && !form.image.trim()) {
         setError("Add an image file or image URL.");
@@ -81,7 +86,7 @@ export default function ProductFormPanel({
       await onSaved(
         {
           name: form.name,
-          price: Number(form.price),
+          price: form.price.trim() === "" ? null : Number(form.price),
           category: form.category,
           description: form.description,
           image: form.image.trim() || undefined,
@@ -153,15 +158,15 @@ export default function ProductFormPanel({
           onChange={(e) => updateField("name", e.target.value)}
         />
         <Input
-          label="Price (USD)"
+          label="Price (₹)"
           name="price"
           type="number"
           size="lg"
           min="0"
           step="0.01"
-          required
           value={form.price}
           onChange={(e) => updateField("price", e.target.value)}
+          placeholder="Optional"
         />
         <div className="flex flex-col gap-ds-2 font-primary md:col-span-2">
           <label htmlFor="form-category" className="text-base font-medium text-text-primary">
